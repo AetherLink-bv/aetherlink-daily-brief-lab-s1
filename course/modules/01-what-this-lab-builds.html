@@ -65,7 +65,7 @@
               </div>
               <div class="ft-folder">
                 <span class="ft-name">reference/</span>
-                <span class="ft-desc">Where the two example briefs (PDFs) go</span>
+                <span class="ft-desc">Three committed example briefs and their README</span>
               </div>
               <div class="ft-file"><span class="ft-name">package.json · tsconfig.json</span><span class="ft-desc">The empty code skeleton</span></div>
             </div>
@@ -88,9 +88,9 @@
 <span class="code-line">| 2 | <span class="code-keyword">Plan</span> | <span class="code-string">`docs/spec.md`, `src/brief.ts`, `sample/brief.sample.json`, `test/schema.test.ts`</span> | <span class="code-function">`npm test`</span> green on the schema tests |</span>
 <span class="code-line">| 3 | <span class="code-keyword">Design</span> | <span class="code-string">`docs/design.md`, one ADR, `docs/plan.md`</span> | A stranger can follow the plan and name what proves completion |</span>
 <span class="code-line">| 4 | <span class="code-keyword">Build</span> | <span class="code-string">`src/render.ts`, `src/main.ts`</span> | <span class="code-function">`npm run brief:sample`</span> writes `out/latest.html` |</span>
-<span class="code-line">| 5 | <span class="code-keyword">Build</span> | <span class="code-string">`src/sources.ts`, `src/agent.ts`</span> | <span class="code-function">`npm test`</span> and <span class="code-function">`npm run typecheck`</span> green; wiring proven without a network |</span>
+<span class="code-line">| 5 | <span class="code-keyword">Build</span> | <span class="code-string">`src/sources.ts`, `src/agent.ts`, live wiring in `src/main.ts`</span> | <span class="code-function">`npm test`</span>, <span class="code-function">`npm run typecheck`</span>, and <span class="code-function">`npm run brief:sample`</span> green |</span>
 <span class="code-line">| 6 | <span class="code-keyword">Test</span> | <span class="code-string">`docs/evidence.md` and one screenshot</span> | Three commands with exit codes and a reviewer |</span>
-<span class="code-line">| 7 | <span class="code-keyword">Deploy</span> | <span class="code-string">`docs/gate.md`, `gitlab-ci.example.yml`</span> | PASS / FAIL / OPEN with a quoted line |</span></code></pre>
+<span class="code-line">| 7 | <span class="code-keyword">Gate</span> | <span class="code-string">`docs/gate.md`, inactive schedule, PR preview</span> | PASS / FAIL / OPEN with a quoted line |</span></code></pre>
           </div>
           <div class="translation-english">
             <span class="translation-label">PLAIN ENGLISH</span>
@@ -103,7 +103,7 @@
               <p class="tl">Step 4: the first real code. Done when a sample brief turns into an <span class="term" data-definition="HTML is the language web pages are written in. Here the brief is saved as an .html file you can open in any browser.">HTML</span> page.</p>
               <p class="tl">Step 5: connect the real sources. Done when tests and the <span class="term" data-definition="A typecheck asks the TypeScript compiler to confirm every piece of data is used the way its declared shape allows, catching mistakes before the program runs.">typecheck</span> pass without touching the internet.</p>
               <p class="tl">Step 6: record proof. Done when three commands, their <span class="term" data-definition="An exit code is the number a command returns when it finishes. 0 means success; anything else means something went wrong.">exit codes</span> and a second person are written down.</p>
-              <p class="tl">Step 7: a human decides whether to ship, quoting the line that convinced them.</p>
+              <p class="tl">Step 7: a human decides the gate, reviews the pull request preview, and leaves the schedule inactive.</p>
             </div>
           </div>
         </div>

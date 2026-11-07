@@ -7,6 +7,7 @@
   "scripts": {
     "brief": "tsx src/main.ts",
     "brief:sample": "tsx src/main.ts --sample",
+    "docs:check": "node scripts/check-solo-docs.mjs",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test test/*.test.ts"
   },

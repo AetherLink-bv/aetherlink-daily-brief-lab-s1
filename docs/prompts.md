@@ -1,122 +1,77 @@
-# Claude Code prompts — seven steps
+# Claude Code prompts for the seven SOLO steps
 
-Paste one block per SOLO step. Each block matches [SOLO.md](../SOLO.md). Work on your branch from `main`. Do not put tokens or secrets in a prompt or a commit.
+These prompts match [SOLO.md](../SOLO.md). Start with the build prompt. Inspect the result before you use the improvement prompt.
 
-Full walkthrough: [SOLO.md](../SOLO.md).
+## Prepare your branch
 
----
+> Read README.md, CLAUDE.md, and SOLO.md. Check the documented Node version and package scripts. Preserve existing work. Prepare my own branch and install the documented dependencies after I approve the commands. Report the starting files and any blockers. Do not implement a solution yet.
 
-## Step 1 · Plan — intent
+## Step 1 · Draft the intent
 
-```
-We are on step 1 of SOLO.md. Read SOLO step 1, AGENTS.md, intent.md, and progress.md.
+Build prompt:
 
-Interview me one question at a time. Fill intent.md in place. Do not skip ahead.
-Write one outcome sentence. Write three success checks a stranger can verify. Write the boundary: what the agent may never do. Fill owners. Add at least one OPEN line for what we do not know yet.
+> Read CLAUDE.md, SOLO.md, and the templates on my branch. Interview me one question at a time. Draft intent.md with one outcome, three observable checks, owners, a hard boundary, and one OPEN. Stop for my review. Do not implement code.
 
-Do not invent evidence. Mark unrun checks OPEN.
-Stop when I can answer the step check yes or no: could a stranger verify each of the three success checks without asking me?
-Then stop for my gate review. Read the boundary aloud with me. Do not start step 2 until I accept.
-```
+Improvement prompt:
 
----
+> Challenge my weakest check with one concrete counterexample. Revise only intent.md after my answer. Show the diff and stop.
 
-## Step 2 · Plan — spec and contract, test first
+## Step 2 · Build the spec and schema
 
-```
-We are on step 2 of SOLO.md. Read SOLO step 2, AGENTS.md, intent.md, and progress.md.
+Build prompt:
 
-Write docs/spec.md first. Quote one real example per field from the two reference PDFs in reference/. If a PDF is missing, say so and mark that row OPEN. Do not guess quotes.
+> Read my accepted intent.md and reference/. Propose docs/spec.md with one quoted example per field. After I accept, write test/schema.test.ts and run it to show the expected red failure. Stop so I can inspect and commit the test. Then build src/brief.ts and sample/brief.sample.json until that test passes. Do not build a renderer or tools.
 
-Write test/schema.test.ts next. Run npm test. The schema tests must fail before you add production code.
+Improvement prompt:
 
-Then add src/brief.ts and sample/brief.sample.json until npm test is green on the schema tests.
-Do not add a renderer. Do not add agent tools.
+> Add one invalid sample of my choice to test/schema.test.ts. Prove the schema rejects it. Show the spec row, test output, and diff. Stop before SOLO 3.
 
-Do not invent evidence. Mark unrun checks OPEN.
-Stop when I can answer the step check yes or no: does git log show the test commit before brief.ts? Does every field in brief.ts have a spec row with a quote?
-```
+## Step 3 · Accept the design and plan
 
----
+Build prompt:
 
-## Step 3 · Design — one decision, a plan with proof
+> In plan mode, read intent.md, docs/spec.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md. Name exact paths, one proof command and rollback per step. Do not edit files or build. Stop for my acceptance.
 
-```
-We are on step 3 of SOLO.md. Read SOLO step 3, AGENTS.md, intent.md, and progress.md.
+Improvement prompt:
 
-Use plan mode. Stay read-only until I accept the plan.
+> After I accept the plan, save only those design documents. Challenge one assumption with the case I choose. Show the revised plan and diff. Stop before building.
 
-Draft docs/design.md for the main parts. Write one ADR in docs/decisions/ for one decision we actually made. Write docs/plan.md with ordered steps, exact file paths, one proof command per step, rollback notes, and the gate before the build step.
+## Step 4 · Build the sample renderer
 
-Do not invent evidence. Mark unrun checks OPEN.
-Stop when I can answer the step check yes or no: can a stranger name what proves each plan step complete?
-Wait for my acceptance before any build work in step 4.
-```
+Build prompt:
 
----
+> Use my accepted docs/plan.md. First write test/render.test.ts and show the expected red failure. Then build src/render.ts and a sample-only src/main.ts. Escape untrusted text. Run the sample script and show out/latest.html. Use no API key or model call. Stop for my inspection.
 
-## Step 4 · Build — render the sample, the first artifact
+Improvement prompt:
 
-```
-We are on step 4 of SOLO.md. Read SOLO step 4, AGENTS.md, intent.md, and progress.md.
+> Change one house-style rule I choose. Add a failing test first, then make it pass. Regenerate out/latest.html and show the diff. Stop so I can inspect the page and save a 1440×900 screenshot.
 
-Write test/render.test.ts first. Run npm test. The render tests must fail before you add production code.
+## Step 5 · Build one read-only tool
 
-Then add src/render.ts and a sample-only src/main.ts. Run npm run brief:sample. It must write out/latest.html with no API keys.
+Build prompt:
 
-Change one house-style rule test-first. Keep a 1440×900 screenshot of the page for step 6.
+> Read my accepted plan and schema. Build src/agent.ts, src/sources.ts, and test/agent.test.ts for one read-only tool. Connect src/main.ts to the agent for the live brief command while preserving brief:sample without model calls. Reuse tool() and guarded() if present. Give the brief-agent no shell or write tools. Prove the tool wiring and missing-source behavior with tests. Keep the sample path working. Stop for my review.
 
-Do not invent evidence. Mark unrun checks OPEN.
-Stop when I can answer the step check yes or no: does the page render without any API key? Does the script-tag test prove escaping?
-```
+Improvement prompt:
 
----
+> Test one missing-source case I choose. Show the diff and observed test output. With configured credentials, run the brief and trace each factual claim to run.log. Without credentials, run the sample and mark the live check OPEN. Never print tokens. Stop for my inspection.
 
-## Step 5 · Build — the loop and one read-only tool
+## Step 6 · Record and review evidence
 
-```
-We are on step 5 of SOLO.md. Read SOLO step 5, AGENTS.md, intent.md, and progress.md.
+Build prompt:
 
-First run in the terminal:
-git checkout step-5-build-agent -- src/sources.ts src/agent.ts src/main.ts test/agent.test.ts
-npm run typecheck && npm test
+> Run the existing typecheck, test, and brief:sample scripts. Record each actual command, exit code, and one output line in docs/evidence.md. Link my screenshot under docs/evidence/. Mark unrun checks OPEN. Do not change implementation to hide a failure. Stop for my review.
 
-Read src/agent.ts once: tools is empty, allowedTools, permissionMode dontAsk, outputFormat. Do not widen permissions. Do not add write scope.
+Improvement prompt:
 
-Add exactly one read-only tool in src/sources.ts. Follow the tool() and guarded() shape. Examples: github_failed_workflows, linear_due_this_week, notion_page_comments. Add a wiring test. No write access.
+> Check the evidence against the extra case I choose. Show missing proof as OPEN. Stop while my reviewer reruns one command and compares the output. Record their actual name and result only afterward.
 
-After I load tokens in .env locally, I will run npm run brief and save run.log. Help me read run.log: the mcp=[…] line and each tool call line. Every sentence in out/latest.html must trace to a tool call.
+## Step 7 · Decide the gate and prepare the PR
 
-Do not put credentials in the repo or in this chat. Do not invent evidence. Mark unrun checks OPEN.
-Stop when I can answer the step check yes or no: is every brief sentence traceable to run.log? Did the model get no shell and no write?
-```
+Build prompt:
 
----
+> Read intent.md, the diff, and docs/evidence.md. Draft docs/gate.md with evidence links and proposed FAIL or OPEN entries for missing checks. Leave PASS decisions to me. Prepare a PR description and weekday schedule without activating it. Do not merge, deploy, or publish. Stop for my decision.
 
-## Step 6 · Test — record the evidence
+Improvement prompt:
 
-```
-We are on step 6 of SOLO.md. Read SOLO step 6, AGENTS.md, intent.md, and progress.md.
-
-Fill docs/evidence.md. Record three commands I actually ran: npm run typecheck, npm test, and npm run brief or npm run brief:sample. For each row write the exit code I saw and one quoted output line.
-
-Add the step 4 screenshot under docs/evidence/. Note a reviewer who reran one command. List differences from the PDFs as OPEN.
-
-Do not invent exit codes or output. Mark unrun checks OPEN.
-Stop when I can answer the step check yes or no: does every row name a command that actually ran?
-```
-
----
-
-## Step 7 · Deploy — the gate and the schedule
-
-```
-We are on step 7 of SOLO.md. Read SOLO step 7, AGENTS.md, intent.md, and progress.md.
-
-Open a pull request from my branch. Help me fill docs/gate.md against intent.md. Use PASS, FAIL, or OPEN per success check. Quote one line per row. Write the handoff.
-
-Add a weekday schedule: a cron line or a GitHub Actions workflow that runs npm run brief on weekday mornings. Store tokens as repository secrets only. Publish out/latest.html as an artifact. Use gitlab-ci.example.yml as shape reference if helpful.
-
-Do not commit secrets. Do not invent evidence. Mark unrun checks OPEN.
-Stop when I can answer the step check yes or no: does no PASS rest on a check I did not read? Is every credential in a secret, none in the repo?
-```
+> Use the OPEN item I choose to propose one new acceptance check. Show the gate diff and PR preview. After I decide the gate and approve publication, open the PR. Stop before merge or deployment.
