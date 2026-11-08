@@ -1,11 +1,47 @@
-# Daily brief agent — lab
+# Daily brief agent — optional Workshop 5 bonus
 
-You are going to build one agent around the whole AI-native SDLC: an agent
-that reads GitLab, Jira, Confluence and the Outlook calendar (or your own GitHub, Linear and Notion) every morning and
-writes a one-page brief. `main` is empty on purpose: templates, a package
-skeleton and nothing else. Every step of the lesson leaves one artifact here.
+This is the optional bonus after the main Workshop 5 SRE lab. You build an
+agent that reads GitLab, Jira, Confluence and the Outlook calendar, or your own
+GitHub, Linear and Notion, and writes a one-page morning brief.
 
-Academy Workshop 5 walks this repository as the AI-native SDLC guided lesson (Academy host path `/workshop/5`).
+The `main` branch is the unsolved participant starter. It contains templates
+and a package skeleton. Build steps 1 through 4 during the 30 to 40 minute
+classroom block. Complete steps 5 through 7 as homework.
+
+## Start in Claude Code
+
+You need Node.js 20 or newer, Git and Claude Code signed in with your own
+account. You do not need an API key for the classroom route.
+
+Run these commands. Use your own first name in the branch name.
+
+```bash
+git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
+cd aetherlink-daily-brief-lab-s1
+git switch -c my/firstname
+claude
+```
+
+Paste this prompt into Claude Code. Approve the setup command that Claude Code
+proposes before step 1. Claude Code stops after each review point.
+
+> Read SOLO.md, AGENTS.md and progress.md in the daily-brief repo. Help me build steps 1–4 with Claude Code, one step at a time. Interview me for intent.md; ask before edits. Show a red schema test, then build the schema. Stay in plan mode until I accept. Build the sample renderer with a red-to-green test and render out/latest.html without a model call. Ask me to choose one style variation. Show its diff and test result. Run commands yourself and stop after each step for my review. Do not copy solved tags or add live credentials.
+
+Stop after step 4. Open `out/latest.html` and confirm that `npm test` passes.
+The classroom route needs no API key. Open a pull request only after the human
+review in step 7.
+
+If you already have this repository, open the existing folder in Claude Code.
+Ask Claude Code to inspect `git status` before it updates anything. Preserve
+your work and use `git pull --ff-only` only on a clean branch that tracks the
+remote branch.
+
+## Facilitator preparation
+
+Use a separate reviewed branch with completed steps 1 through 4 for the
+18-minute preview. Keep `main` unsolved for participants. The Workshop 5
+speaker notes define the preview, the 30 to 40 minute build block and the stop
+after step 4.
 
 ## The steps
 
@@ -22,30 +58,6 @@ Academy Workshop 5 walks this repository as the AI-native SDLC guided lesson (Ac
 ## Always-on artifacts
 
 `CLAUDE.md` · `AGENTS.md` · `progress.md` · `SOLO.md` — read before you change anything; append `progress.md` each SOLO.
-
-## How to work
-
-```bash
-npm install                 # once, at the start
-git switch -c my/<name>     # your own branch from main
-```
-
-Work in your branch. Build each step with the prompt in `SOLO.md`. After your
-own attempt, you can compare your diff with the reference history:
-
-```bash
-git diff main step-2-spec --stat          # what step 2 adds
-git diff step-2-spec -- docs/spec.md      # compare your spec with the reference
-git log --oneline main..step-7-gate-deploy # the whole route
-```
-
-Do not copy solved files from a reference tag into your branch. Ask Claude Code
-to show the reference diff only after your own attempt, then fix your work.
-
-Tags: `step-1-intent`, `step-2-spec`, `step-3-design`, `step-4-build-render`,
-`step-5-build-agent`, `step-6-evidence`, `step-7-gate-deploy`. The same commits
-are reachable as branches `steps/1-intent` … `steps/7-gate-deploy` for browsing
-on GitLab or GitHub.
 
 ## Rules
 
@@ -66,6 +78,22 @@ example. Read `reference/README.md` before you quote them.
 Walking it alone, with your own GitHub, Linear and Notion: `SOLO.md` — each step
 includes a paste-ready Claude Code **Prompt** block; all seven are also in
 [`docs/prompts.md`](docs/prompts.md).
+
+## Compare with the reference after your attempt
+
+Ask Claude Code to show a reference diff only after your own attempt. Preserve
+your work and apply only the change that you reviewed. Do not copy solved files
+into your branch.
+
+```bash
+git diff main step-2-spec --stat
+git diff step-2-spec -- docs/spec.md
+git log --oneline main..step-7-gate-deploy
+```
+
+The reference tags are `step-1-intent` through `step-7-gate-deploy`. The same
+commits are available as `steps/1-intent` through `steps/7-gate-deploy` for
+browsing on GitLab or GitHub.
 
 ## Interactive course
 
