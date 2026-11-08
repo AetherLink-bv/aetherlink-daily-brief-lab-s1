@@ -19,8 +19,11 @@ Run these commands. Use your own first name in the branch name.
 git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
 cd aetherlink-daily-brief-lab-s1
 git switch -c my/firstname
-claude
+claude --setting-sources project --strict-mcp-config --no-chrome
 ```
+
+This workshop command loads only repository context. It does not load user
+settings, global MCP servers, auto memory, or Claude in Chrome.
 
 Paste this prompt into Claude Code. Approve the setup command that Claude Code
 proposes before step 1. Claude Code stops after each review point.
