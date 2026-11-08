@@ -6,6 +6,12 @@ These prompts match [SOLO.md](../SOLO.md). Start with the build prompt. Inspect 
 
 > Read README.md, CLAUDE.md, and SOLO.md. Check the documented Node version and package scripts. Preserve existing work. Prepare my own branch and install the documented dependencies after I approve the commands. Report the starting files and any blockers. Do not implement a solution yet.
 
+## Classroom route through step 4
+
+Use this prompt for the 30 to 40 minute classroom route. Stop after step 4. Complete steps 5 through 7 as homework.
+
+> Read SOLO.md, AGENTS.md and progress.md in the daily-brief repo. Help me build steps 1–4 with Claude Code, one step at a time. Interview me for intent.md; ask before edits. Show a red schema test, then build the schema. Stay in plan mode until I accept. Build the sample renderer with a red-to-green test and render out/latest.html without a model call. Ask me to choose one style variation. Show its diff and test result. Run commands yourself and stop after each step for my review. Do not copy solved tags or add live credentials.
+
 ## Step 1 · Draft the intent
 
 Build prompt:

@@ -19,6 +19,14 @@ Keep tokens in the documented local environment or secrets store. Never paste cr
 SOLO 1 through 4 work without credentials. Missing credentials leave the live checks in SOLO 5 OPEN.
 Keep the sample route working throughout the exercise.
 
+## Complete steps 1 through 4 in class
+
+Use this prompt for the 30 to 40 minute classroom route. Claude Code must stop after each step. You still inspect each result and accept each decision.
+
+> Read SOLO.md, AGENTS.md and progress.md in the daily-brief repo. Help me build steps 1–4 with Claude Code, one step at a time. Interview me for intent.md; ask before edits. Show a red schema test, then build the schema. Stay in plan mode until I accept. Build the sample renderer with a red-to-green test and render out/latest.html without a model call. Ask me to choose one style variation. Show its diff and test result. Run commands yourself and stop after each step for my review. Do not copy solved tags or add live credentials.
+
+Stop after step 4 during class. Complete steps 5 through 7 as homework.
+
 ## Complete the seven steps
 
 For each step, paste the build prompt first. Inspect the result before using the improvement prompt.
