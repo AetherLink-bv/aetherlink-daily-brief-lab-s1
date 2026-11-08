@@ -13,7 +13,7 @@ const files = Object.fromEntries(await Promise.all(paths.map(async (path) => [pa
 const prompts = (text) => [...text.matchAll(/^> (.+)$/gm)].map((match) => match[1]);
 
 assert.deepEqual(prompts(files["docs/prompts.md"]), prompts(files["SOLO.md"]));
-assert.equal(prompts(files["SOLO.md"]).length, 15);
+assert.equal(prompts(files["SOLO.md"]).length, 16);
 
 for (const [path, text] of Object.entries(files)) {
   assert.doesNotMatch(text, /git checkout step-/i, path);
@@ -33,4 +33,4 @@ await Promise.all([
   access("reference/The_Wednesday_Brief_-_October_7.pdf"),
 ]);
 
-console.log("PASS 15 prompt-first SOLO instructions stay aligned");
+console.log("PASS 16 prompt-first SOLO instructions stay aligned");
