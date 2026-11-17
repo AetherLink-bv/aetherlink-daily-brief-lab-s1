@@ -6,13 +6,13 @@ These prompts match [SOLO.md](../SOLO.md). Start with the build prompt. Inspect 
 
 > Read README.md, CLAUDE.md, and SOLO.md. Check the documented Node version and package scripts. Preserve existing work. Prepare my own branch and install the documented dependencies after I approve the commands. Report the starting files and any blockers. Do not implement a solution yet.
 
-## Classroom route through step 4
+## Morning route through step 4
 
-Use this prompt for the 30 to 40 minute classroom route. Stop after step 4. Complete steps 5 through 7 as homework.
+Use this prompt for the morning block, A1 to A4. Stop after step 4 for lunch. After lunch, complete A5 to A7 with the step 5 to 7 prompts below.
 
 > Read SOLO.md, AGENTS.md and progress.md in the daily-brief repo. Help me build steps 1–4 with Claude Code, one step at a time. Interview me for intent.md; ask before edits. Show a red schema test, then build the schema. Stay in plan mode until I accept. Build the sample renderer with a red-to-green test and render out/latest.html without a model call. Ask me to choose one style variation. Show its diff and test result. Run commands yourself and stop after each step for my review. Do not copy solved tags or add live credentials.
 
-## Step 1 · Draft the intent
+## Assignment 1 · Write down what the brief must do
 
 Build prompt:
 
@@ -22,7 +22,7 @@ Improvement prompt:
 
 > Challenge my weakest check with one concrete counterexample. Revise only intent.md after my answer. Show the diff and stop.
 
-## Step 2 · Build the spec and schema
+## Assignment 2 · Make the schema test fail, then pass
 
 Build prompt:
 
@@ -32,7 +32,7 @@ Improvement prompt:
 
 > Add one invalid sample of my choice to test/schema.test.ts. Prove the schema rejects it. Show the spec row, test output, and diff. Stop before SOLO 3.
 
-## Step 3 · Accept the design and plan
+## Assignment 3 · Agree on the design and the plan
 
 Build prompt:
 
@@ -42,7 +42,7 @@ Improvement prompt:
 
 > After I accept the plan, save only those design documents. Challenge one assumption with the case I choose. Show the revised plan and diff. Stop before building.
 
-## Step 4 · Build the sample renderer
+## Assignment 4 · Render the brief from sample data
 
 Build prompt:
 
@@ -52,7 +52,7 @@ Improvement prompt:
 
 > Change one house-style rule I choose. Add a failing test first, then make it pass. Regenerate out/latest.html and show the diff. Stop so I can inspect the page and save a 1440×900 screenshot.
 
-## Step 5 · Build one read-only tool
+## Assignment 5 · Give the agent one read-only tool
 
 Build prompt:
 
@@ -62,7 +62,7 @@ Improvement prompt:
 
 > Test one missing-source case I choose. Show the diff and observed test output. With configured credentials, run the brief and trace each factual claim to run.log. Without credentials, run the sample and mark the live check OPEN. Never print tokens. Stop for my inspection.
 
-## Step 6 · Record and review evidence
+## Assignment 6 · Record the evidence
 
 Build prompt:
 
@@ -72,7 +72,7 @@ Improvement prompt:
 
 > Check the evidence against the extra case I choose. Show missing proof as OPEN. Stop while my reviewer reruns one command and compares the output. Record their actual name and result only afterward.
 
-## Step 7 · Decide the gate and prepare the PR
+## Assignment 7 · Decide the gate and prepare the PR
 
 Build prompt:
 

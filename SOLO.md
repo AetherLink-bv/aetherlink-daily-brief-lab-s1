@@ -19,13 +19,13 @@ Keep tokens in the documented local environment or secrets store. Never paste cr
 SOLO 1 through 4 work without credentials. Missing credentials leave the live checks in SOLO 5 OPEN.
 Keep the sample route working throughout the exercise.
 
-## Complete steps 1 through 4 in class
+## Complete steps 1 through 4 before lunch
 
-Use this prompt for the 30 to 40 minute classroom route. Claude Code must stop after each step. You still inspect each result and accept each decision.
+Use this prompt for the morning block, A1 to A4. Claude Code must stop after each step. You still inspect each result and accept each decision.
 
 > Read SOLO.md, AGENTS.md and progress.md in the daily-brief repo. Help me build steps 1–4 with Claude Code, one step at a time. Interview me for intent.md; ask before edits. Show a red schema test, then build the schema. Stay in plan mode until I accept. Build the sample renderer with a red-to-green test and render out/latest.html without a model call. Ask me to choose one style variation. Show its diff and test result. Run commands yourself and stop after each step for my review. Do not copy solved tags or add live credentials.
 
-Stop after step 4 during class. Complete steps 5 through 7 as homework.
+Stop after step 4 for lunch. After lunch, complete A5 to A7 with the step 5 to 7 prompts below.
 
 ## Complete the seven steps
 
@@ -34,7 +34,7 @@ Choose the requested variation yourself. Append observed proof to `progress.md` 
 Use VERIFIED only after a reviewer reruns the check. Until then, use OPEN.
 A failed check is FAIL. A check that did not run is OPEN.
 
-### 1 · Draft the intent
+### Assignment 1 · Write down what the brief must do
 
 Start with the templates on your own branch.
 
@@ -48,7 +48,7 @@ Choose your own variation, then paste this improvement prompt.
 
 Inspect intent.md yourself. Reject a vague boundary. Stop until you accept the checks. Do not implement code yet.
 
-### 2 · Build the spec and schema
+### Assignment 2 · Make the schema test fail, then pass
 
 Start with your accepted intent and the files in `reference/`.
 
@@ -62,7 +62,7 @@ Choose your own variation, then paste this improvement prompt.
 
 Inspect the quoted spec rows and the actual red and green output. Commit the failing test before `brief.ts`. Stop after your invalid sample is rejected.
 
-### 3 · Accept the design and plan
+### Assignment 3 · Agree on the design and the plan
 
 Start with the accepted spec and schema from SOLO 2.
 
@@ -76,7 +76,7 @@ Choose your own variation, then paste this improvement prompt.
 
 Plan mode is read-only. Accept the proposal yourself before Claude saves the design documents. No build begins before that acceptance.
 
-### 4 · Build the sample renderer
+### Assignment 4 · Render the brief from sample data
 
 Start with your accepted design and plan.
 
@@ -90,7 +90,7 @@ Choose your own variation, then paste this improvement prompt.
 
 Open `out/latest.html` yourself. Inspect the escaping test and your changed style rule. Keep the screenshot before continuing.
 
-### 5 · Build one read-only tool
+### Assignment 5 · Give the agent one read-only tool
 
 Start with the sample renderer and your accepted plan.
 
@@ -104,7 +104,7 @@ Choose your own variation, then paste this improvement prompt.
 
 Claude Code builds and runs checks. The built brief-agent gets no shell or write tools. Inspect the tool trace. Missing credentials leave live evidence OPEN.
 
-### 6 · Record and review evidence
+### Assignment 6 · Record the evidence
 
 Start with your own working code and screenshot from SOLO 4.
 
@@ -118,7 +118,7 @@ Choose your own variation, then paste this improvement prompt.
 
 A reviewer reruns one real command and compares it with `docs/evidence.md`. Unrun checks stay OPEN. Stop until the screenshot and reviewer are recorded.
 
-### 7 · Decide the gate and prepare the PR
+### Assignment 7 · Decide the gate and prepare the PR
 
 Start with the diff, intent, and reviewed evidence.
 

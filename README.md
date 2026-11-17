@@ -1,12 +1,13 @@
-# Daily brief agent — optional Workshop 5 bonus
+# Daily brief agent: the main Workshop 5 route
 
-This is the optional bonus after the main Workshop 5 SRE lab. You build an
+This is the main Day 5 lab. The on-call SRE agent lab (`sre-oncall-agent`)
+is now the bonus. You build an
 agent that reads GitLab, Jira, Confluence and the Outlook calendar, or your own
 GitHub, Linear and Notion, and writes a one-page morning brief.
 
 The `main` branch is the unsolved participant starter. It contains templates
-and a package skeleton. Build steps 1 through 4 during the 30 to 40 minute
-classroom block. Complete steps 5 through 7 as homework.
+and a package skeleton. You build all seven steps in class: A1 to A4 (steps 1
+to 4) before lunch, A5 to A7 (steps 5 to 7) after lunch.
 
 ## Start in Claude Code
 
@@ -19,19 +20,22 @@ Run these commands. Use your own first name in the branch name.
 git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
 cd aetherlink-daily-brief-lab-s1
 git switch -c my/firstname
-claude --setting-sources project --strict-mcp-config --no-chrome
+claude --setting-sources project,user --strict-mcp-config --no-chrome
 ```
 
-This workshop command loads only repository context. It does not load user
-settings, global MCP servers, auto memory, or Claude in Chrome.
+This workshop command loads the repository settings and your user settings.
+User settings include a company login such as Vertex in `~/.claude/settings.json`.
+MCP servers stay off through `--strict-mcp-config`. Claude in Chrome stays off.
+A large personal setup can change the tone of answers and cost more.
 
 Paste this prompt into Claude Code. Approve the setup command that Claude Code
 proposes before step 1. Claude Code stops after each review point.
 
 > Read SOLO.md, AGENTS.md and progress.md in the daily-brief repo. Help me build steps 1–4 with Claude Code, one step at a time. Interview me for intent.md; ask before edits. Show a red schema test, then build the schema. Stay in plan mode until I accept. Build the sample renderer with a red-to-green test and render out/latest.html without a model call. Ask me to choose one style variation. Show its diff and test result. Run commands yourself and stop after each step for my review. Do not copy solved tags or add live credentials.
 
-Stop after step 4. Open `out/latest.html` and confirm that `npm test` passes.
-The classroom route needs no API key. Open a pull request only after the human
+Before lunch, finish step 4. Open `out/latest.html` and confirm that `npm test`
+passes. After lunch, continue with steps 5 to 7 in `SOLO.md`. Steps 1 to 4 need
+no API key. Open a pull request only after the human
 review in step 7.
 
 If you already have this repository, open the existing folder in Claude Code.
@@ -43,8 +47,8 @@ remote branch.
 
 Use a separate reviewed branch with completed steps 1 through 4 for the
 18-minute preview. Keep `main` unsolved for participants. The Workshop 5
-speaker notes define the preview, the 30 to 40 minute build block and the stop
-after step 4.
+speaker notes define the preview, the morning block for A1 to A4 and the
+afternoon block for A5 to A7.
 
 ## The steps
 
