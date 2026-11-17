@@ -78,6 +78,8 @@ Inspect the quoted spec rows and the actual red and green output. Commit the fai
 
 Start with the accepted spec and schema from SOLO 2.
 
+This assignment runs in plan mode. Press Shift+Tab until Claude Code shows "plan mode on". The other assignments run in manual mode.
+
 Paste this build prompt into Claude Code.
 
 > In plan mode, read intent.md, docs/spec.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md. Name exact paths, one proof command and rollback per step. Do not edit files or build. Stop for my acceptance.
@@ -112,7 +114,7 @@ Skill prompt: `/verify-this` runs a real command to prove a claim and reports wh
 /verify-this Prove that npm run brief:sample writes out/latest.html without a model call. Show the command, exit code and one line of output.
 ```
 
-Open `out/latest.html` yourself. Inspect the escaping test and your changed style rule. Keep the screenshot before continuing.
+Open `out/latest.html` yourself. Inspect the escaping test and your changed style rule. Save the screenshot as `docs/evidence/latest-1440x900.png` before continuing.
 
 ### Assignment 5 · Give the agent one read-only tool
 
@@ -132,6 +134,7 @@ Skill prompt: `/show-me` draws a small diagram or code sketch so you can see how
 /show-me Draw how one source reaches the brief: src/sources.ts, the tool in src/agent.ts, and src/main.ts. Only read, change nothing.
 ```
 
+With credentials, run `npm run brief 2> run.log` to make `run.log`.
 Claude Code builds and runs checks. The built brief-agent gets no shell or write tools. Inspect the tool trace. Missing credentials leave live evidence OPEN.
 
 ### Assignment 6 · Record the evidence
@@ -152,7 +155,7 @@ Skill prompt: `/verify-this` runs a real command to prove a claim and reports wh
 /verify-this Rerun the three commands in docs/evidence.md and compare each exit code with what is written. Mark any difference OPEN.
 ```
 
-A reviewer reruns one real command and compares it with `docs/evidence.md`. Unrun checks stay OPEN. Stop until the screenshot and reviewer are recorded.
+A reviewer reruns one real command and compares it with `docs/evidence.md`. Unrun checks stay OPEN. Stop until the screenshot (`docs/evidence/latest-1440x900.png`) and reviewer are recorded.
 
 ### Assignment 7 · Decide the gate and prepare the PR
 
