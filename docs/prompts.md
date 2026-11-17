@@ -22,6 +22,12 @@ Improvement prompt:
 
 > Challenge my weakest check with one concrete counterexample. Revise only intent.md after my answer. Show the diff and stop.
 
+Skill prompt: `/grilling` asks you one hard question at a time until the weak spots in your plan show.
+
+```text
+/grilling Grill me on my intent.md, one question at a time. Focus on the checks a neighbour cannot observe. Do not edit files.
+```
+
 ## Assignment 2 · Make the schema test fail, then pass
 
 Build prompt:
@@ -31,6 +37,12 @@ Build prompt:
 Improvement prompt:
 
 > Add one invalid sample of my choice to test/schema.test.ts. Prove the schema rejects it. Show the spec row, test output, and diff. Stop before SOLO 3.
+
+Skill prompt: `/eli5` explains code in plain words for a smart beginner, without hiding how it works.
+
+```text
+/eli5 Explain my schema and test/schema.test.ts as for an intelligent beginner: what each field checks and why the test was red first. Do not edit files.
+```
 
 ## Assignment 3 · Agree on the design and the plan
 
@@ -42,6 +54,12 @@ Improvement prompt:
 
 > After I accept the plan, save only those design documents. Challenge one assumption with the case I choose. Show the revised plan and diff. Stop before building.
 
+Skill prompt: `/visual-plan` turns a text plan into one self-contained HTML page you open in the browser.
+
+```text
+/visual-plan Turn my accepted docs/plan.md into one HTML page I can read in the browser. Do not change the plan.
+```
+
 ## Assignment 4 · Render the brief from sample data
 
 Build prompt:
@@ -51,6 +69,12 @@ Build prompt:
 Improvement prompt:
 
 > Change one house-style rule I choose. Add a failing test first, then make it pass. Regenerate out/latest.html and show the diff. Stop so I can inspect the page and save a 1440×900 screenshot.
+
+Skill prompt: `/verify-this` runs a real command to prove a claim and reports what it saw.
+
+```text
+/verify-this Prove that npm run brief:sample writes out/latest.html without a model call. Show the command, exit code and one line of output.
+```
 
 ## Assignment 5 · Give the agent one read-only tool
 
@@ -62,6 +86,12 @@ Improvement prompt:
 
 > Test one missing-source case I choose. Show the diff and observed test output. With configured credentials, run the brief and trace each factual claim to run.log. Without credentials, run the sample and mark the live check OPEN. Never print tokens. Stop for my inspection.
 
+Skill prompt: `/show-me` draws a small diagram or code sketch so you can see how parts connect.
+
+```text
+/show-me Draw how one source reaches the brief: src/sources.ts, the tool in src/agent.ts, and src/main.ts. Only read, change nothing.
+```
+
 ## Assignment 6 · Record the evidence
 
 Build prompt:
@@ -72,6 +102,12 @@ Improvement prompt:
 
 > Check the evidence against the extra case I choose. Show missing proof as OPEN. Stop while my reviewer reruns one command and compares the output. Record their actual name and result only afterward.
 
+Skill prompt: `/verify-this` runs a real command to prove a claim and reports what it saw.
+
+```text
+/verify-this Rerun the three commands in docs/evidence.md and compare each exit code with what is written. Mark any difference OPEN.
+```
+
 ## Assignment 7 · Decide the gate and prepare the PR
 
 Build prompt:
@@ -81,3 +117,17 @@ Build prompt:
 Improvement prompt:
 
 > Use the OPEN item I choose to propose one new acceptance check. Show the gate diff and PR preview. After I decide the gate and approve publication, open the PR. Stop before merge or deployment.
+
+Skill prompt: `/review-and-ship` reviews your branch, runs the checks, and prepares the PR for you to open.
+
+```text
+/review-and-ship Review my branch against intent.md and docs/gate.md. Run the tests. Prepare the PR, but stop before you open it and before any merge.
+```
+
+## Stuck or switching laptop?
+
+`/handoff` writes a prompt that a fresh Claude Code session can paste in to continue your work.
+
+```text
+/handoff Write a prompt for a fresh Claude Code session to continue from my current step. Name the step, the files, and the next proof.
+```

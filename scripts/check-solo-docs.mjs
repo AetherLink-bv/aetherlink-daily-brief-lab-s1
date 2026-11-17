@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 const paths = [
   "SOLO.md",
@@ -33,4 +34,21 @@ await Promise.all([
   access("reference/The_Wednesday_Brief_-_October_7.pdf"),
 ]);
 
-console.log("PASS 16 prompt-first SOLO instructions stay aligned");
+// Every SOLO step names one skill prompt; both files must carry each one verbatim.
+const skillPrompts = [
+  "/grilling Grill me on my intent.md, one question at a time. Focus on the checks a neighbour cannot observe. Do not edit files.",
+  "/eli5 Explain my schema and test/schema.test.ts as for an intelligent beginner: what each field checks and why the test was red first. Do not edit files.",
+  "/visual-plan Turn my accepted docs/plan.md into one HTML page I can read in the browser. Do not change the plan.",
+  "/verify-this Prove that npm run brief:sample writes out/latest.html without a model call. Show the command, exit code and one line of output.",
+  "/show-me Draw how one source reaches the brief: src/sources.ts, the tool in src/agent.ts, and src/main.ts. Only read, change nothing.",
+  "/verify-this Rerun the three commands in docs/evidence.md and compare each exit code with what is written. Mark any difference OPEN.",
+  "/review-and-ship Review my branch against intent.md and docs/gate.md. Run the tests. Prepare the PR, but stop before you open it and before any merge.",
+  "/handoff Write a prompt for a fresh Claude Code session to continue from my current step. Name the step, the files, and the next proof.",
+];
+for (const path of ["SOLO.md", "docs/prompts.md"]) {
+  const lines = new Set(files[path].split("\n"));
+  for (const prompt of skillPrompts) assert.ok(lines.has(prompt), `${path} is missing skill prompt: ${prompt}`);
+}
+await Promise.all(skillPrompts.map((prompt) => access(join(".claude/skills", prompt.split(" ")[0].slice(1), "SKILL.md"))));
+
+console.log("PASS 16 prompt-first SOLO instructions stay aligned; 8 skill prompts map to .claude/skills");

@@ -46,6 +46,12 @@ Choose your own variation, then paste this improvement prompt.
 
 > Challenge my weakest check with one concrete counterexample. Revise only intent.md after my answer. Show the diff and stop.
 
+Skill prompt: `/grilling` asks you one hard question at a time until the weak spots in your plan show.
+
+```text
+/grilling Grill me on my intent.md, one question at a time. Focus on the checks a neighbour cannot observe. Do not edit files.
+```
+
 Inspect intent.md yourself. Reject a vague boundary. Stop until you accept the checks. Do not implement code yet.
 
 ### Assignment 2 · Make the schema test fail, then pass
@@ -59,6 +65,12 @@ Paste this build prompt into Claude Code.
 Choose your own variation, then paste this improvement prompt.
 
 > Add one invalid sample of my choice to test/schema.test.ts. Prove the schema rejects it. Show the spec row, test output, and diff. Stop before SOLO 3.
+
+Skill prompt: `/eli5` explains code in plain words for a smart beginner, without hiding how it works.
+
+```text
+/eli5 Explain my schema and test/schema.test.ts as for an intelligent beginner: what each field checks and why the test was red first. Do not edit files.
+```
 
 Inspect the quoted spec rows and the actual red and green output. Commit the failing test before `brief.ts`. Stop after your invalid sample is rejected.
 
@@ -74,6 +86,12 @@ Choose your own variation, then paste this improvement prompt.
 
 > After I accept the plan, save only those design documents. Challenge one assumption with the case I choose. Show the revised plan and diff. Stop before building.
 
+Skill prompt: `/visual-plan` turns a text plan into one self-contained HTML page you open in the browser.
+
+```text
+/visual-plan Turn my accepted docs/plan.md into one HTML page I can read in the browser. Do not change the plan.
+```
+
 Plan mode is read-only. Accept the proposal yourself before Claude saves the design documents. No build begins before that acceptance.
 
 ### Assignment 4 · Render the brief from sample data
@@ -87,6 +105,12 @@ Paste this build prompt into Claude Code.
 Choose your own variation, then paste this improvement prompt.
 
 > Change one house-style rule I choose. Add a failing test first, then make it pass. Regenerate out/latest.html and show the diff. Stop so I can inspect the page and save a 1440×900 screenshot.
+
+Skill prompt: `/verify-this` runs a real command to prove a claim and reports what it saw.
+
+```text
+/verify-this Prove that npm run brief:sample writes out/latest.html without a model call. Show the command, exit code and one line of output.
+```
 
 Open `out/latest.html` yourself. Inspect the escaping test and your changed style rule. Keep the screenshot before continuing.
 
@@ -102,6 +126,12 @@ Choose your own variation, then paste this improvement prompt.
 
 > Test one missing-source case I choose. Show the diff and observed test output. With configured credentials, run the brief and trace each factual claim to run.log. Without credentials, run the sample and mark the live check OPEN. Never print tokens. Stop for my inspection.
 
+Skill prompt: `/show-me` draws a small diagram or code sketch so you can see how parts connect.
+
+```text
+/show-me Draw how one source reaches the brief: src/sources.ts, the tool in src/agent.ts, and src/main.ts. Only read, change nothing.
+```
+
 Claude Code builds and runs checks. The built brief-agent gets no shell or write tools. Inspect the tool trace. Missing credentials leave live evidence OPEN.
 
 ### Assignment 6 · Record the evidence
@@ -115,6 +145,12 @@ Paste this build prompt into Claude Code.
 Choose your own variation, then paste this improvement prompt.
 
 > Check the evidence against the extra case I choose. Show missing proof as OPEN. Stop while my reviewer reruns one command and compares the output. Record their actual name and result only afterward.
+
+Skill prompt: `/verify-this` runs a real command to prove a claim and reports what it saw.
+
+```text
+/verify-this Rerun the three commands in docs/evidence.md and compare each exit code with what is written. Mark any difference OPEN.
+```
 
 A reviewer reruns one real command and compares it with `docs/evidence.md`. Unrun checks stay OPEN. Stop until the screenshot and reviewer are recorded.
 
@@ -130,7 +166,21 @@ Choose your own variation, then paste this improvement prompt.
 
 > Use the OPEN item I choose to propose one new acceptance check. Show the gate diff and PR preview. After I decide the gate and approve publication, open the PR. Stop before merge or deployment.
 
+Skill prompt: `/review-and-ship` reviews your branch, runs the checks, and prepares the PR for you to open.
+
+```text
+/review-and-ship Review my branch against intent.md and docs/gate.md. Run the tests. Prepare the PR, but stop before you open it and before any merge.
+```
+
 You decide PASS, FAIL, or OPEN from evidence you read. Inspect the PR preview before publication. Keep deployment and scheduling inactive.
+
+## Stuck or switching laptop?
+
+`/handoff` writes a prompt that a fresh Claude Code session can paste in to continue your work.
+
+```text
+/handoff Write a prompt for a fresh Claude Code session to continue from my current step. Name the step, the files, and the next proof.
+```
 
 ## Finish the handoff
 
