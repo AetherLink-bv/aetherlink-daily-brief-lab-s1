@@ -85,12 +85,12 @@
             <pre><code><span class="code-line"><span class="code-comment">| Step | Phase | You write | Proof |</span></span>
 <span class="code-line"><span class="code-comment">| --- | --- | --- | --- |</span></span>
 <span class="code-line">| 1 | <span class="code-keyword">Plan</span> | <span class="code-string">`intent.md`</span> | A facilitator accepts the boundary |</span>
-<span class="code-line">| 2 | <span class="code-keyword">Plan</span> | <span class="code-string">`docs/spec.md`, `src/brief.ts`, `sample/brief.sample.json`, `test/schema.test.ts`</span> | <span class="code-function">`npm test`</span> green on the schema tests |</span>
-<span class="code-line">| 3 | <span class="code-keyword">Design</span> | <span class="code-string">`docs/design.md`, one ADR, `docs/plan.md`</span> | A stranger can follow the plan and name what proves completion |</span>
+<span class="code-line">| 2 | <span class="code-keyword">Design</span> | <span class="code-string">`docs/spec.md`, `src/brief.ts`, `sample/brief.sample.json`, `test/schema.test.ts`</span> | <span class="code-function">`npm test`</span> green on the schema tests |</span>
+<span class="code-line">| 3 | <span class="code-keyword">Build (plan mode writes `docs/plan.md`)</span> | <span class="code-string">`docs/design.md`, one ADR, `docs/plan.md`</span> | A stranger can follow the plan and name what proves completion |</span>
 <span class="code-line">| 4 | <span class="code-keyword">Build</span> | <span class="code-string">`src/render.ts`, `src/main.ts`</span> | <span class="code-function">`npm run brief:sample`</span> writes `out/latest.html` |</span>
-<span class="code-line">| 5 | <span class="code-keyword">Build</span> | <span class="code-string">`src/sources.ts`, `src/agent.ts`, live wiring in `src/main.ts`</span> | <span class="code-function">`npm test`</span>, <span class="code-function">`npm run typecheck`</span>, and <span class="code-function">`npm run brief:sample`</span> green |</span>
+<span class="code-line">| 5 | <span class="code-keyword">Build</span> | <span class="code-string">`src/sources.ts`, `src/agent.ts`, live wiring in `src/main.ts`</span> | <span class="code-function">`npm test`</span>, <span class="code-function">`npm run typecheck`</span>, and <span class="code-function">`npm run brief:sample`</span> green; wiring proven without a network |</span>
 <span class="code-line">| 6 | <span class="code-keyword">Test</span> | <span class="code-string">`docs/evidence.md` and one screenshot</span> | Three commands with exit codes and a reviewer |</span>
-<span class="code-line">| 7 | <span class="code-keyword">Gate</span> | <span class="code-string">`docs/gate.md`, inactive schedule, PR preview</span> | PASS / FAIL / OPEN with a quoted line |</span></code></pre>
+<span class="code-line">| 7 | <span class="code-keyword">Deploy</span> | <span class="code-string">`docs/gate.md`, inactive schedule, PR preview</span> | PASS / FAIL / OPEN with a quoted line |</span></code></pre>
           </div>
           <div class="translation-english">
             <span class="translation-label">PLAIN ENGLISH</span>
@@ -99,7 +99,7 @@
               <p class="tl">(Table divider, required by <span class="term" data-definition="Markdown is a plain-text format where symbols mean formatting: # is a heading, | draws a table, backticks mark code. Every .md file in this lab is Markdown.">Markdown</span>.)</p>
               <p class="tl">Step 1: write down what you want. Done when a human accepts where the fence is.</p>
               <p class="tl">Step 2: describe the brief's exact shape, then write <span class="term" data-definition="A test is a small program that checks another program's behaviour and says pass or fail. 'npm test' runs all of them; 'green' means they all passed.">tests</span> that check it. Done when those tests pass.</p>
-              <p class="tl">Step 3: design the parts, record one decision (an <span class="term" data-definition="An ADR (Architecture Decision Record) is a one-page note explaining one technical choice: the problem, the options, what was chosen, and when to revisit it.">ADR</span>), write a plan. Done when a stranger could follow it.</p>
+              <p class="tl">Step 3: in plan mode, design the parts, record one decision (an <span class="term" data-definition="An ADR (Architecture Decision Record) is a one-page note explaining one technical choice: the problem, the options, what was chosen, and when to revisit it.">ADR</span>), write the plan. Done when a stranger could follow it.</p>
               <p class="tl">Step 4: the first real code. Done when a sample brief turns into an <span class="term" data-definition="HTML is the language web pages are written in. Here the brief is saved as an .html file you can open in any browser.">HTML</span> page.</p>
               <p class="tl">Step 5: connect the real sources. Done when tests and the <span class="term" data-definition="A typecheck asks the TypeScript compiler to confirm every piece of data is used the way its declared shape allows, catching mistakes before the program runs.">typecheck</span> pass without touching the internet.</p>
               <p class="tl">Step 6: record proof. Done when three commands, their <span class="term" data-definition="An exit code is the number a command returns when it finishes. 0 means success; anything else means something went wrong.">exit codes</span> and a second person are written down.</p>
@@ -147,7 +147,7 @@
           </div>
         </div>
 
-        <p>This whole cycle has a name: the <span class="term" data-definition="SDLC (Software Development Life Cycle) is the series of phases software goes through: plan, design, build, test, deploy. 'AI-native' means an AI assistant does much of the typing inside each phase while humans decide.">AI-native SDLC</span>. The rest of this course walks it one runner at a time.</p>
+        <p>This whole cycle has a name: the <span class="term" data-definition="SDLC (Software Development Life Cycle) is the series of phases software goes through: plan, design, build, test, deploy, maintain. 'AI-native' means an AI assistant does much of the typing inside each phase while humans decide.">AI-native SDLC</span>. The rest of this course walks it one runner at a time. This lab is the main Day 5 route. You build all seven steps in class. Maintain, the last stage of the cycle, is not an assignment: it is what happens after the gate.</p>
       </section>
 
       <section class="screen animate-in">

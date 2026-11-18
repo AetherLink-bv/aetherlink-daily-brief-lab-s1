@@ -138,12 +138,12 @@
             <pre><code><span class="code-line"><span class="code-comment">| Step | Phase | You write | Proof |</span></span>
 <span class="code-line"><span class="code-comment">| --- | --- | --- | --- |</span></span>
 <span class="code-line">| 1 | <span class="code-keyword">Plan</span> | <span class="code-string">`intent.md`</span> | A facilitator accepts the boundary |</span>
-<span class="code-line">| 2 | <span class="code-keyword">Plan</span> | <span class="code-string">`docs/spec.md`, `src/brief.ts`, `sample/brief.sample.json`, `test/schema.test.ts`</span> | <span class="code-function">`npm test`</span> green on the schema tests |</span>
-<span class="code-line">| 3 | <span class="code-keyword">Design</span> | <span class="code-string">`docs/design.md`, one ADR, `docs/plan.md`</span> | A stranger can follow the plan and name what proves completion |</span>
+<span class="code-line">| 2 | <span class="code-keyword">Design</span> | <span class="code-string">`docs/spec.md`, `src/brief.ts`, `sample/brief.sample.json`, `test/schema.test.ts`</span> | <span class="code-function">`npm test`</span> green on the schema tests |</span>
+<span class="code-line">| 3 | <span class="code-keyword">Build (plan mode writes `docs/plan.md`)</span> | <span class="code-string">`docs/design.md`, one ADR, `docs/plan.md`</span> | A stranger can follow the plan and name what proves completion |</span>
 <span class="code-line">| 4 | <span class="code-keyword">Build</span> | <span class="code-string">`src/render.ts`, `src/main.ts`</span> | <span class="code-function">`npm run brief:sample`</span> writes `out/latest.html` |</span>
-<span class="code-line">| 5 | <span class="code-keyword">Build</span> | <span class="code-string">`src/sources.ts`, `src/agent.ts`, live wiring in `src/main.ts`</span> | <span class="code-function">`npm test`</span>, <span class="code-function">`npm run typecheck`</span>, and <span class="code-function">`npm run brief:sample`</span> green |</span>
+<span class="code-line">| 5 | <span class="code-keyword">Build</span> | <span class="code-string">`src/sources.ts`, `src/agent.ts`, live wiring in `src/main.ts`</span> | <span class="code-function">`npm test`</span>, <span class="code-function">`npm run typecheck`</span>, and <span class="code-function">`npm run brief:sample`</span> green; wiring proven without a network |</span>
 <span class="code-line">| 6 | <span class="code-keyword">Test</span> | <span class="code-string">`docs/evidence.md` and one screenshot</span> | Three commands with exit codes and a reviewer |</span>
-<span class="code-line">| 7 | <span class="code-keyword">Gate</span> | <span class="code-string">`docs/gate.md`, inactive schedule, PR preview</span> | PASS / FAIL / OPEN with a quoted line |</span></code></pre>
+<span class="code-line">| 7 | <span class="code-keyword">Deploy</span> | <span class="code-string">`docs/gate.md`, inactive schedule, PR preview</span> | PASS / FAIL / OPEN with a quoted line |</span></code></pre>
           </div>
           <div class="translation-english">
             <span class="translation-label">PLAIN ENGLISH</span>
@@ -152,7 +152,7 @@
               <p class="tl">(Table divider, required by <span class="term" data-definition="Markdown is a plain-text format where symbols mean formatting: # is a heading, | draws a table, backticks mark code. Every .md file in this lab is Markdown.">Markdown</span>.)</p>
               <p class="tl">Step 1: write down what you want. Done when a human accepts where the fence is.</p>
               <p class="tl">Step 2: describe the brief's exact shape, then write <span class="term" data-definition="A test is a small program that checks another program's behaviour and says pass or fail. 'npm test' runs all of them; 'green' means they all passed.">tests</span> that check it. Done when those tests pass.</p>
-              <p class="tl">Step 3: design the parts, record one decision (an <span class="term" data-definition="An ADR (Architecture Decision Record) is a one-page note explaining one technical choice: the problem, the options, what was chosen, and when to revisit it.">ADR</span>), write a plan. Done when a stranger could follow it.</p>
+              <p class="tl">Step 3: in plan mode, design the parts, record one decision (an <span class="term" data-definition="An ADR (Architecture Decision Record) is a one-page note explaining one technical choice: the problem, the options, what was chosen, and when to revisit it.">ADR</span>), write the plan. Done when a stranger could follow it.</p>
               <p class="tl">Step 4: the first real code. Done when a sample brief turns into an <span class="term" data-definition="HTML is the language web pages are written in. Here the brief is saved as an .html file you can open in any browser.">HTML</span> page.</p>
               <p class="tl">Step 5: connect the real sources. Done when tests and the <span class="term" data-definition="A typecheck asks the TypeScript compiler to confirm every piece of data is used the way its declared shape allows, catching mistakes before the program runs.">typecheck</span> pass without touching the internet.</p>
               <p class="tl">Step 6: record proof. Done when three commands, their <span class="term" data-definition="An exit code is the number a command returns when it finishes. 0 means success; anything else means something went wrong.">exit codes</span> and a second person are written down.</p>
@@ -200,7 +200,7 @@
           </div>
         </div>
 
-        <p>This whole cycle has a name: the <span class="term" data-definition="SDLC (Software Development Life Cycle) is the series of phases software goes through: plan, design, build, test, deploy. 'AI-native' means an AI assistant does much of the typing inside each phase while humans decide.">AI-native SDLC</span>. The rest of this course walks it one runner at a time.</p>
+        <p>This whole cycle has a name: the <span class="term" data-definition="SDLC (Software Development Life Cycle) is the series of phases software goes through: plan, design, build, test, deploy, maintain. 'AI-native' means an AI assistant does much of the typing inside each phase while humans decide.">AI-native SDLC</span>. The rest of this course walks it one runner at a time. This lab is the main Day 5 route. You build all seven steps in class. Maintain, the last stage of the cycle, is not an assignment: it is what happens after the gate.</p>
       </section>
 
       <section class="screen animate-in">
@@ -343,7 +343,7 @@
 
       <section class="screen animate-in">
         <h2 class="screen-heading">Wish or rule?</h2>
-        <p><code>SOLO.md</code> gives you a test for your own boundary: "Read the boundary aloud. If any line is a wish rather than a rule, it is NEEDS REVISION." Try it on this made-up draft. Click the line that is a wish.</p>
+        <p><code>SOLO.md</code> tells you to "Reject a vague boundary." A wish is vague, a rule is not. Try it on this made-up draft. Click the line that is a wish.</p>
 
         <div class="bug-challenge">
           <h3>An example draft boundary (not from the repo). Which line fails the test?</h3>
@@ -381,7 +381,7 @@
             <div><strong>Gate</strong><p>"Reads every pull request against this file before merge." The human who says yes or no.</p></div>
           </div>
         </div>
-        <p>Splitting these roles means nobody grades their own homework, including the AI.</p>
+        <p>Splitting these roles means nobody grades their own work, including the AI.</p>
       </section>
 
       <section class="screen animate-in">
@@ -498,7 +498,7 @@
           </div>
         </div>
 
-        <p>Step 2 then works <span class="term" data-definition="Test-first (or TDD, test-driven development) means writing the check before the code. The test fails ('red') at first, then you write code until it passes ('green'). It proves the test can actually catch a problem.">test-first</span>: <code>test/schema.test.ts</code> is written and fails, and only then does <code>src/brief.ts</code> get written to make it pass. <code>SOLO.md</code> even asks you to check that "<code>git log</code> show[s] the test commit before <code>brief.ts</code>."</p>
+        <p>Step 2 then works <span class="term" data-definition="Test-first (or TDD, test-driven development) means writing the check before the code. The test fails ('red') at first, then you write code until it passes ('green'). It proves the test can actually catch a problem.">test-first</span>: <code>test/schema.test.ts</code> is written and fails, and only then does <code>src/brief.ts</code> get written to make it pass. <code>SOLO.md</code> even says: "Commit the failing test before <code>brief.ts</code>."</p>
       </section>
 
       <section class="screen animate-in">
@@ -634,7 +634,7 @@
           <div class="quiz-question-block"
                data-correct="b"
                data-explanation-right="Exactly. Test-first means the test is committed and failing before the code. If the test was written after, you never saw it fail, so you don't know it can catch anything."
-               data-explanation-wrong="The order matters. SOLO.md asks you to check that git log shows the test commit before brief.ts. A test that has never failed has never proven it can catch a bug.">
+               data-explanation-wrong="The order matters. SOLO.md asks you to commit the failing test before brief.ts. A test that has never failed has never proven it can catch a bug.">
             <h3 class="quiz-question">The AI hands you <code>src/brief.ts</code> and <code>test/schema.test.ts</code> in a single commit, all green. What is missing?</h3>
             <div class="quiz-options">
               <button class="quiz-option" data-value="a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Nothing. Green is green.</span></button>
@@ -1073,12 +1073,12 @@
 
         <div class="step-cards">
           <div class="step-card"><div class="step-num">1</div><div class="step-body"><strong>Plan: intent (15 min)</strong><p>Claude Code interviews you one question at a time. You cut.</p></div></div>
-          <div class="step-card"><div class="step-num">2</div><div class="step-body"><strong>Plan: spec and contract, test first (25 min)</strong><p>Quote the PDFs, write the failing test, then the code.</p></div></div>
-          <div class="step-card"><div class="step-num">3</div><div class="step-body"><strong>Design: one decision, a plan with proof (15 min)</strong><p>Claude Code in <span class="term" data-definition="Plan mode is a Claude Code setting where the assistant can read files and propose a plan but cannot edit anything until you accept it.">plan mode</span>: read-only until you accept.</p></div></div>
+          <div class="step-card"><div class="step-num">2</div><div class="step-body"><strong>Design: spec and contract, test first (25 min)</strong><p>Quote the PDFs, write the failing test, then the code.</p></div></div>
+          <div class="step-card"><div class="step-num">3</div><div class="step-body"><strong>Build, in plan mode: one decision, a plan with proof (15 min)</strong><p>Claude Code in <span class="term" data-definition="Plan mode is a Claude Code setting where the assistant can read files and propose a plan but cannot edit anything until you accept it.">plan mode</span>: read-only until you accept.</p></div></div>
           <div class="step-card"><div class="step-num">4</div><div class="step-body"><strong>Build: render the sample (25 min)</strong><p>The first artifact: <code>out/latest.html</code>, no API key needed.</p></div></div>
-          <div class="step-card"><div class="step-num">5</div><div class="step-body"><strong>Build: the loop and one read-only tool (20 min + live run)</strong><p>Build the agent and one tool, then wire the live and sample routes.</p></div></div>
+          <div class="step-card"><div class="step-num">5</div><div class="step-body"><strong>Build: the loop and one read-only tool (20 min)</strong><p>Build the agent and one tool, then wire the live and sample routes. The live run needs credentials.</p></div></div>
           <div class="step-card"><div class="step-num">6</div><div class="step-body"><strong>Test: record the evidence (15 min)</strong><p>Three commands, exit codes, one screenshot, one reviewer.</p></div></div>
-          <div class="step-card"><div class="step-num">7</div><div class="step-body"><strong>Gate: review and prepare the schedule (15 min)</strong><p>Decide the gate, preview the pull request, and keep the schedule inactive.</p></div></div>
+          <div class="step-card"><div class="step-num">7</div><div class="step-body"><strong>Deploy: review the gate and prepare the schedule (15 min)</strong><p>Decide the gate, preview the pull request, and keep the schedule inactive.</p></div></div>
         </div>
       </section>
 
@@ -1087,17 +1087,17 @@
 
         <div class="translation-block animate-in">
           <div class="translation-code">
-            <span class="translation-label">SOLO.md</span>
-            <pre><code><span class="code-line"><span class="code-function">git</span> diff main step-2-spec --stat              <span class="code-comment"># what a step adds</span></span>
-<span class="code-line"><span class="code-function">git</span> diff step-2-spec -- docs/spec.md          <span class="code-comment"># compare after your attempt</span></span>
-<span class="code-line"><span class="code-function">git</span> diff step-5-build-agent -- src/agent.ts  <span class="code-comment"># inspect, do not copy</span></span></code></pre>
+            <span class="translation-label">README.md</span>
+            <pre><code><span class="code-line"><span class="code-function">git</span> diff main step-2-spec -- src test docs</span>
+<span class="code-line"><span class="code-function">git</span> diff step-2-spec -- docs/spec.md</span>
+<span class="code-line"><span class="code-function">git</span> log --oneline main..step-7-gate-deploy</span></code></pre>
           </div>
           <div class="translation-english">
             <span class="translation-label">PLAIN ENGLISH</span>
             <div class="translation-lines">
-              <p class="tl"><strong>Inspect the scope.</strong> List the files that the reference solution added by the end of step 2.</p>
+              <p class="tl"><strong>Inspect the scope.</strong> List what the reference solution changed in source, tests and docs by the end of step 2. Compare by path.</p>
               <p class="tl"><strong>Compare your work.</strong> Show how your spec differs after you have written and tested it.</p>
-              <p class="tl"><strong>Learn from the reference.</strong> Read the agent diff after Claude Code has built your version. Keep your work and fix only the mismatch you understand.</p>
+              <p class="tl"><strong>See the route.</strong> List the commits of the reference solution, from the empty start to step 7.</p>
             </div>
           </div>
         </div>
@@ -1113,30 +1113,24 @@
 
       <section class="screen animate-in">
         <h2 class="screen-heading">The live run: read the log, not just the page</h2>
-        <p>Step 5 ends with the first real run, using your read-only tokens from <code>.env</code>.</p>
+        <p>Step 5 has a live run only if you have read-only credentials. Without them, the sample route still works and the live check stays <code>OPEN</code>.</p>
 
         <div class="translation-block animate-in">
           <div class="translation-code">
             <span class="translation-label">SOLO.md</span>
-            <pre><code><span class="code-line"><span class="code-function">set</span> -a &amp;&amp; . ./.env &amp;&amp; <span class="code-function">set</span> +a</span>
-<span class="code-line"><span class="code-function">npm</span> run brief 2&gt; run.log</span>
-<span class="code-line"></span>
-<span class="code-line">Read <span class="code-string">`run.log`</span>: the <span class="code-string">`mcp=[…]`</span> line names the connected sources, every <span class="code-string">`→`</span></span>
-<span class="code-line">line is a tool call. Then read <span class="code-string">`out/latest.html`</span>.</span></code></pre>
+            <pre><code><span class="code-line">With credentials, run <span class="code-string">`npm run brief 2&gt; run.log`</span> to make <span class="code-string">`run.log`</span>.</span>
+<span class="code-line">Claude Code builds and runs checks. The built brief-agent gets no shell or write tools. Inspect the tool trace. Missing credentials leave live evidence OPEN.</span></code></pre>
           </div>
           <div class="translation-english">
             <span class="translation-label">PLAIN ENGLISH</span>
             <div class="translation-lines">
-              <p class="tl">Load every setting in <code>.env</code> (your tokens) as <span class="term" data-definition="Environment variables are named settings the operating system hands to a program when it starts, like GITHUB_TOKEN. They keep secrets out of the code itself.">environment variables</span> for this terminal session.</p>
-              <p class="tl">Run the real brief, and send its diagnostic output (<code>2&gt;</code>, the error stream) into a file called <code>run.log</code>.</p>
-              <p class="tl">&nbsp;</p>
-              <p class="tl">In the log, one line lists which sources connected over <span class="term" data-definition="MCP (Model Context Protocol) is a standard way to plug tools and data sources into an AI model, so the model can call 'read Linear issues' like a function.">MCP</span>, and each arrow line is one <span class="term" data-definition="A tool call is the moment the AI model asks the program to run one of its tools, for example 'list my open pull requests', and receives the result back.">tool call</span>.</p>
-              <p class="tl">Only after reading the log, read the brief itself.</p>
+              <p class="tl">Run the real brief and send its diagnostic output (<code>2&gt;</code>, the error stream) into a file called <code>run.log</code>.</p>
+              <p class="tl">Claude Code does the building and the checking. The agent you build can only read. Read its <span class="term" data-definition="A tool call is the moment the AI model asks the program to run one of its tools, for example 'list my open pull requests', and receives the result back.">tool calls</span> in the log. No credentials means the live check is <code>OPEN</code>, not failed.</p>
             </div>
           </div>
         </div>
 
-        <p>The check that follows is the sharpest in the lab: "is every sentence in the brief traceable to a tool call in <code>run.log</code>?" A sentence with no matching tool call came from nowhere.</p>
+        <p>The sharpest check in the lab: trace each factual claim in the brief to a tool call in <code>run.log</code>. A sentence with no matching tool call came from nowhere.</p>
       </section>
 
       <section class="screen animate-in">
@@ -1144,24 +1138,19 @@
 
         <div class="translation-block animate-in">
           <div class="translation-code">
-            <span class="translation-label">SOLO.md</span>
-            <pre><code><span class="code-line"><span class="code-keyword">## When you are done</span></span>
-<span class="code-line"></span>
-<span class="code-line">Seven files a stranger can point at, one brief you did not write, and a gate</span>
-<span class="code-line">you decided. Tomorrow's run reads what you merged today; when a footnote in</span>
-<span class="code-line">the brief changes <span class="code-string">`intent.md`</span>, the loop has closed.</span></code></pre>
+            <span class="translation-label">README.md</span>
+            <pre><code><span class="code-line">Maintain is not an assignment. OPEN items in <span class="code-string">`docs/gate.md`</span> become a new <span class="code-string">`intent.md`</span>.</span></code></pre>
           </div>
           <div class="translation-english">
             <span class="translation-label">PLAIN ENGLISH</span>
             <div class="translation-lines">
-              <p class="tl">What "finished" looks like.</p>
-              <p class="tl">&nbsp;</p>
-              <p class="tl">Artifacts anyone can inspect, a brief written by the agent, and a human decision on record.</p>
-              <p class="tl">After a person accepts and merges the work, the next scheduled run uses it. If something in the brief shows that your intent was wrong...</p>
-              <p class="tl">...you go back and change <code>intent.md</code>. The route is a circle, not a line.</p>
+              <p class="tl">The last stage of the cycle, Maintain, is not one of your seven assignments.</p>
+              <p class="tl">Whatever the gate left OPEN is where the next round of intent starts. The route is a circle, not a line.</p>
             </div>
           </div>
         </div>
+
+        <p>Before that, finish the handoff. A reviewer reruns one command. A prepared schedule stays inactive until you approve activation. The pull request stays unmerged until a person accepts the result.</p>
 
         <div class="callout callout-accent">
           <div class="callout-icon">💡</div>
