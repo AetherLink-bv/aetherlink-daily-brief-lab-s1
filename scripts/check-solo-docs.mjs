@@ -36,6 +36,7 @@ assert.match(files["course/modules/01-what-this-lab-builds.html"], /inactive sch
 assert.doesNotMatch(files["course/modules/01-what-this-lab-builds.html"], /gitlab-ci\.example\.yml/);
 
 await Promise.all([
+  access(".github/workflows/verify.yml"),
   access("reference/The_Tuesday_Brief_-_September_1.pdf"),
   access("reference/The_Wednesday_Brief_-_August_26.pdf"),
   access("reference/The_Wednesday_Brief_-_October_7.pdf"),

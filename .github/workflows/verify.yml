@@ -1,0 +1,36 @@
+name: verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  participant-route:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run docs:check
+      - id: implementation
+        name: Detect assignment implementation
+        run: |
+          if [ -d src ] && [ -d test ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.implementation.outputs.present == 'true'
+        run: npm run typecheck
+      - if: steps.implementation.outputs.present == 'true'
+        run: npm test
+      - if: steps.implementation.outputs.present == 'true'
+        run: npm run brief:sample
