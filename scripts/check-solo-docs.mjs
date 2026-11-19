@@ -33,7 +33,7 @@ assert.match(files["SOLO.md"], /After I approve the plan, tell me to press Shift
 assert.match(files["README.md"], /The_Tuesday_Brief_-_September_1\.pdf/);
 assert.match(files["README.md"], /The_Wednesday_Brief_-_August_26\.pdf/);
 assert.match(files["course/modules/01-what-this-lab-builds.html"], /live wiring in `src\/main\.ts`/);
-assert.match(files["course/modules/01-what-this-lab-builds.html"], /inactive schedule, PR preview/);
+assert.match(files["course/modules/01-what-this-lab-builds.html"], /inactive schedule, PR opened after approval/);
 assert.doesNotMatch(files["course/modules/01-what-this-lab-builds.html"], /gitlab-ci\.example\.yml/);
 
 await Promise.all([

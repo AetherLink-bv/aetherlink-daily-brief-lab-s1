@@ -90,7 +90,7 @@
 <span class="code-line">| 4 | <span class="code-keyword">Build</span> | <span class="code-string">`src/render.ts`, `src/main.ts`</span> | <span class="code-function">`npm run brief:sample`</span> writes `out/latest.html` |</span>
 <span class="code-line">| 5 | <span class="code-keyword">Build</span> | <span class="code-string">`src/sources.ts`, `src/agent.ts`, live wiring in `src/main.ts`</span> | <span class="code-function">`npm test`</span>, <span class="code-function">`npm run typecheck`</span>, and <span class="code-function">`npm run brief:sample`</span> green; wiring proven without a network |</span>
 <span class="code-line">| 6 | <span class="code-keyword">Test</span> | <span class="code-string">`docs/evidence.md` and one screenshot</span> | Three commands with exit codes and a reviewer |</span>
-<span class="code-line">| 7 | <span class="code-keyword">Deploy</span> | <span class="code-string">`docs/gate.md`, inactive schedule, PR preview</span> | PASS / FAIL / OPEN with a quoted line |</span></code></pre>
+<span class="code-line">| 7 | <span class="code-keyword">Deploy</span> | <span class="code-string">`docs/gate.md`, inactive schedule, PR opened after approval</span> | PASS / FAIL / OPEN with a quoted line |</span></code></pre>
           </div>
           <div class="translation-english">
             <span class="translation-label">PLAIN ENGLISH</span>
@@ -103,7 +103,7 @@
               <p class="tl">Step 4: the first real code. Done when a sample brief turns into an <span class="term" data-definition="HTML is the language web pages are written in. Here the brief is saved as an .html file you can open in any browser.">HTML</span> page.</p>
               <p class="tl">Step 5: connect the real sources. Done when tests and the <span class="term" data-definition="A typecheck asks the TypeScript compiler to confirm every piece of data is used the way its declared shape allows, catching mistakes before the program runs.">typecheck</span> pass without touching the internet.</p>
               <p class="tl">Step 6: record proof. Done when three commands, their <span class="term" data-definition="An exit code is the number a command returns when it finishes. 0 means success; anything else means something went wrong.">exit codes</span> and a second person are written down.</p>
-              <p class="tl">Step 7: a human decides the gate, reviews the pull request preview, and leaves the schedule inactive.</p>
+              <p class="tl">Step 7: a human decides the gate, then opens the pull request and leaves the schedule inactive.</p>
             </div>
           </div>
         </div>

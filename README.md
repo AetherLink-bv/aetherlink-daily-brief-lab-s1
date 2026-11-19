@@ -1,7 +1,7 @@
 # Daily brief agent: the main Workshop 5 route
 
 This lab teaches the [AI-native SDLC](https://claude.com/resources/articles/the-ai-native-sdlc-playbook).
-It has six stages, one committed file per stage, and a person decides at every
+It has six stages, one reviewed result per stage, and a person decides at every
 stage. The daily brief agent is the example. It reads GitLab, Jira, Confluence
 and the Outlook calendar, or your own GitHub, Linear and Notion, and writes a
 one-page morning brief.
@@ -61,7 +61,7 @@ older lesson and are not acceptance evidence for this route.
 | 4 | Build | `src/render.ts`, `src/main.ts` | `npm run brief:sample` writes `out/latest.html` |
 | 5 | Build | `src/sources.ts`, `src/agent.ts`, live wiring in `src/main.ts` | `npm test`, `npm run typecheck`, and `npm run brief:sample` green; wiring proven without a network |
 | 6 | Test | `docs/evidence.md` and one screenshot | Three commands with exit codes and a reviewer |
-| 7 | Deploy | `docs/gate.md`, inactive schedule, remote branch, PR preview | PASS / FAIL / OPEN with a quoted line |
+| 7 | Deploy | `docs/gate.md`, inactive schedule, PR opened after approval | PASS / FAIL / OPEN with a quoted line |
 
 Maintain is not an assignment. OPEN items in `docs/gate.md` become a new `intent.md`.
 
