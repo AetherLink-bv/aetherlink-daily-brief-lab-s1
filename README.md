@@ -1,66 +1,73 @@
-# Daily brief agent — optional Workshop 5 bonus
+# Daily brief agent: the main Workshop 5 route
 
-This is the optional bonus after the main Workshop 5 SRE lab. You build an
-agent that reads GitLab, Jira, Confluence and the Outlook calendar, or your own
-GitHub, Linear and Notion, and writes a one-page morning brief.
+This lab teaches the [AI-native SDLC](https://claude.com/resources/articles/the-ai-native-sdlc-playbook).
+It has six stages, one reviewed result per stage, and a person decides at every
+stage. The daily brief agent is the example. It reads GitLab, Jira, Confluence
+and the Outlook calendar, or your own GitHub, Linear and Notion, and writes a
+one-page morning brief.
+
+This is the main Day 5 lab. The on-call SRE agent lab (`sre-oncall-agent`)
+is the bonus.
 
 The `main` branch is the unsolved participant starter. It contains templates
-and a package skeleton. Build steps 1 through 4 during the 30 to 40 minute
-classroom block. Complete steps 5 through 7 as homework.
+and a package skeleton. You build all seven steps in class: A1 to A4 (steps 1
+to 4) before lunch, A5 to A7 (steps 5 to 7) after lunch.
 
 ## Start in Claude Code
 
 You need Node.js 20 or newer, Git and Claude Code signed in with your own
 account. You do not need an API key for the classroom route.
+The Sonny bonus (`sre-oncall-agent`) needs Node 22, so install Node 22 if you
+plan to do it.
 
-Run these commands. Use your own first name in the branch name.
+Run these commands from a terminal. Stay on the cloned `main` branch during the assignments.
 
 ```bash
 git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
 cd aetherlink-daily-brief-lab-s1
-git switch -c my/firstname
-claude --setting-sources project --strict-mcp-config --no-chrome
+npm ci
+claude --setting-sources project,user --strict-mcp-config --no-chrome
 ```
 
-This workshop command loads only repository context. It does not load user
-settings, global MCP servers, auto memory, or Claude in Chrome.
+This workshop command loads the repository and user settings. MCP servers stay
+off through `--strict-mcp-config`. Claude in Chrome stays off.
 
-Paste this prompt into Claude Code. Approve the setup command that Claude Code
-proposes before step 1. Claude Code stops after each review point.
+In class, follow the slides. Work one assignment at a time. Paste the one exact
+prompt for that assignment from `SOLO.md`. Approve each proposed command.
+Claude Code stops at the review points in each prompt.
 
-> Read SOLO.md, AGENTS.md and progress.md in the daily-brief repo. Help me build steps 1–4 with Claude Code, one step at a time. Interview me for intent.md; ask before edits. Show a red schema test, then build the schema. Stay in plan mode until I accept. Build the sample renderer with a red-to-green test and render out/latest.html without a model call. Ask me to choose one style variation. Show its diff and test result. Run commands yourself and stop after each step for my review. Do not copy solved tags or add live credentials.
-
-Stop after step 4. Open `out/latest.html` and confirm that `npm test` passes.
-The classroom route needs no API key. Open a pull request only after the human
-review in step 7.
+Before lunch, finish step 4. Open `out/latest.html` and confirm that `npm test`
+passes. After lunch, continue with steps 5 to 7 in `SOLO.md`. Steps 1 to 4 need
+no API key. Assignment 7 creates the remote branch and opens a pull request
+only after the human gate approves publication. Your local branch does not change.
 
 If you already have this repository, open the existing folder in Claude Code.
 Ask Claude Code to inspect `git status` before it updates anything. Preserve
-your work and use `git pull --ff-only` only on a clean branch that tracks the
-remote branch.
+your work. Use `git pull --ff-only` only when the working tree is clean.
 
 ## Facilitator preparation
 
-Use a separate reviewed branch with completed steps 1 through 4 for the
-18-minute preview. Keep `main` unsolved for participants. The Workshop 5
-speaker notes define the preview, the 30 to 40 minute build block and the stop
-after step 4.
+There is no preview. The deck is `day5-daily-brief` in the classroom slides.
+Keep `main` unsolved for participants. Historical reference tags belong to an
+older lesson and are not acceptance evidence for this route.
 
 ## The steps
 
 | Step | Phase | You write | Proof |
 | --- | --- | --- | --- |
 | 1 | Plan | `intent.md` | A facilitator accepts the boundary |
-| 2 | Plan | `docs/spec.md`, `src/brief.ts`, `sample/brief.sample.json`, `test/schema.test.ts` | `npm test` green on the schema tests |
-| 3 | Design | `docs/design.md`, one ADR, `docs/plan.md` | A stranger can follow the plan and name what proves completion |
+| 2 | Design | `docs/spec.md`, `src/brief.ts`, `sample/brief.sample.json`, `test/schema.test.ts` | `npm test` green on the schema tests |
+| 3 | Build (plan mode writes `docs/plan.md`) | `docs/design.md`, one ADR, `docs/plan.md` | A stranger can follow the plan and name what proves completion |
 | 4 | Build | `src/render.ts`, `src/main.ts` | `npm run brief:sample` writes `out/latest.html` |
 | 5 | Build | `src/sources.ts`, `src/agent.ts`, live wiring in `src/main.ts` | `npm test`, `npm run typecheck`, and `npm run brief:sample` green; wiring proven without a network |
 | 6 | Test | `docs/evidence.md` and one screenshot | Three commands with exit codes and a reviewer |
-| 7 | Gate | `docs/gate.md`, inactive schedule, PR preview | PASS / FAIL / OPEN with a quoted line |
+| 7 | Deploy | `docs/gate.md`, inactive schedule, PR opened after approval | PASS / FAIL / OPEN with a quoted line |
+
+Maintain is not an assignment. OPEN items in `docs/gate.md` become a new `intent.md`.
 
 ## Always-on artifacts
 
-`CLAUDE.md` · `AGENTS.md` · `progress.md` · `SOLO.md` — read before you change anything; append `progress.md` each SOLO.
+`CLAUDE.md` · `AGENTS.md` · `progress.md` · `SOLO.md`. Read before you change anything; append `progress.md` each SOLO.
 
 ## Rules
 
@@ -78,25 +85,15 @@ Step 2 uses the committed canonical references
 `reference/The_Wednesday_Brief_-_August_26.pdf`. The October brief is an extra
 example. Read `reference/README.md` before you quote them.
 
-Walking it alone, with your own GitHub, Linear and Notion: `SOLO.md` — each step
-includes a paste-ready Claude Code **Prompt** block; all seven are also in
+Walking it alone, with your own GitHub, Linear and Notion: `SOLO.md`. Each step
+has one paste-ready Claude Code **Prompt** block; all seven are also in
 [`docs/prompts.md`](docs/prompts.md).
 
-## Compare with the reference after your attempt
+## Review your own work
 
-Ask Claude Code to show a reference diff only after your own attempt. Preserve
-your work and apply only the change that you reviewed. Do not copy solved files
-into your branch.
-
-```bash
-git diff main step-2-spec --stat
-git diff step-2-spec -- docs/spec.md
-git log --oneline main..step-7-gate-deploy
-```
-
-The reference tags are `step-1-intent` through `step-7-gate-deploy`. The same
-commits are available as `steps/1-intent` through `steps/7-gate-deploy` for
-browsing on GitLab or GitHub.
+Use the seven current prompts, checkpoints, and proof commands as the contract.
+Inspect your own diff after every assignment. Historical `step-*` tags contain
+an older, broader solution and are outside this participant route.
 
 ## Interactive course
 

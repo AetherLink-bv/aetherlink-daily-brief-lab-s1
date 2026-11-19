@@ -62,7 +62,7 @@
           </div>
         </div>
 
-        <p>Step 2 then works <span class="term" data-definition="Test-first (or TDD, test-driven development) means writing the check before the code. The test fails ('red') at first, then you write code until it passes ('green'). It proves the test can actually catch a problem.">test-first</span>: <code>test/schema.test.ts</code> is written and fails, and only then does <code>src/brief.ts</code> get written to make it pass. <code>SOLO.md</code> even asks you to check that "<code>git log</code> show[s] the test commit before <code>brief.ts</code>."</p>
+        <p>Step 2 then works <span class="term" data-definition="Test-first (or TDD, test-driven development) means writing the check before the code. The test fails ('red') at first, then you write code until it passes ('green'). It proves the test can actually catch a problem.">test-first</span>: <code>test/schema.test.ts</code> is written and fails, and only then does <code>src/brief.ts</code> get written to make it pass. <code>SOLO.md</code> even says: "Commit the failing test before <code>brief.ts</code>."</p>
       </section>
 
       <section class="screen animate-in">
@@ -198,7 +198,7 @@
           <div class="quiz-question-block"
                data-correct="b"
                data-explanation-right="Exactly. Test-first means the test is committed and failing before the code. If the test was written after, you never saw it fail, so you don't know it can catch anything."
-               data-explanation-wrong="The order matters. SOLO.md asks you to check that git log shows the test commit before brief.ts. A test that has never failed has never proven it can catch a bug.">
+               data-explanation-wrong="The order matters. SOLO.md asks you to commit the failing test before brief.ts. A test that has never failed has never proven it can catch a bug.">
             <h3 class="quiz-question">The AI hands you <code>src/brief.ts</code> and <code>test/schema.test.ts</code> in a single commit, all green. What is missing?</h3>
             <div class="quiz-options">
               <button class="quiz-option" data-value="a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Nothing. Green is green.</span></button>

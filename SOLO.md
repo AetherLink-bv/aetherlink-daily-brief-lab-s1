@@ -1,139 +1,158 @@
 # Build the daily brief with Claude Code
 
-Build a brief on your own branch through seven prompts. You choose the requirements and inspect each result.
-Claude Code is your development helper. It may edit code and run commands after your approval.
-The brief-agent you build gets no shell or write tools.
+Build one daily brief through seven assignments. You choose the requirements, inspect every result, and approve every decision.
+Claude Code may edit files and run commands after your approval. The brief agent gets no shell or write tools.
 
-## Prepare your branch
+## Start once
 
-Open Claude Code in the lab repository. If you need the repository, use the clone URL from the workshop.
-Paste this prompt before implementing anything.
+Clone the starter and open Claude Code from the repository root. Do not create or change a branch yet.
 
-> Read README.md, CLAUDE.md, and SOLO.md. Check the documented Node version and package scripts. Preserve existing work. Prepare my own branch and install the documented dependencies after I approve the commands. Report the starting files and any blockers. Do not implement a solution yet.
+```bash
+git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
+cd aetherlink-daily-brief-lab-s1
+npm ci
+claude --setting-sources project,user --strict-mcp-config --no-chrome
+```
 
-`main` is empty on purpose apart from templates and a package skeleton. Reference tags `step-1-intent` through `step-7-gate-deploy` show one solution.
-Use them for comparison only after your own attempt. Ask Claude Code to show a diff before recovering anything.
-Keep your changes before recovery. Do not overwrite your branch with reference files.
+`main` is intentionally unsolved. It contains the templates, package skeleton, reference briefs, and project skills.
+Commit only work you accepted. Assignment 7 publishes the accepted commits to a new remote branch without changing your local branch.
 
-Keep tokens in the documented local environment or secrets store. Never paste credentials into a prompt or commit them.
-SOLO 1 through 4 work without credentials. Missing credentials leave the live checks in SOLO 5 OPEN.
-Keep the sample route working throughout the exercise.
+Never paste credentials into a prompt or commit them. Assignments 1 through 4 work without credentials.
+Missing credentials leave the live check in Assignment 5 OPEN. Keep `npm run brief:sample` working throughout the exercise.
 
-## Complete steps 1 through 4 in class
+## How every assignment works
 
-Use this prompt for the 30 to 40 minute classroom route. Claude Code must stop after each step. You still inspect each result and accept each decision.
+1. Check the required Claude Code mode.
+2. Paste the one assignment prompt.
+3. Inspect the named proof and the diff.
+4. Approve or revise the result.
+5. Commit only accepted work.
+6. Append the observed proof to `progress.md`.
 
-> Read SOLO.md, AGENTS.md and progress.md in the daily-brief repo. Help me build steps 1–4 with Claude Code, one step at a time. Interview me for intent.md; ask before edits. Show a red schema test, then build the schema. Stay in plan mode until I accept. Build the sample renderer with a red-to-green test and render out/latest.html without a model call. Ask me to choose one style variation. Show its diff and test result. Run commands yourself and stop after each step for my review. Do not copy solved tags or add live credentials.
+Use VERIFIED only after a reviewer reruns the check. Use FAIL for a failed check. Use OPEN for a check that did not run.
 
-Stop after step 4 during class. Complete steps 5 through 7 as homework.
+## Assignment 1 · Write down what the brief must do
 
-## Complete the seven steps
+Use manual mode. Start with the templates.
 
-For each step, paste the build prompt first. Inspect the result before using the improvement prompt.
-Choose the requested variation yourself. Append observed proof to `progress.md` after each step.
-Use VERIFIED only after a reviewer reruns the check. Until then, use OPEN.
-A failed check is FAIL. A check that did not run is OPEN.
+> Read CLAUDE.md, SOLO.md, and the templates. Interview me one question at a time. Draft intent.md with one outcome, three observable checks, owners, a hard boundary, and one OPEN. Challenge my weakest check with one concrete counterexample. Revise only after my answer. Show the diff and stop for my review. Do not implement code.
 
-### 1 · Draft the intent
+Optional project skill:
 
-Start with the templates on your own branch.
+```text
+/grilling Grill me on my intent.md, one question at a time. Focus on the checks a neighbour cannot observe. Do not edit files.
+```
 
-Paste this build prompt into Claude Code.
+Done when a facilitator accepts the boundary and all three checks are observable.
 
-> Read CLAUDE.md, SOLO.md, and the templates on my branch. Interview me one question at a time. Draft intent.md with one outcome, three observable checks, owners, a hard boundary, and one OPEN. Stop for my review. Do not implement code.
+## Assignment 2 · Make the schema test fail, then pass
 
-Choose your own variation, then paste this improvement prompt.
+Use manual mode. Start with the accepted intent and `reference/`.
 
-> Challenge my weakest check with one concrete counterexample. Revise only intent.md after my answer. Show the diff and stop.
+> Read my accepted intent.md and reference/. Draft docs/spec.md with one quoted example per field, then stop for my approval. After I approve it, write test/schema.test.ts and run it to show the expected red failure. Stop so I can inspect and commit the red test. After I confirm, build src/brief.ts and sample/brief.sample.json until the test passes. Ask me for one invalid sample and prove the schema rejects it. Show the test output and diff. Do not build a renderer or tools.
 
-Inspect intent.md yourself. Reject a vague boundary. Stop until you accept the checks. Do not implement code yet.
+Optional project skill:
 
-### 2 · Build the spec and schema
+```text
+/eli5 Explain my schema and test/schema.test.ts as for an intelligent beginner: what each field checks and why the test was red first. Do not edit files.
+```
 
-Start with your accepted intent and the files in `reference/`.
+Done when the red test is committed first, the schema tests pass, and the invalid sample is rejected.
 
-Paste this build prompt into Claude Code.
+## Assignment 3 · Agree on the design and the plan
 
-> Read my accepted intent.md and reference/. Propose docs/spec.md with one quoted example per field. After I accept, write test/schema.test.ts and run it to show the expected red failure. Stop so I can inspect and commit the test. Then build src/brief.ts and sample/brief.sample.json until that test passes. Do not build a renderer or tools.
+Press Shift+Tab until Claude Code shows `plan mode on`.
 
-Choose your own variation, then paste this improvement prompt.
+> In plan mode, read intent.md, docs/spec.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md. Give every plan step an exact path, proof command, and rollback. Do not edit files or build. Stop for my approval. After I approve the plan, tell me to press Shift+Tab until manual mode is on. Then save only those design documents, challenge one assumption with a case I choose, show the revised diff, and stop.
 
-> Add one invalid sample of my choice to test/schema.test.ts. Prove the schema rejects it. Show the spec row, test output, and diff. Stop before SOLO 3.
+Optional project skill:
 
-Inspect the quoted spec rows and the actual red and green output. Commit the failing test before `brief.ts`. Stop after your invalid sample is rejected.
+```text
+/visual-plan Turn my accepted docs/plan.md into one HTML page I can read in the browser. Do not change the plan.
+```
 
-### 3 · Accept the design and plan
+Done when a neighbour can follow the plan and name the proof for every step.
 
-Start with the accepted spec and schema from SOLO 2.
+## Assignment 4 · Render the brief from sample data
 
-Paste this build prompt into Claude Code.
+Return to manual mode. Use no API key or model call.
 
-> In plan mode, read intent.md, docs/spec.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md. Name exact paths, one proof command and rollback per step. Do not edit files or build. Stop for my acceptance.
+> Use my accepted docs/plan.md. Write test/render.test.ts and show the expected red failure. Then build src/render.ts and a sample-only src/main.ts. Escape untrusted text. Run npm run brief:sample and show out/latest.html. Ask me to choose one house-style change. Add its failing test first, make it pass, regenerate the page, and show the diff. Use no API key or model call. Stop for my inspection.
 
-Choose your own variation, then paste this improvement prompt.
+Optional project skill:
 
-> After I accept the plan, save only those design documents. Challenge one assumption with the case I choose. Show the revised plan and diff. Stop before building.
+```text
+/verify-this Prove that npm run brief:sample writes out/latest.html without a model call. Show the command, exit code and one line of output.
+```
 
-Plan mode is read-only. Accept the proposal yourself before Claude saves the design documents. No build begins before that acceptance.
+Open `out/latest.html`. Save a 1440×900 screenshot as `docs/evidence/latest-1440x900.png`.
 
-### 4 · Build the sample renderer
+## Assignment 5 · Give the agent one read-only tool
 
-Start with your accepted design and plan.
+Use manual mode. Preserve the offline sample route.
 
-Paste this build prompt into Claude Code.
+> Read my accepted plan and schema. Build src/agent.ts, src/sources.ts, and test/agent.test.ts for one read-only tool. Connect src/main.ts to the agent for the live brief command. Preserve brief:sample without model calls. Give the brief agent no shell or write tools. Prove the tool wiring and one missing-source case I choose with tests. With credentials, run the brief and trace each factual claim to run.log. Without credentials, run the sample and mark the live check OPEN. Never print tokens. Show the proof and diff, then stop.
 
-> Use my accepted docs/plan.md. First write test/render.test.ts and show the expected red failure. Then build src/render.ts and a sample-only src/main.ts. Escape untrusted text. Run the sample script and show out/latest.html. Use no API key or model call. Stop for my inspection.
+Optional project skill:
 
-Choose your own variation, then paste this improvement prompt.
+```text
+/show-me Draw how one source reaches the brief: src/sources.ts, the tool in src/agent.ts, and src/main.ts. Only read, change nothing.
+```
 
-> Change one house-style rule I choose. Add a failing test first, then make it pass. Regenerate out/latest.html and show the diff. Stop so I can inspect the page and save a 1440×900 screenshot.
+With credentials, run `npm run brief 2> run.log`. Without credentials, keep the live result OPEN.
 
-Open `out/latest.html` yourself. Inspect the escaping test and your changed style rule. Keep the screenshot before continuing.
+## Assignment 6 · Record the evidence
 
-### 5 · Build one read-only tool
+Use manual mode. Record only commands you actually ran.
 
-Start with the sample renderer and your accepted plan.
+> Run the existing typecheck, test, and brief:sample scripts. Record every command, exit code, and one output line in docs/evidence.md. Link docs/evidence/latest-1440x900.png. Mark unrun checks OPEN. Do not change code to hide a failure. Ask my reviewer to rerun one command. Record the reviewer's actual name and result only after the rerun. Show the evidence diff and stop.
 
-Paste this build prompt into Claude Code.
+Optional project skill:
 
-> Read my accepted plan and schema. Build src/agent.ts, src/sources.ts, and test/agent.test.ts for one read-only tool. Connect src/main.ts to the agent for the live brief command while preserving brief:sample without model calls. Reuse tool() and guarded() if present. Give the brief-agent no shell or write tools. Prove the tool wiring and missing-source behavior with tests. Keep the sample path working. Stop for my review.
+```text
+/verify-this Rerun the three commands in docs/evidence.md and compare each exit code with what is written. Mark any difference OPEN.
+```
 
-Choose your own variation, then paste this improvement prompt.
+Done when the evidence contains three real command results, the screenshot, and one independent rerun.
 
-> Test one missing-source case I choose. Show the diff and observed test output. With configured credentials, run the brief and trace each factual claim to run.log. Without credentials, run the sample and mark the live check OPEN. Never print tokens. Stop for my inspection.
+## Assignment 7 · Decide the gate and prepare the PR
 
-Claude Code builds and runs checks. The built brief-agent gets no shell or write tools. Inspect the tool trace. Missing credentials leave live evidence OPEN.
+Use manual mode. You make every PASS decision.
 
-### 6 · Record and review evidence
+> Read intent.md, the current diff, and docs/evidence.md. Draft docs/gate.md with evidence links and proposed FAIL or OPEN entries for missing checks. Leave every PASS decision to me. Prepare a PR title, description, and inactive weekday schedule. Show the diff and stop for my gate decision. Do not commit, push, open a PR, merge, deploy, or activate the schedule.
 
-Start with your own working code and screenshot from SOLO 4.
+Optional project skill:
 
-Paste this build prompt into Claude Code.
+```text
+/review-and-ship Review my work against intent.md and docs/gate.md. Run the tests. Prepare the PR, but stop before you open it and before any merge.
+```
 
-> Run the existing typecheck, test, and brief:sample scripts. Record each actual command, exit code, and one output line in docs/evidence.md. Link my screenshot under docs/evidence/. Mark unrun checks OPEN. Do not change implementation to hide a failure. Stop for my review.
+After the human gate approves publication, commit the accepted Assignment 7 files. Then replace `<firstname>` and use one route.
 
-Choose your own variation, then paste this improvement prompt.
+If you can write to the classroom repository:
 
-> Check the evidence against the extra case I choose. Show missing proof as OPEN. Stop while my reviewer reruns one command and compares the output. Record their actual name and result only afterward.
+```bash
+BRANCH="my/<firstname>"
+git push origin "HEAD:refs/heads/$BRANCH"
+gh pr create --repo AetherLink-bv/aetherlink-daily-brief-lab-s1 --base main --head "$BRANCH"
+```
 
-A reviewer reruns one real command and compares it with `docs/evidence.md`. Unrun checks stay OPEN. Stop until the screenshot and reviewer are recorded.
+If `origin` is not writable, publish through your fork:
 
-### 7 · Decide the gate and prepare the PR
+```bash
+BRANCH="my/<firstname>"
+gh repo fork AetherLink-bv/aetherlink-daily-brief-lab-s1 --remote --remote-name fork --clone=false
+git push fork "HEAD:refs/heads/$BRANCH"
+OWNER=$(gh api user --jq .login)
+gh pr create --repo AetherLink-bv/aetherlink-daily-brief-lab-s1 --base main --head "$OWNER:$BRANCH"
+```
 
-Start with the diff, intent, and reviewed evidence.
+Both routes leave the local branch unchanged. Stop before merge, deployment, or schedule activation.
 
-Paste this build prompt into Claude Code.
+## Stuck or switching laptop?
 
-> Read intent.md, the diff, and docs/evidence.md. Draft docs/gate.md with evidence links and proposed FAIL or OPEN entries for missing checks. Leave PASS decisions to me. Prepare a PR description and weekday schedule without activating it. Do not merge, deploy, or publish. Stop for my decision.
+```text
+/handoff Write a prompt for a fresh Claude Code session to continue from my current assignment. Name the files, decisions, and next proof.
+```
 
-Choose your own variation, then paste this improvement prompt.
-
-> Use the OPEN item I choose to propose one new acceptance check. Show the gate diff and PR preview. After I decide the gate and approve publication, open the PR. Stop before merge or deployment.
-
-You decide PASS, FAIL, or OPEN from evidence you read. Inspect the PR preview before publication. Keep deployment and scheduling inactive.
-
-## Finish the handoff
-
-Open the rendered page and read the gate yourself. Keep the schema, renderer, read-only tool, evidence, and PR traceable to your own branch.
-Ask a reviewer to rerun one command. If you work alone, rerun it the next day and record that limitation.
-A prepared schedule stays inactive until you approve activation. A PR stays unmerged until a person accepts the result.
+Open the rendered page and read the gate yourself. Keep the schema, renderer, read-only tool, evidence, and PR traceable to your accepted commits.
