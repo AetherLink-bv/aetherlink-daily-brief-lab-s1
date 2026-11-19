@@ -48,8 +48,8 @@ your work. Use `git pull --ff-only` only when the working tree is clean.
 ## Facilitator preparation
 
 There is no preview. The deck is `day5-daily-brief` in the classroom slides.
-Keep `main` unsolved for participants. The reference tags `step-1-intent` to
-`step-7-gate-deploy` are for comparing after an attempt, not for showing first.
+Keep `main` unsolved for participants. Historical reference tags belong to an
+older lesson and are not acceptance evidence for this route.
 
 ## The steps
 
@@ -89,25 +89,11 @@ Walking it alone, with your own GitHub, Linear and Notion: `SOLO.md`. Each step
 has one paste-ready Claude Code **Prompt** block; all seven are also in
 [`docs/prompts.md`](docs/prompts.md).
 
-## Compare with the reference after your attempt
+## Review your own work
 
-Ask Claude Code to show a reference diff only after your own attempt. Preserve
-your work and apply only the change that you reviewed. Do not copy solved files
-into your working tree.
-
-```bash
-git diff main step-2-spec -- src test docs
-git diff step-2-spec -- docs/spec.md
-git log --oneline main..step-7-gate-deploy
-```
-
-Compare by path. A plain `git diff main step-2-spec --stat` shows unrelated
-deletions, because the tags predate `course/` and the PDFs.
-
-The reference tags are `step-1-intent` through `step-7-gate-deploy`. The same
-commits are available as `steps/1-intent` through `steps/7-gate-deploy` for
-browsing on GitLab or GitHub. The tag for step 5 has many tools. The assignment
-builds one.
+Use the seven current prompts, checkpoints, and proof commands as the contract.
+Inspect your own diff after every assignment. Historical `step-*` tags contain
+an older, broader solution and are outside this participant route.
 
 ## Interactive course
 

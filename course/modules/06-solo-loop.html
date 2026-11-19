@@ -10,8 +10,8 @@
 
       <section class="screen animate-in">
         <h2 class="screen-heading">Seven builds with a review after each result</h2>
-        <p><code>SOLO.md</code> guides one person through seven builds with their own GitHub, Linear, and Notion. Each step starts with a Claude Code prompt, asks you for one variation, and ends with evidence you inspect.</p>
-        <p>Git <span class="term" data-definition="A Git tag is a permanent name attached to one commit. The reference tags show one completed route through this lab.">tags</span> <code>step-1-intent</code> through <code>step-7-gate-deploy</code> show one reference solution. Compare them only after your own attempt. Do not copy solved files into your branch.</p>
+        <p><code>SOLO.md</code> guides one person through seven builds with their own GitHub, Linear, and Notion. Each step has one Claude Code prompt and ends with evidence you inspect.</p>
+        <p>The current prompt, checkpoint, and proof command form the contract. Historical <code>step-*</code> tags belong to an older lesson and are not acceptance evidence for this route.</p>
 
         <div class="step-cards">
           <div class="step-card"><div class="step-num">1</div><div class="step-body"><strong>Plan: intent (15 min)</strong><p>Claude Code interviews you one question at a time. You cut.</p></div></div>
@@ -25,21 +25,21 @@
       </section>
 
       <section class="screen animate-in">
-        <h2 class="screen-heading">Build first, compare after your attempt</h2>
+        <h2 class="screen-heading">Review your own diff after every assignment</h2>
 
         <div class="translation-block animate-in">
           <div class="translation-code">
-            <span class="translation-label">README.md</span>
-            <pre><code><span class="code-line"><span class="code-function">git</span> diff main step-2-spec -- src test docs</span>
-<span class="code-line"><span class="code-function">git</span> diff step-2-spec -- docs/spec.md</span>
-<span class="code-line"><span class="code-function">git</span> log --oneline main..step-7-gate-deploy</span></code></pre>
+            <span class="translation-label">Terminal</span>
+            <pre><code><span class="code-line"><span class="code-function">git</span> status --short</span>
+<span class="code-line"><span class="code-function">git</span> diff --stat</span>
+<span class="code-line"><span class="code-function">git</span> diff</span></code></pre>
           </div>
           <div class="translation-english">
             <span class="translation-label">PLAIN ENGLISH</span>
             <div class="translation-lines">
-              <p class="tl"><strong>Inspect the scope.</strong> List what the reference solution changed in source, tests and docs by the end of step 2. Compare by path.</p>
-              <p class="tl"><strong>Compare your work.</strong> Show how your spec differs after you have written and tested it.</p>
-              <p class="tl"><strong>See the route.</strong> List the commits of the reference solution, from the empty start to step 7.</p>
+              <p class="tl"><strong>Inspect the scope.</strong> List every changed and untracked path.</p>
+              <p class="tl"><strong>Check the size.</strong> Confirm that only the accepted assignment changed.</p>
+              <p class="tl"><strong>Read the change.</strong> Inspect every line before you commit it.</p>
             </div>
           </div>
         </div>
@@ -47,8 +47,8 @@
         <div class="callout callout-info">
           <div class="callout-icon">🔍</div>
           <div class="callout-content">
-            <strong class="callout-title">The reference is a review aid</strong>
-            <p>Step 5 asks Claude Code to build <code>agent.ts</code>, <code>sources.ts</code>, and the live path in <code>main.ts</code>. Compare the reference only after the tests and the sample route work.</p>
+            <strong class="callout-title">Your evidence is the review aid</strong>
+            <p>Step 5 asks Claude Code to build <code>agent.ts</code>, <code>sources.ts</code>, and the live path in <code>main.ts</code>. Accept it only after its tests and sample route work.</p>
           </div>
         </div>
       </section>
@@ -108,12 +108,12 @@
         <div class="quiz-container" id="quiz-module6">
           <div class="quiz-question-block"
                data-correct="b"
-               data-explanation-right="Right. Preserve your work, compare the reference diff, and fix the mismatch you understand."
-               data-explanation-wrong="SOLO.md keeps your attempt as the evidence. A reference diff helps you review a mismatch, but it does not replace your files.">
+               data-explanation-right="Right. Keep the failing test visible, inspect your diff, and fix only the mismatch you understand."
+               data-explanation-wrong="SOLO.md uses your own diff and test output as evidence. Historical reference tags are not the current contract.">
             <h3 class="quiz-question">Your renderer test still fails after your own attempt. What does SOLO.md suggest?</h3>
             <div class="quiz-options">
-              <button class="quiz-option" data-value="a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Delete your branch and start the lab again from main.</span></button>
-              <button class="quiz-option" data-value="b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Keep your files, inspect the reference diff, and ask Claude Code to fix the mismatch you can explain.</span></button>
+              <button class="quiz-option" data-value="a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Delete your work and start the lab again from main.</span></button>
+              <button class="quiz-option" data-value="b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Keep the failing test, inspect your diff, and fix the mismatch you can explain.</span></button>
               <button class="quiz-option" data-value="c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Skip to step 5; rendering can be fixed later.</span></button>
             </div>
             <div class="quiz-feedback"></div>
