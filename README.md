@@ -20,38 +20,30 @@ account. You do not need an API key for the classroom route.
 The Sonny bonus (`sre-oncall-agent`) needs Node 22, so install Node 22 if you
 plan to do it.
 
-Run these commands. Use your own first name in the branch name.
+Run these commands from a terminal. Stay on the cloned `main` branch during the assignments.
 
 ```bash
 git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
 cd aetherlink-daily-brief-lab-s1
-git switch -c my/firstname
+npm ci
 claude --setting-sources project,user --strict-mcp-config --no-chrome
 ```
 
-This workshop command loads the repository settings and your user settings.
-User settings include a company login such as Vertex in `~/.claude/settings.json`.
-MCP servers stay off through `--strict-mcp-config`. Claude in Chrome stays off.
-A large personal setup can change the tone of answers and cost more.
+This workshop command loads the repository and user settings. MCP servers stay
+off through `--strict-mcp-config`. Claude in Chrome stays off.
 
-In class, follow the slides. Work one assignment at a time. Start with the
-"Prepare your branch" prompt from `SOLO.md`, then paste one build prompt per
-assignment from the slides. Approve each command that Claude Code proposes.
-Claude Code stops after each review point.
-
-Working alone? You can use this combined prompt for steps 1 to 4 instead:
-
-> Read SOLO.md, AGENTS.md and progress.md in the daily-brief repo. Help me build steps 1–4 with Claude Code, one step at a time. Interview me for intent.md; ask before edits. Show a red schema test, then build the schema. Stay in plan mode until I accept. Build the sample renderer with a red-to-green test and render out/latest.html without a model call. Ask me to choose one style variation. Show its diff and test result. Run commands yourself and stop after each step for my review. Do not copy solved tags or add live credentials.
+In class, follow the slides. Work one assignment at a time. Paste the one exact
+prompt for that assignment from `SOLO.md`. Approve each proposed command.
+Claude Code stops at the review points in each prompt.
 
 Before lunch, finish step 4. Open `out/latest.html` and confirm that `npm test`
 passes. After lunch, continue with steps 5 to 7 in `SOLO.md`. Steps 1 to 4 need
-no API key. Open a pull request only after the human
-review in step 7.
+no API key. Assignment 7 creates the remote branch and opens a pull request
+only after the human gate approves publication. Your local branch does not change.
 
 If you already have this repository, open the existing folder in Claude Code.
 Ask Claude Code to inspect `git status` before it updates anything. Preserve
-your work and use `git pull --ff-only` only on a clean branch that tracks the
-remote branch.
+your work. Use `git pull --ff-only` only when the working tree is clean.
 
 ## Facilitator preparation
 
@@ -69,7 +61,7 @@ Keep `main` unsolved for participants. The reference tags `step-1-intent` to
 | 4 | Build | `src/render.ts`, `src/main.ts` | `npm run brief:sample` writes `out/latest.html` |
 | 5 | Build | `src/sources.ts`, `src/agent.ts`, live wiring in `src/main.ts` | `npm test`, `npm run typecheck`, and `npm run brief:sample` green; wiring proven without a network |
 | 6 | Test | `docs/evidence.md` and one screenshot | Three commands with exit codes and a reviewer |
-| 7 | Deploy | `docs/gate.md`, inactive schedule, PR preview | PASS / FAIL / OPEN with a quoted line |
+| 7 | Deploy | `docs/gate.md`, inactive schedule, remote branch, PR preview | PASS / FAIL / OPEN with a quoted line |
 
 Maintain is not an assignment. OPEN items in `docs/gate.md` become a new `intent.md`.
 
@@ -94,14 +86,14 @@ Step 2 uses the committed canonical references
 example. Read `reference/README.md` before you quote them.
 
 Walking it alone, with your own GitHub, Linear and Notion: `SOLO.md`. Each step
-includes a paste-ready Claude Code **Prompt** block; all seven are also in
+has one paste-ready Claude Code **Prompt** block; all seven are also in
 [`docs/prompts.md`](docs/prompts.md).
 
 ## Compare with the reference after your attempt
 
 Ask Claude Code to show a reference diff only after your own attempt. Preserve
 your work and apply only the change that you reviewed. Do not copy solved files
-into your branch.
+into your working tree.
 
 ```bash
 git diff main step-2-spec -- src test docs
