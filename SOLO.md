@@ -63,7 +63,7 @@ Done when the red test is committed first, the schema tests pass, and the invali
 
 Press Shift+Tab until Claude Code shows `plan mode on`.
 
-> In plan mode, read intent.md, docs/spec.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md. Give every plan step an exact path, proof command, and rollback. Do not edit files or build. Stop for my approval. After I approve the plan, save only those design documents, challenge one assumption with a case I choose, show the revised diff, and stop.
+> In plan mode, read intent.md, docs/spec.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md. Give every plan step an exact path, proof command, and rollback. Do not edit files or build. Stop for my approval. After I approve the plan, tell me to press Shift+Tab until manual mode is on. Then save only those design documents, challenge one assumption with a case I choose, show the revised diff, and stop.
 
 Optional project skill:
 

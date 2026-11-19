@@ -20,7 +20,7 @@ These seven prompts match [SOLO.md](../SOLO.md) exactly. Paste one prompt per as
 
 ## Assignment 3 · Agree on the design and the plan
 
-> In plan mode, read intent.md, docs/spec.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md. Give every plan step an exact path, proof command, and rollback. Do not edit files or build. Stop for my approval. After I approve the plan, save only those design documents, challenge one assumption with a case I choose, show the revised diff, and stop.
+> In plan mode, read intent.md, docs/spec.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md. Give every plan step an exact path, proof command, and rollback. Do not edit files or build. Stop for my approval. After I approve the plan, tell me to press Shift+Tab until manual mode is on. Then save only those design documents, challenge one assumption with a case I choose, show the revised diff, and stop.
 
 ```text
 /visual-plan Turn my accepted docs/plan.md into one HTML page I can read in the browser. Do not change the plan.

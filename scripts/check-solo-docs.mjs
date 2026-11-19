@@ -29,6 +29,7 @@ assert.match(files["SOLO.md"], /After the human gate approves publication, commi
 
 assert.match(files["SOLO.md"], /Connect src\/main\.ts to the agent for the live brief command\. Preserve brief:sample without model calls/);
 assert.match(files["SOLO.md"], /Without credentials, run the sample and mark the live check OPEN/);
+assert.match(files["SOLO.md"], /After I approve the plan, tell me to press Shift\+Tab until manual mode is on\. Then save only those design documents/);
 assert.match(files["README.md"], /The_Tuesday_Brief_-_September_1\.pdf/);
 assert.match(files["README.md"], /The_Wednesday_Brief_-_August_26\.pdf/);
 assert.match(files["course/modules/01-what-this-lab-builds.html"], /live wiring in `src\/main\.ts`/);
