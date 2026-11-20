@@ -110,7 +110,7 @@ No prescribed implementation prompt. Jij kiest een nieuw probleem en begrenst de
 2. Kies één lokale invoer en één zichtbaar resultaat.
 3. Schrijf `challenge/README.md` met de grens en één foutgeval.
 4. Schrijf eerst een rode test.
-5. Bouw de kleinste uitbreiding die de test groen maakt.
+5. Bouw de kleinste toepassing die de test groen maakt.
 6. Toon de uitvoer en inspecteer de diff.
 7. Commit alleen wat je zelf hebt geaccepteerd.
 

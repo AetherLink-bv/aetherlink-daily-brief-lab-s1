@@ -1,28 +1,28 @@
 # Evidence — Daily brief agent
 
-Cutoff: `TEMPLATE — YYYY-MM-DD HH:MM TZ, revision`
+Cutoff: `2026-11-20, local solution walkthrough`
 
 Every row is a claim with the command that proves it, the exit code you saw and
 one quoted output line. A command nobody ran is `OPEN`, never a failure or pass.
 
 | Claim | Command | Exit code | Output line quoted | Status |
 | --- | --- | --- | --- | --- |
-| `TEMPLATE — the types hold` | `npm run typecheck` | `OPEN` | `OPEN` | `OPEN` |
-| `TEMPLATE — all tests hold` | `npm test` | `OPEN` | `OPEN` | `OPEN` |
-| `TEMPLATE — three eval cases hold` | `npm run eval` | `OPEN` | `OPEN` | `OPEN` |
-| `TEMPLATE — the page renders` | `npm run brief:sample` | `OPEN` | `OPEN` | `OPEN` |
+| The types hold | `npm run typecheck` | `0` | `tsc --noEmit` | `VERIFIED` |
+| All tests hold | `npm test` | `0` | `pass 9` | `VERIFIED` |
+| Three eval cases hold | `npm run eval` | `0` | `pass 3` | `VERIFIED` |
+| The page renders | `npm run brief:sample` | `0` | `WROTE out/latest.html` | `VERIFIED` |
 
 ## Fresh local checkout
 
-`TEMPLATE — path, commit, commands, exit codes, output path.`
+`OPEN — recorded after the A6 commit is exercised in detached worktrees.`
 
 ## Rollback proof
 
-`TEMPLATE — the temporary checkout ended clean after restoring docs/evidence.md from HEAD.`
+`OPEN — recorded after the previous A5 commit and current A6 commit both run.`
 
 ## Visible result
 
-`TEMPLATE — path to out/latest.html and what the participant checked.`
+`out/latest.html — contains Maya and the 09:00 decision line.`
 
 ## Differences from the references
 
