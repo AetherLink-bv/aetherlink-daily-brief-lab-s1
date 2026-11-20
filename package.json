@@ -5,9 +5,15 @@
   "type": "module",
   "description": "Daily brief agent: reads GitLab, Jira, Confluence and Outlook (or GitHub, Linear and Notion) and writes a Dia-style brief as a self-contained HTML artifact.",
   "scripts": {
-    "brief": "tsx src/main.ts",
+    "mini": "tsx src/mini.ts sample/calendar-item.sample.json",
+    "brief": "tsx src/main.ts --sample",
     "brief:sample": "tsx src/main.ts --sample",
     "docs:check": "node scripts/check-solo-docs.mjs",
+    "eval": "tsx --test test/eval.test.ts",
+    "test:mini": "tsx --test test/mini.test.ts",
+    "test:render": "tsx --test test/render.test.ts",
+    "test:schema": "tsx --test test/schema.test.ts",
+    "test:tool": "tsx --test test/tool.test.ts",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test test/*.test.ts"
   },

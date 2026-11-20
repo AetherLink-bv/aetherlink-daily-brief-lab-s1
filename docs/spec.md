@@ -29,6 +29,12 @@ Source: `TEMPLATE — the two reference PDFs in reference/, by name`
 | `TEMPLATE — the sample brief` | `TEMPLATE — the contract is checked` | `TEMPLATE — it passes` | `npm test` |
 | `TEMPLATE — a brief without a push item` | `TEMPLATE` | `TEMPLATE — it is rejected` | `npm test` |
 
+## Evaluation cases
+
+- Ordinary: `TEMPLATE — one agenda item becomes one decision line.`
+- Missing: `TEMPLATE — return OPEN and invent no fact.`
+- Conflict: `TEMPLATE — return CONFLICT and choose nothing silently.`
+
 ## OPEN
 
 - `TEMPLATE — every rule you could not settle from the reference alone.`

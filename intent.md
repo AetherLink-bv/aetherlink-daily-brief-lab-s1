@@ -4,14 +4,19 @@ Status: `TEMPLATE — complete before the spec`
 
 ## Outcome
 
-`TEMPLATE — one observable result, in plain words: what the reader opens every morning and what they no longer have to do.`
+### User and decision
+
+- User: `TEMPLATE — who reads the morning brief.`
+- Decision: `TEMPLATE — the first decision this person must make.`
+
+`TEMPLATE — one observable result: how one local agenda item helps this user make that decision.`
 
 ## Success checks
 
 - [ ] `TEMPLATE — a check a fresh reader can verify with one command or one look, without the author in the room.`
 - [ ] `TEMPLATE`
 - [ ] `TEMPLATE`
-- [ ] `OPEN — a check that needs a live run or an access you do not have yet.`
+- [ ] `npm run mini prints one decision line from sample/calendar-item.sample.json.`
 
 ## Boundary
 
@@ -24,13 +29,13 @@ Status: `TEMPLATE — complete before the spec`
 
 | Role | Name | Responsibility |
 | --- | --- | --- |
-| Reader | `TEMPLATE` | Reads the brief, decides what to push |
-| Maintainer | `TEMPLATE` | Owns the contract, the prompt, the schedule |
-| Gate | `TEMPLATE` | Reads every pull request against this file before merge |
+| Reader | `TEMPLATE` | Reads the brief and makes the named decision |
+| Builder | `TEMPLATE` | Owns the contract, the code and the local proof |
+| Gate | `TEMPLATE` | Accepts or rejects each local result against this file |
 
 ## Evidence contract
 
-`TEMPLATE — which commands with exit codes, which screenshot at which size, who reruns one of them. A claim about a live source needs the run log at the cutoff. Anything less is a hypothesis and is written as OPEN.`
+`TEMPLATE — which local commands, output file, fresh-checkout result and rollback proof are required. Anything unrun is OPEN.`
 
 ## OPEN
 

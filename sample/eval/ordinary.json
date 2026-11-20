@@ -1,0 +1,11 @@
+{
+  "user": "Maya",
+  "items": [
+    {
+      "id": "CAL-101",
+      "start": "09:00",
+      "title": "Daily stand-up",
+      "decision": "Bring the top blocker"
+    }
+  ]
+}

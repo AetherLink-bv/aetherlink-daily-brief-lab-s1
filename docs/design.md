@@ -17,9 +17,9 @@ Status: `TEMPLATE — complete before the build`
 
 ## Boundaries in code
 
-- Bound the task: `TEMPLATE — which options remove capability from the model.`
-- Watch the loop: `TEMPLATE — which options cap and log the run.`
-- Interrupt on purpose: `TEMPLATE — where the human sits, and why not inside the run.`
+- One source tool: `TEMPLATE — readAgenda reads one local JSON fixture.`
+- No extra capability: `TEMPLATE — no network, shell or write tool.`
+- Human gate: `TEMPLATE — where the participant accepts the plan and results.`
 
 ## Hooks (deterministic, hold without asking)
 

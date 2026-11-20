@@ -1,64 +1,56 @@
-# Claude Code prompts for the seven assignments
+# Exacte Claude Code-prompts
 
-These seven prompts match [SOLO.md](../SOLO.md) exactly. Paste one prompt per assignment.
+Deze zes prompts zijn bytegelijk aan A1 tot en met A6 in `SOLO.md`. A7 heeft bewust geen vaste implementatieprompt.
 
-## Assignment 1 · Write down what the brief must do
+## Assignment 1 · Kies de gebruiker en bouw één beslisregel
 
-> Read CLAUDE.md, SOLO.md, and the templates. Interview me one question at a time. Draft intent.md with one outcome, three observable checks, owners, a hard boundary, and one OPEN. Challenge my weakest check with one concrete counterexample. Revise only after my answer. Show the diff and stop for my review. Do not implement code.
-
-```text
-/grilling Grill me on my intent.md, one question at a time. Focus on the checks a neighbour cannot observe. Do not edit files.
-```
-
-## Assignment 2 · Make the schema test fail, then pass
-
-> Read my accepted intent.md and reference/. Draft docs/spec.md with one quoted example per field, then stop for my approval. After I approve it, write test/schema.test.ts and run it to show the expected red failure. Stop so I can inspect and commit the red test. After I confirm, build src/brief.ts and sample/brief.sample.json until the test passes. Ask me for one invalid sample and prove the schema rejects it. Show the test output and diff. Do not build a renderer or tools.
+> Read CLAUDE.md, SOLO.md, intent.md, progress.md, and sample/calendar-item.sample.json. Interview me one question at a time until I choose one user and one morning decision. After I approve the wording, update the User and decision section of intent.md and the matching user and decision fields in sample/calendar-item.sample.json. Then write test/mini.test.ts first for one exact line in the form `<start> <title> — decide: <decision>`. Run npm run test:mini and show the expected red failure. Build src/mini.ts, run npm run test:mini and npm run mini, show the green proof and diff, then stop. Use only the local fixture.
 
 ```text
-/eli5 Explain my schema and test/schema.test.ts as for an intelligent beginner: what each field checks and why the test was red first. Do not edit files.
+/grilling Challenge whether my chosen user, decision, and boundary are observable. Ask one question at a time. Do not edit files.
 ```
 
-## Assignment 3 · Agree on the design and the plan
+## Assignment 2 · Maak het briefschema rood en daarna groen
 
-> In plan mode, read intent.md, docs/spec.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md. Give every plan step an exact path, proof command, and rollback. Do not edit files or build. Stop for my approval. After I approve the plan, tell me to press Shift+Tab until manual mode is on. Then save only those design documents, challenge one assumption with a case I choose, show the revised diff, and stop.
+> Read the accepted intent.md, the two PDFs named in reference/README.md, and sample/calendar-item.sample.json. Draft docs/spec.md with the complete local brief schema and explicit rules for ordinary, missing, and conflicting input. Stop for my approval. After approval, write test/schema.test.ts first and run npm run test:schema to show the expected red failure. Build src/brief.ts and sample/brief.sample.json until npm run test:schema passes. Add one invalid local sample and prove the schema rejects it. Show the red and green evidence and the diff, then stop. Do not build the renderer or a tool.
 
 ```text
-/visual-plan Turn my accepted docs/plan.md into one HTML page I can read in the browser. Do not change the plan.
+/eli5 Explain my brief schema and its red-then-green test. Name what each field protects. Do not edit files.
 ```
 
-## Assignment 4 · Render the brief from sample data
+## Assignment 3 · Leg ontwerp en plan vast
 
-> Use my accepted docs/plan.md. Write test/render.test.ts and show the expected red failure. Then build src/render.ts and a sample-only src/main.ts. Escape untrusted text. Run npm run brief:sample and show out/latest.html. Ask me to choose one house-style change. Add its failing test first, make it pass, regenerate the page, and show the diff. Use no API key or model call. Stop for my inspection.
+> In plan mode, read intent.md, docs/spec.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md for the smallest local route from one agenda fixture to one HTML brief. Give every plan step exact root-relative paths, one proof command, and a reversible rollback. The design must allow exactly one read-only source tool and no network, shell, or write capability. Do not edit files or build. Stop for my approval. After I approve the plan, tell me to press Shift+Tab until manual mode is on. Then save only the approved design documents, challenge one assumption with a case I choose, show the diff, and stop.
 
 ```text
-/verify-this Prove that npm run brief:sample writes out/latest.html without a model call. Show the command, exit code and one line of output.
+/visual-plan Turn my accepted docs/plan.md into one local HTML page. Do not change the plan.
 ```
 
-## Assignment 5 · Give the agent one read-only tool
+## Assignment 4 · Render de lokale voorbeeldbrief
 
-> Read my accepted plan and schema. Build src/agent.ts, src/sources.ts, and test/agent.test.ts for one read-only tool. Connect src/main.ts to the agent for the live brief command. Preserve brief:sample without model calls. Give the brief agent no shell or write tools. Prove the tool wiring and one missing-source case I choose with tests. With credentials, run the brief and trace each factual claim to run.log. Without credentials, run the sample and mark the live check OPEN. Never print tokens. Show the proof and diff, then stop.
+> Read my accepted docs/plan.md and docs/spec.md. Write test/render.test.ts first and run npm run test:render to show the expected red failure. Then build src/render.ts and a sample-only src/main.ts. Escape untrusted text. Run npm run test:render and npm run brief:sample. Prove that out/latest.html contains the chosen user, the decision line, and no invented fact. Ask me for one small house-style change, add its failing test first, make it pass, regenerate the page, show the proof and diff, then stop.
 
 ```text
-/show-me Draw how one source reaches the brief: src/sources.ts, the tool in src/agent.ts, and src/main.ts. Only read, change nothing.
+/verify-this Prove that npm run brief:sample writes out/latest.html from local sample data. Show the exit code and output path.
 ```
 
-## Assignment 6 · Record the evidence
+## Assignment 5 · Voeg één read-only tool toe en spoor de fout op
 
-> Run the existing typecheck, test, and brief:sample scripts. Record every command, exit code, and one output line in docs/evidence.md. Link docs/evidence/latest-1440x900.png. Mark unrun checks OPEN. Do not change code to hide a failure. Ask my reviewer to rerun one command. Record the reviewer's actual name and result only after the rerun. Show the evidence diff and stop.
+> Read the accepted design, plan, and schema. Write test/tool.test.ts first for exactly one read-only `readAgenda` tool that reads a local JSON fixture. Run npm run test:tool and show the expected red failure. Build src/sources.ts and src/agent.ts as a local agent path: instruction, controlled test-model choice, tool call, and answer. Give it no network, shell, or write capability. Add sample/calendar-item.invalid.json with the `start` field missing. Prove that the failing test names `start`, then return an explicit source error and make npm run test:tool pass. Prove the tool contract, not model quality. Show the data path, proof, and diff, then stop.
 
 ```text
-/verify-this Rerun the three commands in docs/evidence.md and compare each exit code with what is written. Mark any difference OPEN.
+/show-me Draw the path from sample/calendar-item.sample.json through the one read-only tool to the brief. Only read files.
 ```
 
-## Assignment 7 · Decide the gate and prepare the PR
+## Assignment 6 · Evalueer en lever lokaal op
 
-> Read intent.md, the current diff, and docs/evidence.md. Draft docs/gate.md with evidence links and proposed FAIL or OPEN entries for missing checks. Leave every PASS decision to me. Prepare a PR title, description, and inactive weekday schedule. Show the diff and stop for my gate decision. Do not commit, push, open a PR, merge, deploy, or activate the schedule.
+> Read docs/spec.md and the fixtures sample/eval/ordinary.json, sample/eval/missing.json, and sample/eval/conflict.json. Write test/eval.test.ts for three outcomes: an ordinary decision line, explicit OPEN without invented facts, and explicit CONFLICT without silently choosing. Run npm run eval and fix only mismatches with the accepted spec. Then run npm run typecheck, npm test, npm run eval, and npm run brief:sample. Record commands, exit codes, and one output line in docs/evidence.md. Mark anything not run OPEN. Show the evidence diff and stop for my approval. Do not publish anything.
 
 ```text
-/review-and-ship Review my work against intent.md and docs/gate.md. Run the tests. Prepare the PR, but stop before you open it and before any merge.
+/verify-this Run npm run eval and compare ordinary, missing, and conflict with docs/spec.md. Mark every mismatch OPEN.
 ```
 
-## Stuck or switching laptop?
+## Handoff
 
 ```text
 /handoff Write a prompt for a fresh Claude Code session to continue from my current assignment. Name the files, decisions, and next proof.
