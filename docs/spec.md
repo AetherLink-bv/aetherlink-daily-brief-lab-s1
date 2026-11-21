@@ -51,3 +51,7 @@ Live source: `TEMPLATE — one exact owner-confirmed read-only tool from the exi
 ## OPEN
 
 - `TEMPLATE — every rule you could not settle from the reference alone.`
+
+## Optional voice extension
+
+The [voice extension](voice-extension.md) is outside the core `DailyBrief` contract. It may use only the validated synthetic sample. It speaks only the summary and top todos, preserves the words `OPEN` and `CONFLICT`, and never reads a live brief or connector response.

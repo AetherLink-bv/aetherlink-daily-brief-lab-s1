@@ -42,3 +42,7 @@ Status: `TEMPLATE — complete before the spec`
 ## OPEN
 
 - `TEMPLATE — every unknown, one per line. Unknowns are written down, not guessed.`
+
+## Optional extension after the core route
+
+The [voice extension](docs/voice-extension.md) is not part of the accepted Bree outcome. Start it only after A7 and the Maintain loop. It uses synthetic data, a personal ElevenLabs account, and a key stored only in ignored `.env.local`. It never reads or speaks live work data.
