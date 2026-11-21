@@ -4,7 +4,7 @@ Status per step. VERIFIED means the proof command ran in the current checkout; O
 
 | Step | Artifact | Proof | Status |
 | --- | --- | --- | --- |
-| 1 | intent.md, sample/calendar-item.sample.json, src/mini.ts, test/mini.test.ts | npm run test:mini && npm run mini | OPEN |
+| 1 | intent.md, sample/calendar-item.sample.json, src/mini.ts, test/mini.test.ts | npm run test:mini && npm run mini | VERIFIED by fictional participant, 2026-11-21 |
 | 2 | docs/spec.md, src/brief.ts, sample, test/schema.test.ts | npm test (schema) | OPEN |
 | 3 | docs/design.md, docs/decisions/ADR-001, docs/plan.md, offline visual plan | complete route accepted before build | OPEN |
 | 4 | src/render.ts, src/main.ts | npm run brief:sample | OPEN |
