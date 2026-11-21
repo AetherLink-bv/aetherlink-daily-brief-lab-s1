@@ -27,6 +27,8 @@ This starts Manual mode and loads no MCP server for A1–A4. Local settings are 
 
 Complete one assignment at a time. Inspect each diff and run the named check yourself before you continue.
 
+When a named command runs, preserve its synthetic red and green output with the actual exit codes. Never reconstruct historical raw logs or record live connector contents.
+
 | SDLC phase | Artifact and proof |
 | --- | --- |
 | Plan | Accepted `intent.md` and one synthetic decision line |
@@ -126,7 +128,7 @@ Use manual mode. This assignment builds the visible result with synthetic input.
 
 **Action:** Paste Part 1. Inspect the red test, the green rerun, and the generated page.
 
-> Read the accepted docs/plan.md, docs/spec.md, and reference/dia-to-bree.md. Write test/render.test.ts first and run npm run test:render to show the expected red failure. Build src/render.ts and a sample-only src/main.ts. Render the complete DailyBrief schema as one readable HTML page with title, date, greeting, summary, move-work-forward action, top todos, new updates, your day, sources, and visible OPEN states. Escape long untrusted text and source labels. Run npm run test:render and npm run brief:sample. Prove that out/latest.html contains every section, source provenance, and no invented fact. Show the proof and diff, then stop.
+> Read the accepted docs/plan.md, docs/spec.md, and reference/dia-to-bree.md. Write test/render.test.ts first and run npm run test:render to show the expected red failure. Build src/render.ts and a sample-only src/main.ts. Render the complete DailyBrief schema as one readable HTML page with title, date, greeting, summary, move-work-forward action, top todos, new updates, your day, sources, and visible OPEN states. Include the fixed public illustration https://picsum.photos/seed/bree-morning/1200/400 with empty alt text, referrerpolicy="no-referrer", and stable visible fallback text. Keep it outside the DailyBrief contract, put no work data in its URL, and keep the brief usable when the image fails. Escape long untrusted text and source labels. Run npm run test:render and npm run brief:sample. Prove that out/latest.html contains every section, source provenance, and no invented fact. Show the proof and diff, then stop.
 
 ```text
 /verify-this Prove that npm run brief:sample writes out/latest.html from synthetic data. Show the exit code, output path, source label, and unavailable-source behavior.
@@ -137,8 +139,6 @@ Optional, when Impeccable is available:
 ```text
 /impeccable critique Bree's brief view. Read only. Use the accepted specification and existing visual system. Report the three most important hierarchy or accessibility issues, then stop for approval.
 ```
-
-Optional, after the complete brief passes: follow the decorative image guidance in `reference/dia-to-bree.md`. Ask Claude to add the fixed public photo, useful alt text, and an offline-safe fallback. Treat the image as decoration, not business evidence.
 
 ### Part 2: improve one house-style detail
 

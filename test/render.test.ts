@@ -30,6 +30,18 @@ test("renders the complete editorial brief with OPEN, CONFLICT and escaped sourc
   assert.doesNotMatch(html, /<Maya>/);
 });
 
+test("renders the fixed public illustration without leaking a referrer or relying on the image", () => {
+  const input = dailyBriefSchema.parse(JSON.parse(readFileSync("sample/brief.sample.json", "utf8")));
+  const html = renderDailyBrief(input);
+
+  assert.match(html, /https:\/\/picsum\.photos\/seed\/bree-morning\/1200\/400/);
+  assert.match(html, /alt=""/);
+  assert.match(html, /referrerpolicy="no-referrer"/);
+  assert.match(html, /Morning focus\. Your complete brief remains below\./);
+  assert.doesNotMatch(html, /onerror=/);
+  assert.doesNotMatch(html, /picsum[^"']*(?:DEMO|Maya|2026-)/i);
+});
+
 test("keeps unavailable sections OPEN when no source is available", () => {
   const openItem = { status: "OPEN" as const, text: "OPEN — approved source unavailable.", sourceIds: [] };
   const html = renderDailyBrief(dailyBriefSchema.parse({

@@ -29,10 +29,8 @@ A7 has no prescribed implementation prompt. Use `/handoff` after the mission and
 
 ## Known gaps in this lab
 
-The skills are copied unchanged. These references point at things this lab does not have:
+These optional paths still depend on local tools or create their output folder on first use:
 
-- `visual-plan` points to `/diagram` and `/archify`. Neither skill is in this lab.
-- `visual-plan` reads `PROGRESS.md` for a recap. This lab uses `progress.md`.
 - `visual-plan` and `show-me` write to `docs/visual/` and `docs/show-me/`. These folders do not exist until the skill creates them.
-- `review-and-ship` and `visual-plan` call `gh`. Without the GitHub CLI, those steps report a blocker.
+- `review-and-ship` calls `gh`. Without the GitHub CLI, those steps report a blocker. `visual-plan` uses `gh` only when it is available.
 - `handoff` writes `/tmp/handoff-prompt.txt` and copies it with `pbcopy` or a similar clipboard tool.
