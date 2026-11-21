@@ -1,16 +1,20 @@
 # Evidence — Daily brief agent
 
-Cutoff: `2026-11-20, local solution walkthrough`
+Cutoff: `2026-11-21, current targeted solution checks`
 
-Every row is a claim with the command that proves it, the exit code you saw and
-one quoted output line. A command nobody ran is `OPEN`, never a failure or pass.
+Every row is a claim with the command that proves it, the exit code observed, and one quoted output line. An unrun command is `OPEN`, never a pass.
 
 | Claim | Command | Exit code | Output line quoted | Status |
 | --- | --- | --- | --- | --- |
-| The types hold | `npm run typecheck` | `0` | `tsc --noEmit` | `VERIFIED` |
-| All tests hold | `npm test` | `0` | `pass 9` | `VERIFIED` |
-| Three eval cases hold | `npm run eval` | `0` | `pass 3` | `VERIFIED` |
+| The full schema holds | `npm run test:schema` | `0` | `# pass 5` | `VERIFIED` |
+| The complete HTML renderer holds | `npm run test:render` | `0` | `# pass 3` | `VERIFIED` |
+| The live boundary holds | `npm run test:live` | `0` | `# pass 15` | `VERIFIED` |
+| The evaluation cases hold | `npm run eval` | `0` | `# pass 6` | `VERIFIED` |
+| The learning slice holds | `npm run test:mini` | `0` | `# pass 1` | `VERIFIED` |
+| The full suite holds | `npm test` | `OPEN` | `OPEN — awaiting current CI` | `OPEN` |
 | The page renders | `npm run brief:sample` | `0` | `WROTE out/latest.html` | `VERIFIED` |
+
+The targeted checks cover 30 tests in total. This does not replace the full-suite CI result.
 
 ## Fresh local checkout
 
@@ -22,7 +26,11 @@ one quoted output line. A command nobody ran is `OPEN`, never a failure or pass.
 
 ## Visible result
 
-`out/latest.html — contains Maya and the 09:00 decision line.`
+`out/latest.html — contains the complete synthetic Daily Brief: title, date, greeting, summary, move-work-forward action, top todos, new updates, your day, and sources.`
+
+## Private live result
+
+`OPEN — record only the dated path under ~/.bree/briefs/ after approved access succeeds. Never paste its contents here.`
 
 ## Differences from the references
 
