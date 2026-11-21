@@ -2,7 +2,7 @@
 
 Status: `TEMPLATE — accepted by the participant before any build step runs`
 
-Smallest complete slice: `TEMPLATE — synthetic brief first, then one exact read-only Jira tool through the same contract.`
+Smallest complete slice: `TEMPLATE — full synthetic HTML first, then one exact read-only Jira tool through the same DailyBrief contract to a dated private HTML artifact.`
 
 ## Ordered steps
 

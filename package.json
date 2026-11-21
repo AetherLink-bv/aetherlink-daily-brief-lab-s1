@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Daily Brief workshop: build locally, then optionally query one approved Jira source through company Vertex.",
+  "description": "Daily Brief workshop: build a complete private HTML brief, then optionally query one approved Jira source through company Vertex.",
   "scripts": {
     "mini": "tsx src/mini.ts sample/calendar-item.sample.json",
     "brief": "tsx src/main.ts --sample",
@@ -18,7 +18,7 @@
     "test:tool": "tsx --test test/tool.test.ts",
     "test:live": "tsx --test test/live.test.ts",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test test/*.test.ts"
+    "test": "tsx --test --test-concurrency=2 test/*.test.ts"
   },
   "engines": { "node": ">=20" },
   "dependencies": {

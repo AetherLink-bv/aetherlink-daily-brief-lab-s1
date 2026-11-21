@@ -1,19 +1,36 @@
-# Synthetic Daily Brief example
+# Synthetic full Daily Brief example
 
 This example is fictional. It contains no work, customer, or personal data.
 
-## Maya's Daily Brief
+## Maya's Daily Brief — 2026-11-21
 
-**Decision for 09:00**
+Good morning, Maya.
 
-Bring the top blocker to the daily stand-up.
+### Summary
 
-**Source**
+- `READY` — You have one decision before the 09:00 stand-up. Source: `SYNTHETIC-JIRA-001`.
 
-`SYNTHETIC-JIRA-001` — Daily stand-up at 09:00.
+### Push your work forward
 
-**Status**
+- `READY` — Bring the top blocker to the stand-up. Source: `SYNTHETIC-JIRA-001`.
 
-`ordinary`
+### Top to-dos
 
-If the source item is missing, show `OPEN`. If sources disagree, show `CONFLICT` and do not choose silently.
+- `READY` — Review the workshop outline before 15:00. Source: `MAIL-DEMO-001`.
+- `OPEN` — Confirm the owner of the follow-up. Source: `SYNTHETIC-JIRA-002`.
+
+### New updates
+
+- `READY` — The workshop outline is ready for review. Source: `MAIL-DEMO-001`.
+
+### Your day
+
+- `READY` — 09:00 Daily stand-up. Source: `SYNTHETIC-JIRA-001`.
+
+### Sources
+
+- `SYNTHETIC-JIRA-001` — fictional Jira work item.
+- `SYNTHETIC-JIRA-002` — fictional Jira work item with missing owner.
+- `MAIL-DEMO-001` — fictional Outlook-style fixture.
+
+If evidence is missing, keep the affected item `OPEN`. If sources disagree, mark it `CONFLICT`. Never invent a value.

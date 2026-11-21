@@ -4,7 +4,7 @@ Status: `TEMPLATE — complete before the build`
 
 ## Shape
 
-`TEMPLATE — synthetic fixture → contract → renderer → HTML, plus existing approved Jira MCP → exact read-only tool → Agent SDK through Anthropic via Vertex → private terminal brief.`
+`TEMPLATE — synthetic fixtures → DailyBrief schema → full HTML renderer → out/latest.html, plus approved Jira MCP → exact read-only tool → Agent SDK → same schema → host writer → ~/.bree/briefs/YYYY-MM-DD.html.`
 
 ## Parts
 
@@ -12,15 +12,16 @@ Status: `TEMPLATE — complete before the build`
 | --- | --- | --- | --- |
 | The contract | `TEMPLATE` | `TEMPLATE` | `TEMPLATE` |
 | Synthetic adapter | `TEMPLATE` | Repeatable tests and recordings | Read work data |
-| Live adapter | `TEMPLATE` | One exact approved MCP read tool | Offer another tool or persist output |
-| Agent loop | `TEMPLATE` | Bounded SDK turns and source-aware response | Use built-in tools or persist a session |
+| Live adapter | `TEMPLATE` | One exact approved MCP read tool | Offer another tool or store raw output |
+| Agent loop | `TEMPLATE` | Bounded SDK turns and validated DailyBrief output | Use built-in or write tools |
+| Host writer | `TEMPLATE` | Validated dated HTML with private permissions | Write inside the repository or expose raw input |
 | The checker | `TEMPLATE` | `TEMPLATE` | `TEMPLATE` |
 
 ## Boundaries in code
 
 - One live source tool: `TEMPLATE — exact Jira read-tool name inspected with /mcp and confirmed read-only by its owner.`
 - No extra capability: no built-in, shell, file-write, messaging, or ticket-update tool.
-- Separate evidence: synthetic tests may be stored; private live output may not.
+- Separate evidence: synthetic tests may be stored; live contents may not. Record only the dated path and status.
 - Human gate: `TEMPLATE — where the participant accepts the plan and results.`
 
 ## Hooks (deterministic, hold without asking)
