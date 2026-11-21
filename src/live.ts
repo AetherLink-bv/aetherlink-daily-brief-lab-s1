@@ -6,14 +6,14 @@ import { z } from "zod";
 import { parseDailyBrief } from "./brief.js";
 import { renderBrief } from "./render.js";
 
-const configSchema = z.object({ approvedCorporateConnector: z.boolean(), approvedReadOnlyTool: z.boolean(), authorizedModelAccount: z.boolean(), modelProvider: z.literal("vertex"), user: z.string(), decision: z.string(), mcp: z.object({ server: z.literal("jira"), tool: z.string(), configPath: z.string().min(1) }) });
+const configSchema = z.object({ approvedCorporateConnector: z.boolean(), approvedReadOnlyTool: z.boolean(), authorizedModelAccount: z.boolean(), modelProvider: z.literal("vertex"), user: z.string(), decision: z.string(), mcp: z.object({ server: z.literal("jira"), tool: z.string() }) });
 export type BreeConfig = z.infer<typeof configSchema>;
-type QueryLike = (args: { prompt: string; options: Options }) => AsyncIterable<any>;
+type QueryLike = (args: { prompt: string; options: Options }) => AsyncIterable<unknown>;
 type LiveDependencies = { query: QueryLike; mcpServers: Record<string, McpServerConfig>; vertexEnabled: boolean; outputPath: string };
 
 export function checkLiveConfig(input: unknown): string[] {
   const parsed = configSchema.safeParse(input);
-  if (!parsed.success) return ["valid local configuration including the approved MCP config path"];
+  if (!parsed.success) return ["valid local configuration"];
   const config = parsed.data;
   return [!config.approvedCorporateConnector && "corporate connector approval", !config.approvedReadOnlyTool && "read-only tool approval", !config.authorizedModelAccount && "authorized Vertex model account", (!config.mcp.tool.startsWith("mcp__jira__") || config.mcp.tool.includes("REPLACE_")) && "exact Jira tool from /mcp"].filter((item): item is string => Boolean(item));
 }
@@ -36,7 +36,18 @@ export function privateOutputPath(date: string): string {
   return path;
 }
 
-const contentBlocks = (message: any): any[] => Array.isArray(message?.message?.content) ? message.message.content : [];
+const record = (value: unknown): Record<string, unknown> | undefined => typeof value === "object" && value !== null ? value as Record<string, unknown> : undefined;
+const contentBlocks = (message: unknown): unknown[] => {
+  const envelope = record(message);
+  const inner = record(envelope?.message);
+  return Array.isArray(inner?.content) ? inner.content : [];
+};
+const resultJson = (block: Record<string, unknown>): unknown => {
+  const content = block.content;
+  const text = typeof content === "string" ? content : Array.isArray(content) && content.length === 1 && record(content[0])?.type === "text" ? record(content[0])?.text : undefined;
+  if (typeof text !== "string") return undefined;
+  try { return JSON.parse(text); } catch { return undefined; }
+};
 
 export async function runLive(config: BreeConfig, dependencies: LiveDependencies): Promise<string> {
   const missing = checkLiveConfig(config);
@@ -52,18 +63,27 @@ export async function runLive(config: BreeConfig, dependencies: LiveDependencies
     options: { ...buildSdkOptions(config, dependencies.mcpServers), maxTurns: 2 }
   });
   for await (const message of stream) {
-    if (message.type === "assistant") for (const block of contentBlocks(message)) if (block.type === "tool_use" && block.name === config.mcp.tool && typeof block.id === "string") chosenCalls.add(block.id);
-    if (message.type === "user") for (const block of contentBlocks(message)) {
-      if (block.type !== "tool_result" || block.is_error || !chosenCalls.has(block.tool_use_id)) continue;
-      const issues = block.structuredContent?.issues;
-      if (!Array.isArray(issues)) continue;
-      for (const issue of issues) if (typeof issue?.key === "string" && /^[A-Z][A-Z0-9]+-\d+$/.test(issue.key)) permittedKeys.add(issue.key);
+    const envelope = record(message);
+    if (envelope?.type === "assistant") for (const value of contentBlocks(message)) {
+      const block = record(value);
+      if (block?.type === "tool_use" && block.name === config.mcp.tool && typeof block.id === "string") chosenCalls.add(block.id);
     }
-    if (message.type === "result" && message.subtype === "success") candidate = JSON.parse(message.result);
+    if (envelope?.type === "user") for (const value of contentBlocks(message)) {
+      const block = record(value);
+      if (!block || block.type !== "tool_result" || block.is_error === true || typeof block.tool_use_id !== "string" || !chosenCalls.has(block.tool_use_id)) continue;
+      const structured = record(resultJson(block));
+      const issues = structured?.issues;
+      if (!Array.isArray(issues)) continue;
+      for (const value of issues) {
+        const issue = record(value);
+        if (typeof issue?.key === "string" && /^[A-Z][A-Z0-9]+-\d+$/.test(issue.key)) permittedKeys.add(issue.key);
+      }
+    }
+    if (envelope?.type === "result" && envelope.subtype === "success" && typeof envelope.result === "string") candidate = JSON.parse(envelope.result);
   }
 
   const brief = parseDailyBrief(candidate);
-  const permittedIds = new Set([...permittedKeys].map(key => `jira:${key}`));
+  const permittedIds = permittedKeys;
   for (const source of brief.sources) if (!permittedIds.has(source.id)) throw new Error(`Unpermitted live source ID: ${source.id}`);
   for (const item of [brief.summary, brief.moveWorkForward, ...brief.topTodos, ...brief.newUpdates, ...brief.yourDay]) {
     for (const id of item.sourceIds) if (!permittedIds.has(id)) throw new Error(`Unpermitted live source ID: ${id}`);
@@ -79,8 +99,8 @@ async function loadConfig(): Promise<BreeConfig> {
   return configSchema.parse(JSON.parse(await readFile(".bree.local.json", "utf8")));
 }
 
-async function loadJiraServer(config: BreeConfig): Promise<Record<string, McpServerConfig>> {
-  const parsed = JSON.parse(await readFile(config.mcp.configPath, "utf8"));
+async function loadJiraServer(path: string): Promise<Record<string, McpServerConfig>> {
+  const parsed = JSON.parse(await readFile(path, "utf8"));
   const jira = parsed.mcpServers?.jira ?? parsed.jira;
   if (!jira || typeof jira !== "object") throw new Error("approved MCP config has no Jira server");
   return { jira };
@@ -90,10 +110,11 @@ if (process.argv[1]?.endsWith("live.ts")) {
   try {
     const config = await loadConfig();
     const missing = checkLiveConfig(config);
-    const mcpServers = missing.length ? {} : await loadJiraServer(config);
+    const mcpPath = process.env.AETHERLINK_JIRA_MCP_CONFIG;
+    const mcpServers = missing.length || !mcpPath ? {} : await loadJiraServer(mcpPath);
     const vertexEnabled = process.env.CLAUDE_CODE_USE_VERTEX === "1";
     if (process.argv.includes("--check")) {
-      const open = [...missing, !vertexEnabled && "approved Vertex route", !mcpServers.jira && "approved Jira-only MCP config"].filter((item): item is string => Boolean(item));
+      const open = [...missing, !vertexEnabled && "approved Vertex route", !mcpPath && "AETHERLINK_JIRA_MCP_CONFIG", !mcpServers.jira && "approved Jira-only MCP config"].filter((item): item is string => Boolean(item));
       console.log(open.length ? `OPEN — ${open.join(", ")}` : "READY — local approvals and configuration are present");
       if (open.length) process.exitCode = 2;
     } else {
@@ -101,7 +122,7 @@ if (process.argv[1]?.endsWith("live.ts")) {
       console.log(`PASS — wrote validated private brief to ${path}`);
     }
   } catch (error) {
-    console.log(`OPEN — ${error instanceof Error ? error.message : "live configuration unavailable"}`);
+    console.log("OPEN — approved local live configuration is unavailable");
     process.exitCode = 2;
   }
 }

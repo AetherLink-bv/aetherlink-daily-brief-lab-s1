@@ -7,7 +7,6 @@
   "decision": "Bring the top blocker to the 09:00 stand-up",
   "mcp": {
     "server": "jira",
-    "tool": "mcp__jira__REPLACE_WITH_EXACT_READ_ONLY_TOOL_FROM_MCP",
-    "configPath": "REPLACE_WITH_ORGANISATION_APPROVED_JIRA_ONLY_MCP_CONFIG_PATH"
+    "tool": "mcp__jira__REPLACE_WITH_EXACT_READ_ONLY_TOOL_FROM_MCP"
   }
 }

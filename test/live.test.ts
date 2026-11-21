@@ -6,7 +6,7 @@ import { test } from "node:test";
 import sample from "../sample/brief.sample.json" with { type: "json" };
 import { buildSdkOptions, checkLiveConfig, privateOutputPath, runLive, type BreeConfig } from "../src/live.js";
 
-const ready = { approvedCorporateConnector: true, approvedReadOnlyTool: true, authorizedModelAccount: true, modelProvider: "vertex", user: "Maya", decision: "Choose blocker", mcp: { server: "jira", tool: "mcp__jira__search_my_issues", configPath: "/approved/jira.json" } } satisfies BreeConfig;
+const ready = { approvedCorporateConnector: true, approvedReadOnlyTool: true, authorizedModelAccount: true, modelProvider: "vertex", user: "Maya", decision: "Choose blocker", mcp: { server: "jira", tool: "mcp__jira__search_my_issues" } } satisfies BreeConfig;
 
 test("permits exactly one read-only tool and denies every other tool", async () => {
   const options = buildSdkOptions(ready, { jira: { command: "approved-jira" } });
@@ -34,15 +34,16 @@ test("private artifact path rejects traversal-like dates", () => {
 test("full live boundary accepts only exact keys from successful structured output", async () => {
   const output = join(await mkdtemp(join(tmpdir(), "bree-live-")), "brief.html");
   const liveBrief = structuredClone(sample);
-  liveBrief.summary.sourceIds = ["jira:DEMO-101"];
-  liveBrief.moveWorkForward.sourceIds = ["jira:DEMO-101"];
+  liveBrief.summary.sourceIds = ["DEMO-101"];
+  liveBrief.moveWorkForward.sourceIds = ["DEMO-101"];
   liveBrief.topTodos = [liveBrief.topTodos[0]!];
+  liveBrief.topTodos[0]!.sourceIds = ["DEMO-101"];
   liveBrief.newUpdates = [{ status: "OPEN", text: "OPEN — no new update", sourceIds: [] }];
   liveBrief.yourDay = [{ status: "OPEN", text: "OPEN — calendar is unavailable", sourceIds: [] }];
-  liveBrief.sources = [{ id: "jira:DEMO-101", label: "Approved Jira item" }];
+  liveBrief.sources = [{ id: "DEMO-101", label: "Approved Jira item" }];
   const messages = [
     { type: "assistant", message: { content: [{ type: "tool_use", id: "call-1", name: ready.mcp.tool }] } },
-    { type: "user", message: { content: [{ type: "tool_result", tool_use_id: "call-1", is_error: false, structuredContent: { issues: [{ key: "DEMO-101" }] } }] } },
+    { type: "user", message: { content: [{ type: "tool_result", tool_use_id: "call-1", is_error: false, content: JSON.stringify({ issues: [{ key: "DEMO-101" }] }) }] } },
     { type: "result", subtype: "success", result: JSON.stringify(liveBrief) }
   ];
   const result = await runLive(ready, { query: async function* () { yield* messages; }, mcpServers: { jira: { command: "approved-jira" } }, vertexEnabled: true, outputPath: output });
@@ -53,15 +54,15 @@ test("full live boundary accepts only exact keys from successful structured outp
 
 test("rejects keys from prose, failed calls, other calls, and unlisted sources", async () => {
   const candidate = structuredClone(sample);
-  candidate.sources = [{ id: "jira:DEMO-101", label: "Unproven" }];
-  candidate.summary.sourceIds = ["jira:DEMO-101"];
-  candidate.moveWorkForward.sourceIds = ["jira:DEMO-101"];
+  candidate.sources = [{ id: "DEMO-101", label: "Unproven" }];
+  candidate.summary.sourceIds = ["DEMO-101"];
+  candidate.moveWorkForward.sourceIds = ["DEMO-101"];
   candidate.topTodos = [{ status: "OPEN", text: "OPEN — no todo evidence", sourceIds: [] }];
   candidate.newUpdates = [{ status: "OPEN", text: "OPEN — no update evidence", sourceIds: [] }];
   candidate.yourDay = [{ status: "OPEN", text: "OPEN — no day evidence", sourceIds: [] }];
   const messages = [
     { type: "assistant", message: { content: [{ type: "text", text: "DEMO-101" }, { type: "tool_use", id: "other", name: "Bash" }, { type: "tool_use", id: "call-1", name: ready.mcp.tool }] } },
-    { type: "user", message: { content: [{ type: "tool_result", tool_use_id: "call-1", is_error: true, structuredContent: { issues: [{ key: "DEMO-101" }] } }, { type: "tool_result", tool_use_id: "other", is_error: false, structuredContent: { issues: [{ key: "DEMO-101" }] } }] } },
+    { type: "user", message: { content: [{ type: "tool_result", tool_use_id: "call-1", is_error: true, content: JSON.stringify({ issues: [{ key: "DEMO-101" }] }) }, { type: "tool_result", tool_use_id: "call-1", is_error: false, content: "DEMO-101 in prose" }, { type: "tool_result", tool_use_id: "call-1", is_error: false, content: "{malformed" }, { type: "tool_result", tool_use_id: "other", is_error: false, content: JSON.stringify({ issues: [{ key: "DEMO-101" }] }) }] } },
     { type: "result", subtype: "success", result: JSON.stringify(candidate) }
   ];
   await assert.rejects(() => runLive(ready, { query: async function* () { yield* messages; }, mcpServers: { jira: { command: "approved-jira" } }, vertexEnabled: true, outputPath: join(tmpdir(), "must-not-write.html") }), /Unpermitted live source ID/);

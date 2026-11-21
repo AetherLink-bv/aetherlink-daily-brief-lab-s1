@@ -10,8 +10,9 @@ Cutoff: 2026-11-21, local participant branch.
 | Renderer holds | `npm run test:render` | 0 | `pass 2, fail 0` | PASS |
 | Live boundary holds with mocks | `npm run test:live` | 0 | `pass 6, fail 0` | PASS |
 | Three eval cases hold | `npm run eval` | 0 | `pass 3, fail 0` | PASS |
+| Mock Outlook mission holds | `npm run test:tool` | 0 | `pass 2, fail 0` | PASS |
 | Page renders | `npm run brief:sample` | 0 | `Wrote out/latest.html (2136 bytes) from synthetic data` | PASS |
-| Local live configuration | `npm run live:check` | 2 | `OPEN — ... .bree.local.json` | OPEN |
+| Local live configuration | `npm run live:check` | 2 | `OPEN — approved local live configuration is unavailable` | OPEN |
 | Full suite | `npm test` | OPEN | Assigned to remote CI by local resource policy | OPEN |
 
 ## Fresh local checkout
