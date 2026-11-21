@@ -4,19 +4,26 @@ Status: `TEMPLATE — complete before the spec`
 
 ## Outcome
 
-`TEMPLATE — one observable result, in plain words: what the reader opens every morning and what they no longer have to do.`
+### User and decision
+
+- User: `TEMPLATE — who reads the morning brief.`
+- Decision: `TEMPLATE — the first decision this person must make.`
+
+`TEMPLATE — one observable result: how a sourced morning signal helps this user make that decision.`
 
 ## Success checks
 
 - [ ] `TEMPLATE — a check a fresh reader can verify with one command or one look, without the author in the room.`
 - [ ] `TEMPLATE`
 - [ ] `TEMPLATE`
-- [ ] `OPEN — a check that needs a live run or an access you do not have yet.`
+- [ ] `npm run mini prints one synthetic decision line.`
+- [ ] `npm run live:check reports READY or an exact OPEN reason without contacting the source.`
+- [ ] `TEMPLATE — the private live brief names its source, or live access remains OPEN.`
 
 ## Boundary
 
-- In scope: `TEMPLATE — the folder, the sources, the outputs.`
-- Out of scope: `TEMPLATE — what the agent may never do: write to a source, send anything, store a credential.`
+- In scope: `TEMPLATE — one approved read-only corporate source, the synthetic equivalent, and private terminal output.`
+- Out of scope: writing to a source, sending messages, changing tickets, public deployment, customer data, and stored live output.
 - The model never invents a fact: `TEMPLATE — what happens when a source is silent.`
 - Stop or escalate when: `TEMPLATE — a write scope is offered, personal data appears, the agent starts deciding instead of describing.`
 
@@ -24,13 +31,13 @@ Status: `TEMPLATE — complete before the spec`
 
 | Role | Name | Responsibility |
 | --- | --- | --- |
-| Reader | `TEMPLATE` | Reads the brief, decides what to push |
-| Maintainer | `TEMPLATE` | Owns the contract, the prompt, the schedule |
-| Gate | `TEMPLATE` | Reads every pull request against this file before merge |
+| Reader | `TEMPLATE` | Reads the brief and makes the named decision |
+| Builder | `TEMPLATE` | Owns the contract, the code and the local proof |
+| Gate | `TEMPLATE` | Accepts or rejects each local result against this file |
 
 ## Evidence contract
 
-`TEMPLATE — which commands with exit codes, which screenshot at which size, who reruns one of them. A claim about a live source needs the run log at the cutoff. Anything less is a hypothesis and is written as OPEN.`
+`TEMPLATE — which synthetic commands, output file, preflight, private live check, fresh-checkout result, and rollback proof are required. Anything unrun is OPEN.`
 
 ## OPEN
 

@@ -1,0 +1,17 @@
+{
+  "user": "Maya",
+  "items": [
+    {
+      "id": "CAL-201",
+      "start": "09:00",
+      "title": "Daily stand-up",
+      "decision": "Bring the top blocker"
+    },
+    {
+      "id": "CAL-202",
+      "start": "09:00",
+      "title": "Customer escalation",
+      "decision": "Choose the meeting to attend"
+    }
+  ]
+}

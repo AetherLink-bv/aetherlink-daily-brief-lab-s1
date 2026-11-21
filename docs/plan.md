@@ -1,8 +1,8 @@
 # Plan — Daily brief agent
 
-Status: `TEMPLATE — accepted by the facilitator before any build step runs`
+Status: `TEMPLATE — accepted by the participant before any build step runs`
 
-Smallest complete slice: `TEMPLATE — the first thing that renders end to end, from sample data, without a credential.`
+Smallest complete slice: `TEMPLATE — synthetic brief first, then one exact read-only Jira tool through the same contract.`
 
 ## Ordered steps
 
@@ -20,6 +20,6 @@ Smallest complete slice: `TEMPLATE — the first thing that renders end to end, 
 
 ## Evidence log outline
 
-| Claim | Command | Exit code | Reviewer | Status |
+| Claim | Command | Exit code | Output line | Status |
 | --- | --- | --- | --- | --- |
-| `TEMPLATE` | `TEMPLATE` | `OPEN` | `TEMPLATE` | `OPEN` |
+| `TEMPLATE` | `TEMPLATE` | `OPEN` | `OPEN` | `OPEN` |

@@ -2,7 +2,9 @@
 
 Status: `TEMPLATE — complete before design`
 
-Source: `TEMPLATE — the two reference PDFs in reference/, by name`
+References: `TEMPLATE — the two example PDFs in reference/, by name`
+
+Live source: `TEMPLATE — one exact owner-confirmed read-only tool from the existing approved Jira MCP connection. Never paste its response here.`
 
 ## The artifact
 
@@ -12,7 +14,9 @@ Source: `TEMPLATE — the two reference PDFs in reference/, by name`
 
 | Field | Type | Rule | Example from the reference |
 | --- | --- | --- | --- |
-| `TEMPLATE` | `TEMPLATE` | `TEMPLATE — imperative, max nine words, names the artifact` | `TEMPLATE — quoted from the PDF` |
+| `source` | string | Names the source behind every claim | Synthetic label only |
+| `status` | ordinary, OPEN, or CONFLICT | Never hides missing or conflicting evidence | OPEN |
+| `TEMPLATE` | `TEMPLATE` | `TEMPLATE — short rule that names the artifact` | Synthetic example |
 
 ## House style
 
@@ -20,7 +24,7 @@ Source: `TEMPLATE — the two reference PDFs in reference/, by name`
 
 ## What the agent may never do
 
-- `TEMPLATE — invent a fact, hide a silent source, write to a system.`
+- Invent a fact, hide a silent source, connect work email, write to a system, expose customer data, or persist live output.
 
 ## Acceptance examples
 
@@ -28,6 +32,12 @@ Source: `TEMPLATE — the two reference PDFs in reference/, by name`
 | --- | --- | --- | --- |
 | `TEMPLATE — the sample brief` | `TEMPLATE — the contract is checked` | `TEMPLATE — it passes` | `npm test` |
 | `TEMPLATE — a brief without a push item` | `TEMPLATE` | `TEMPLATE — it is rejected` | `npm test` |
+
+## Evaluation cases
+
+- Ordinary: `TEMPLATE — one agenda item becomes one decision line.`
+- Missing: `TEMPLATE — return OPEN and invent no fact.`
+- Conflict: `TEMPLATE — return CONFLICT and choose nothing silently.`
 
 ## OPEN
 
