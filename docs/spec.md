@@ -1,40 +1,31 @@
-# Spec — Daily brief
+# Spec — Bree Daily Brief
 
-Status: `TEMPLATE — complete before design`
+Status: `TRAINER EXAMPLE — accepted synthetic contract`
 
-Source: `TEMPLATE — the two reference PDFs in reference/, by name`
+## Artifact
 
-## The artifact
+The brief names the reader and shows a sourced decision line. Every line is derived from one input item. Missing input returns `OPEN`. Items that share a start time return `CONFLICT`.
 
-`TEMPLATE — what the reader sees, top to bottom, one line per section. Quote the reference: which section, which words, which order.`
+## Contract
 
-## The contract
-
-| Field | Type | Rule | Example from the reference |
+| Field | Type | Rule | Synthetic example |
 | --- | --- | --- | --- |
-| `TEMPLATE` | `TEMPLATE` | `TEMPLATE — imperative, max nine words, names the artifact` | `TEMPLATE — quoted from the PDF` |
+| `user` | non-empty string | Names the private reader | `Maya` |
+| `items[].id` | non-empty string | Identifies the source item | `CAL-001` |
+| `items[].start` | `HH:MM` | Preserves source time | `09:00` |
+| `items[].title` | non-empty string | Preserves source title | `Daily stand-up` |
+| `items[].decision` | non-empty string | States the user's next decision | `Bring the top blocker` |
 
-## House style
-
-- `TEMPLATE — tone, person, tense, what is forbidden (hype, emoji, bullet lists inside bodies).`
-
-## What the agent may never do
-
-- `TEMPLATE — invent a fact, hide a silent source, write to a system.`
-
-## Acceptance examples
-
-| Given | When | Then | Proof |
-| --- | --- | --- | --- |
-| `TEMPLATE — the sample brief` | `TEMPLATE — the contract is checked` | `TEMPLATE — it passes` | `npm test` |
-| `TEMPLATE — a brief without a push item` | `TEMPLATE` | `TEMPLATE — it is rejected` | `npm test` |
+The source ID is the provenance carried by the contract. Shared HTML evidence uses only synthetic IDs. The application prints a live result to the terminal and does not write a brief file. The configured client and provider follow company retention policy.
 
 ## Evaluation cases
 
-- Ordinary: `TEMPLATE — one agenda item becomes one decision line.`
-- Missing: `TEMPLATE — return OPEN and invent no fact.`
-- Conflict: `TEMPLATE — return CONFLICT and choose nothing silently.`
+- Ordinary: render `<start> <title> — decide: <decision>`.
+- Missing: return `OPEN — no agenda item available`.
+- Conflict: return `CONFLICT` and do not choose silently.
 
-## OPEN
+## Prohibited behavior
 
-- `TEMPLATE — every rule you could not settle from the reference alone.`
+- Do not invent facts or hide missing input.
+- Do not connect work email or store work data.
+- Do not write to Jira, send messages, start a shell, or permit a second tool.

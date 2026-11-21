@@ -1,5 +1,6 @@
 {
   "user": "Maya",
+  "source": "synthetic:brief.sample.json",
   "items": [
     {
       "id": "CAL-001",

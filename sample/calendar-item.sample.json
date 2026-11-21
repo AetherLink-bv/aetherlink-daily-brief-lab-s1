@@ -1,5 +1,6 @@
 {
   "user": "Maya",
+  "source": "synthetic:calendar-item.sample.json",
   "items": [
     {
       "id": "CAL-001",

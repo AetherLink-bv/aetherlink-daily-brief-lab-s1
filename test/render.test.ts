@@ -3,8 +3,9 @@ import test from "node:test";
 import { renderBrief } from "../src/render.js";
 
 test("renders the visible result and escapes text", () => {
-  const html = renderBrief({ status: "ordinary", user: "<Maya>", line: "09:00 Stand-up — decide: Bring blocker" });
+  const html = renderBrief({ status: "ordinary", user: "<Maya>", line: "09:00 Stand-up — decide: Bring blocker", source: "synthetic:<calendar>" });
   assert.match(html, /&lt;Maya&gt;/);
   assert.match(html, /Bring blocker/);
+  assert.match(html, /Source: synthetic:&lt;calendar&gt;/);
   assert.doesNotMatch(html, /<Maya>/);
 });

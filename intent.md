@@ -1,42 +1,28 @@
-# Intent — Daily brief agent
+# Intent — Bree Daily Brief
 
-Status: `TEMPLATE — complete before the spec`
+Status: `TRAINER EXAMPLE — accepted for the synthetic reference solution`
 
-## Outcome
+## User and decision
 
-### User and decision
-
-- User: `TEMPLATE — who reads the morning brief.`
-- Decision: `TEMPLATE — the first decision this person must make.`
-
-`TEMPLATE — one observable result: how one local agenda item helps this user make that decision.`
+- User: Maya.
+- Decision: Bring the top blocker to the 09:00 stand-up.
+- Visible result: one sourced decision line in a private morning brief.
 
 ## Success checks
 
-- [ ] `TEMPLATE — a check a fresh reader can verify with one command or one look, without the author in the room.`
-- [ ] `TEMPLATE`
-- [ ] `TEMPLATE`
-- [ ] `npm run mini prints one decision line from sample/calendar-item.sample.json.`
+- `npm run mini` prints the expected synthetic decision line.
+- `npm run brief:sample` renders the synthetic brief locally.
+- `npm run eval` proves ordinary, `OPEN`, and `CONFLICT` outcomes.
+- `npm run live:check` validates only the local boundary. Live authentication and source evidence remain `OPEN` until a private run succeeds.
 
 ## Boundary
 
-- In scope: `TEMPLATE — the folder, the sources, the outputs.`
-- Out of scope: `TEMPLATE — what the agent may never do: write to a source, send anything, store a credential.`
-- The model never invents a fact: `TEMPLATE — what happens when a source is silent.`
-- Stop or escalate when: `TEMPLATE — a write scope is offered, personal data appears, the agent starts deciding instead of describing.`
-
-## Owners
-
-| Role | Name | Responsibility |
-| --- | --- | --- |
-| Reader | `TEMPLATE` | Reads the brief and makes the named decision |
-| Builder | `TEMPLATE` | Owns the contract, the code and the local proof |
-| Gate | `TEMPLATE` | Accepts or rejects each local result against this file |
-
-## Evidence contract
-
-`TEMPLATE — which local commands, output file, fresh-checkout result and rollback proof are required. Anything unrun is OPEN.`
+- Read only Maya's permitted work items through one existing approved Jira MCP tool.
+- Use the organisation-approved model provider.
+- Never connect work email, write to a source, send a message, or persist live output.
+- Store only synthetic fixtures and evidence in the repository.
 
 ## OPEN
 
-- `TEMPLATE — every unknown, one per line. Unknowns are written down, not guessed.`
+- The exact approved Jira MCP tool name is selected privately with `/mcp`.
+- Live authentication and source access are not proven by this trainer example.

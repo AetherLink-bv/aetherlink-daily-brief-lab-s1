@@ -1,58 +1,97 @@
-# Daily brief: individuele Day 5-route
+# Bree: your personal Daily Brief agent
 
-Je bouwt zelfstandig één lokale daily brief in zeven opdrachten. Eén lokaal agenda-item wordt eerst één beslisregel. Daarna groeit dezelfde route uit tot een geteste HTML-pagina met precies één read-only tool.
+Bree prepares a private morning brief from your own permitted work items through the existing, organisation-approved Jira MCP connection. You build it through the full local AI-native SDLC with Claude Code and the Claude Agent SDK.
 
-Alles draait met lokale voorbeelddata. Je gebruikt geen account, sleutel, live bron of publicatie-oefening. De repository zelf behoudt wel een controle voor lesmakers.
+The lesson starts with synthetic data because tests, recordings, and shared evidence must be repeatable and contain no work data. Assignment 5 uses the existing approved Jira MCP connection. Assignment 6 proves the user path and keeps live verification separate.
+
+## What you build
+
+| Assignment | Result | Proof |
+| --- | --- | --- |
+| A1 | One user, one decision, one synthetic line | `npm run test:mini && npm run mini` |
+| A2 | Accepted brief contract with provenance, `OPEN`, and `CONFLICT` | `npm run test:schema` |
+| A3 | Accepted design, decision, plan, and offline visual plan | Human review plus `/visual-plan` |
+| A4 | First sourced decision view from synthetic input | `npm run test:render && npm run brief:sample` |
+| A5 | One bounded Agent SDK route to one approved read-only MCP tool | `npm run test:live && npm run live:check` |
+| A6 | Three evaluations, a generated verification skill, and local recovery | Full local suite plus one synthetic journey |
+| A7 | One personal mission using Jira, GitLab, Confluence, or a mock Outlook email | Participant-defined proof |
+
+Every phase leaves something another person can inspect. Missing facts stay `OPEN`. Conflicting facts stay `CONFLICT`.
 
 ## Start
 
-Gebruik Node.js 20 of nieuwer, Git en Claude Code. Voer dit uit vanaf een terminal:
+Requirements are Node.js 20 or newer, Git, Claude Code, the existing Jira MCP connection, and the approved Anthropic via Vertex route.
 
 ```bash
 git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
 cd aetherlink-daily-brief-lab-s1
 npm ci
-claude --setting-sources project,user --strict-mcp-config --no-chrome
+claude --setting-sources project,user --no-chrome
 ```
 
-Lees `SOLO.md`. Voer één opdracht tegelijk uit. Bekijk iedere diff en accepteer alleen werk dat je begrijpt.
+Read [SOLO.md](SOLO.md). Complete one assignment at a time.
 
-## De zeven opdrachten
+## Permission boundary
 
-| Opdracht | Resultaat | Bewijs |
-| --- | --- | --- |
-| A1 | Kies één gebruiker en één ochtendbeslissing. Bouw daarna het lokale mini-pad. | `npm run test:mini` en `npm run mini` |
-| A2 | Leg het volledige briefschema vast en maak de schematest rood en daarna groen. | `npm run test:schema` |
-| A3 | Leg ontwerp, één besluit en een uitvoerbaar plan vast. | Menselijke goedkeuring en een plan met paden, bewijs en rollback |
-| A4 | Render de voorbeeldbrief als lokale HTML-pagina. | `npm run test:render` en `npm run brief:sample` |
-| A5 | Voeg precies één read-only agendatool toe. Spoor een ontbrekend veld op. | `npm run test:tool` |
-| A6 | Evalueer gewone, ontbrekende en conflicterende invoer. Lever lokaal op vanuit een verse checkout. | `npm run eval`, alle controles en rollback in een tijdelijke checkout |
-| A7 | Ontwerp en bouw zelfstandig een nieuwe kleine lokale toepassing. | Een rode test, werkende uitvoer en jouw eigen zichtbare resultaat |
+- Use only the existing approved Jira MCP connection and your own permitted work items.
+- Use only the organisation-approved Anthropic via Vertex model route already configured for the workshop.
+- Do not connect work email. Use only sanitised, non-sensitive pasted text when the trainer explicitly asks for it.
+- Keep Bree private. Do not publish live output.
+- Do not store customer data, work data, credentials, connector responses, or live briefs in this repository.
+- Keep the live tool read-only. Bree cannot send messages, change tickets, write files, or start a shell.
+- Stop when approval or source access is unclear.
 
-## Grenzen
+Approval of a connector does not automatically approve every model account. Local execution also does not mean that model processing stays on the laptop.
 
-- Gebruik alleen lokale voorbeelddata.
-- Geef de brief geen shell-, netwerk- of schrijftool.
-- Houd de ene brontool read-only.
-- Verzin geen ontbrekende feiten. Toon `OPEN` bij ontbrekende invoer.
-- Kies niet stil tussen conflicterende feiten. Toon `CONFLICT`.
-- Bewaar alleen geaccepteerd werk in een commit.
+## Configure the live route
 
-## Bestanden
-
-`CLAUDE.md`, `AGENTS.md`, `intent.md`, `progress.md` en `SOLO.md` sturen de route. De map `docs/` bevat de templates. De map `sample/` bevat alle lokale invoer.
-
-## Interactieve uitleg
-
-Open de lokale cursus zonder server:
+A4 works without an account or network call. In A5, inspect the existing approved connection with `/mcp`. Do not install a connector or create a token.
 
 ```bash
-open course/index.html
+cp .bree.example.json .bree.local.json
 ```
 
-Pas bronmodules aan onder `course/modules/`. Bouw daarna de cursus opnieuw met:
+Edit the ignored local file with the exact Jira read tool shown by `/mcp`, plus the user and decision. Set all three approval flags to `true` only after the connector, tool-owner read-only status, and model route are confirmed. Claude Code inherits the existing approved MCP connection. Never create or store a token for this workshop.
 
 ```bash
-cd course
-bash build.sh
+npm run live:check
 ```
+
+This is a local preflight. It does not contact the source. A successful preflight still leaves authentication and source access unproven.
+
+Run the real route privately:
+
+```bash
+npm run brief:live
+```
+
+The application prints the live result to the terminal and does not write a brief file. The configured client and provider follow company retention policy. Do not record or commit the result.
+
+## Project skills
+
+The repository includes the core workshop skills:
+
+- `/visual-plan` creates the A3 offline review artifact.
+- `/create-verification-skill` generates the A6 project-specific `verify-bree` skill.
+- `/grilling`, `/eli5`, `/verify-this`, `/show-me`, and `/handoff` support focused steps.
+
+Impeccable, Break UI, and other design skills are optional. They do not replace the accepted contract, tests, or real connector evidence.
+
+The optional A7 Outlook mission uses only `sample/outlook-email.sample.json`. It simulates an email and never connects to Outlook or work email.
+
+## Files
+
+- `SOLO.md` is the participant route and canonical prompt source.
+- `docs/prompts.md` contains the same six main prompts.
+- `intent.md` and `progress.md` record the accepted outcome and current evidence.
+- `docs/` contains the contract, design, plan, decision, evidence, and gate templates.
+- `sample/` contains synthetic data only.
+- `src/live.ts` owns the private Agent SDK route after A5.
+
+Open `course/index.html` for the interactive explanation. Edit modules under `course/modules/`, then rebuild with `cd course && bash build.sh`.
+
+## Official references
+
+- [Claude Agent SDK overview](https://platform.claude.com/docs/en/agent-sdk/overview)
+- [Claude Code MCP connections](https://code.claude.com/docs/en/mcp)
+- [Claude Code data usage](https://code.claude.com/docs/en/data-usage)

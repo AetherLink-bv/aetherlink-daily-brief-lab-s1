@@ -9,15 +9,16 @@ export const agendaItemSchema = z.object({
 
 export const agendaSchema = z.object({
   user: z.string().min(1),
+  source: z.string().min(1),
   items: z.array(agendaItemSchema),
 });
 
 export type Agenda = z.infer<typeof agendaSchema>;
 
 export type BriefResult =
-  | { status: "ordinary"; user: string; line: string }
-  | { status: "open"; user: string; line: "OPEN — no agenda item available" }
-  | { status: "conflict"; user: string; line: string };
+  | { status: "ordinary"; user: string; line: string; source: string }
+  | { status: "open"; user: string; line: "OPEN — no agenda item available"; source: string }
+  | { status: "conflict"; user: string; line: string; source: string };
 
 export function decisionLine(item: z.infer<typeof agendaItemSchema>): string {
   return `${item.start} ${item.title} — decide: ${item.decision}`;
@@ -25,12 +26,12 @@ export function decisionLine(item: z.infer<typeof agendaItemSchema>): string {
 
 export function buildBrief(input: unknown): BriefResult {
   const agenda = agendaSchema.parse(input);
-  if (agenda.items.length === 0) return { status: "open", user: agenda.user, line: "OPEN — no agenda item available" };
+  if (agenda.items.length === 0) return { status: "open", user: agenda.user, line: "OPEN — no agenda item available", source: agenda.source };
   const times = new Set(agenda.items.map((item) => item.start));
   if (times.size < agenda.items.length) {
-    return { status: "conflict", user: agenda.user, line: `CONFLICT — ${agenda.items.length} agenda items share a start time` };
+    return { status: "conflict", user: agenda.user, line: `CONFLICT — ${agenda.items.length} agenda items share a start time`, source: agenda.source };
   }
   const item = agenda.items[0];
-  if (!item) return { status: "open", user: agenda.user, line: "OPEN — no agenda item available" };
-  return { status: "ordinary", user: agenda.user, line: decisionLine(item) };
+  if (!item) return { status: "open", user: agenda.user, line: "OPEN — no agenda item available", source: agenda.source };
+  return { status: "ordinary", user: agenda.user, line: decisionLine(item), source: `${agenda.source}#${item.id}` };
 }

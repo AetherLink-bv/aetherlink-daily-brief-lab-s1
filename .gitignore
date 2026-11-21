@@ -2,5 +2,5 @@ node_modules/
 out/
 .env
 .env.*
-!.env.example
+.bree.local.json
 *.log

@@ -1,40 +1,24 @@
-# Design — Daily brief agent
+# Design — Bree Daily Brief
 
-Status: `TEMPLATE — complete before the build`
+Status: `TRAINER EXAMPLE — accepted design`
 
-## Shape
+## Routes
 
-`TEMPLATE — one diagram or one paragraph: what flows from the sources to the page, and which file owns each arrow.`
+Synthetic route: fixture → brief contract → escaped HTML → local file.
 
-## Parts
+Live route: existing approved Jira MCP connection → one exact read-only tool → Claude Agent SDK through the approved model provider → private terminal JSON.
+
+## Parts and boundaries
 
 | Part | File | Owns | Never does |
 | --- | --- | --- | --- |
-| The contract | `TEMPLATE` | `TEMPLATE` | `TEMPLATE` |
-| The adapters | `TEMPLATE` | `TEMPLATE` | `TEMPLATE` |
-| The loop | `TEMPLATE` | `TEMPLATE` | `TEMPLATE` |
-| The checker | `TEMPLATE` | `TEMPLATE` | `TEMPLATE` |
+| Contract | `src/brief.ts` | Validation and ordinary, `OPEN`, `CONFLICT` outcomes | Calls a connector |
+| Renderer | `src/render.ts` | Escaped synthetic HTML | Stores live data |
+| Sample entry | `src/main.ts` | Synthetic input and local output | Calls a model |
+| Live entry | `src/live.ts` | One bounded SDK and MCP run | Enables built-in or write tools |
 
-## Boundaries in code
+The live configuration is ignored by Git. All three approval flags default to `false`. `/mcp` identifies the existing connection and exact Jira read tool. No installation or token creation is part of the workshop.
 
-- One source tool: `TEMPLATE — readAgenda reads one local JSON fixture.`
-- No extra capability: `TEMPLATE — no network, shell or write tool.`
-- Human gate: `TEMPLATE — where the participant accepts the plan and results.`
+## Evidence separation
 
-## Hooks (deterministic, hold without asking)
-
-- `TEMPLATE — the rule from the prompt that must hold even if the model ignores the prompt, and the code that holds it.`
-
-## Decisions
-
-- `TEMPLATE — link each ADR in docs/decisions/.`
-
-## Risks
-
-| Risk | Signal | Response |
-| --- | --- | --- |
-| `TEMPLATE` | `TEMPLATE` | `TEMPLATE` |
-
-## OPEN
-
-- `TEMPLATE`
+Synthetic tests, screenshots, recordings, and HTML may be stored. Live authentication, source access, and output are checked privately and are never recorded.
