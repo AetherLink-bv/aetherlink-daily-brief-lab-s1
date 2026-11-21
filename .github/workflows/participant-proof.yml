@@ -1,0 +1,107 @@
+name: Temporary participant route verification
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - codex/ryan-participant-proof
+
+permissions:
+  contents: read
+
+concurrency:
+  group: temporary-participant-review-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  participant-route:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PREVIOUS_CHECKPOINT: 35ca6836729a6b462f1a81de0a9ad20abf8c4f73
+      FINAL_CHECKPOINT: 0e65a7795cdef7ef68753d8965ad5370f62a543f
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.12'
+          cache: npm
+
+      - name: Install temporary browser runtime
+        run: |
+          npm install --no-save --package-lock=false playwright@latest
+          npx playwright install --with-deps chromium
+
+      - name: Verify fixed participant checkpoints
+        run: |
+          previous="$RUNNER_TEMP/daily-brief-previous"
+          final="$RUNNER_TEMP/daily-brief-final"
+          server_pid=''
+          cleanup() {
+            if test -n "$server_pid"; then kill "$server_pid" 2>/dev/null || true; fi
+            git worktree remove "$previous" 2>/dev/null || true
+            git worktree remove "$final" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+          git worktree add --detach "$previous" "$PREVIOUS_CHECKPOINT"
+          git worktree add --detach "$final" "$FINAL_CHECKPOINT"
+          (
+            cd "$previous"
+            npm ci
+            npm run typecheck
+            npm test
+            npm run brief:sample
+          )
+          (
+            cd "$final"
+            npm ci
+            npm run docs:check
+            npm run typecheck
+            npm test
+            npm run eval
+            npm run brief:sample
+          )
+          test -f "$previous/out/latest.html"
+          test -f "$final/out/latest.html"
+          mkdir -p "$RUNNER_TEMP/participant-pages"
+          cp "$previous/out/latest.html" "$RUNNER_TEMP/participant-pages/previous.html"
+          cp "$final/out/latest.html" "$RUNNER_TEMP/participant-pages/final.html"
+          python3 -m http.server 8765 --directory "$RUNNER_TEMP/participant-pages" > "$RUNNER_TEMP/participant-http.log" 2>&1 &
+          server_pid=$!
+          for attempt in {1..40}; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:8765/final.html; then break; fi
+            sleep 0.25
+          done
+          PARTICIPANT_SCREENSHOTS="$RUNNER_TEMP/participant-pages" node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {chromium} from 'playwright';
+          const browser = await chromium.launch();
+          try {
+            const page = await browser.newPage({viewport: {width: 1499, height: 878}, reducedMotion: 'reduce'});
+            for (const name of ['previous', 'final']) {
+              await page.goto(`http://127.0.0.1:8765/${name}.html`, {waitUntil: 'networkidle'});
+              assert.ok((await page.locator('body').innerText()).trim().length > 0, `${name} brief must render visible content`);
+              await page.screenshot({path: `${process.env.PARTICIPANT_SCREENSHOTS}/${name}.png`});
+            }
+          } finally {
+            await browser.close();
+          }
+          JS
+          kill "$server_pid"
+          server_pid=''
+          cleanup
+          git worktree list --porcelain > "$RUNNER_TEMP/worktree-list.txt"
+          test "$(grep -c '^worktree ' "$RUNNER_TEMP/worktree-list.txt")" = 1
+
+      - name: Upload worktree proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: participant-worktree-proof
+          path: |
+            ${{ runner.temp }}/worktree-list.txt
+            ${{ runner.temp }}/participant-pages/
+            ${{ runner.temp }}/participant-http.log
+          if-no-files-found: warn
