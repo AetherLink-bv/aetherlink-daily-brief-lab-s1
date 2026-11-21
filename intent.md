@@ -18,12 +18,12 @@ Status: `TEMPLATE — complete before the spec`
 - [ ] `TEMPLATE`
 - [ ] `npm run mini prints one synthetic decision line.`
 - [ ] `npm run live:check reports READY or an exact OPEN reason without contacting the source.`
-- [ ] `TEMPLATE — the private live brief names its source, or live access remains OPEN.`
+- [ ] `TEMPLATE — the private dated HTML brief names its sources, or live access remains OPEN.`
 
 ## Boundary
 
-- In scope: `TEMPLATE — one approved read-only corporate source, the synthetic equivalent, and private terminal output.`
-- Out of scope: writing to a source, sending messages, changing tickets, public deployment, customer data, and stored live output.
+- In scope: `TEMPLATE — one approved read-only corporate source, the synthetic equivalent, and validated private HTML at ~/.bree/briefs/YYYY-MM-DD.html.`
+- Out of scope: writing to a source, sending messages, changing tickets, public deployment, customer data, raw connector storage, and live output inside this repository.
 - The model never invents a fact: `TEMPLATE — what happens when a source is silent.`
 - Stop or escalate when: `TEMPLATE — a write scope is offered, personal data appears, the agent starts deciding instead of describing.`
 
