@@ -10,6 +10,15 @@ test("renders every brief section and provenance", () => {
   assert.match(html, /class="status open"[^>]*>OPEN/);
 });
 
+test("renders the fixed decorative illustration with a visible fallback", () => {
+  const html = renderBrief(sample);
+  assert.match(html, /src="https:\/\/picsum\.photos\/seed\/bree-morning\/1200\/400"/);
+  assert.match(html, /alt=""/);
+  assert.match(html, /referrerpolicy="no-referrer"/);
+  assert.match(html, /onerror="this\.hidden=true"/);
+  assert.match(html, /The brief remains available if the illustration cannot load\./);
+});
+
 test("escapes untrusted text and source labels", () => {
   const unsafe = structuredClone(sample);
   unsafe.summary.text = "<script>alert(1)</script>";

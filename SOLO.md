@@ -16,14 +16,18 @@ Local fixtures are synthetic. Use them for tests, recordings, and reproducible e
 - Give Bree one exact read-only source tool. Do not give it shell, file-write, messaging, or ticket-update tools.
 - Stop when the connector offers write scope, the source contains customer data, or permission is unclear.
 
-## Start once
+## Start synthetic work
 
 ```bash
 npm ci
-claude --setting-sources project,user --strict-mcp-config --no-chrome
+claude --setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome
 ```
 
+This starts Manual mode and loads no MCP server for A1–A4. Local settings are excluded. Confirm the organisation-approved Vertex route with `/status` before the first prompt. If it is unavailable, keep model-assisted work `OPEN`; manual synthetic checks can continue.
+
 Complete one assignment at a time. Inspect each diff and run the named check yourself before you continue.
+
+When a named command runs, preserve its synthetic red and green output with the actual exit codes. Never reconstruct historical raw logs or record live connector contents.
 
 | SDLC phase | Artifact and proof |
 | --- | --- |
@@ -124,7 +128,7 @@ Use manual mode. This assignment builds the visible result with synthetic input.
 
 **Action:** Paste Part 1. Inspect the red test, the green rerun, and the generated page.
 
-> Read the accepted docs/plan.md, docs/spec.md, and reference/dia-to-bree.md. Write test/render.test.ts first and run npm run test:render to show the expected red failure. Build src/render.ts and a sample-only src/main.ts. Render the complete DailyBrief schema as one readable HTML page with title, date, greeting, summary, move-work-forward action, top todos, new updates, your day, sources, and visible OPEN states. Escape long untrusted text and source labels. Run npm run test:render and npm run brief:sample. Prove that out/latest.html contains every section, source provenance, and no invented fact. Show the proof and diff, then stop.
+> Read the accepted docs/plan.md, docs/spec.md, and reference/dia-to-bree.md. Write test/render.test.ts first and run npm run test:render to show the expected red failure. Build src/render.ts and a sample-only src/main.ts. Render the complete DailyBrief schema as one readable HTML page with title, date, greeting, summary, move-work-forward action, top todos, new updates, your day, sources, and visible OPEN states. Include the fixed public illustration https://picsum.photos/seed/bree-morning/1200/400 with empty alt text, referrerpolicy="no-referrer", and stable visible fallback text. Keep it outside the DailyBrief contract, put no work data in its URL, and keep the brief usable when the image fails. Escape long untrusted text and source labels. Run npm run test:render and npm run brief:sample. Prove that out/latest.html contains every section, source provenance, and no invented fact. Show the proof and diff, then stop.
 
 ```text
 /verify-this Prove that npm run brief:sample writes out/latest.html from synthetic data. Show the exit code, output path, source label, and unavailable-source behavior.
@@ -136,8 +140,6 @@ Optional, when Impeccable is available:
 /impeccable critique Bree's brief view. Read only. Use the accepted specification and existing visual system. Report the three most important hierarchy or accessibility issues, then stop for approval.
 ```
 
-Optional, after the complete brief passes: follow the decorative image guidance in `reference/dia-to-bree.md`. Ask Claude to add the fixed public photo, useful alt text, and an offline-safe fallback. Treat the image as decoration, not business evidence.
-
 ### Part 2: improve one house-style detail
 
 **Action:** Paste Part 2. Accept one small visual change only after its failing test is visible.
@@ -148,7 +150,15 @@ Optional, after the complete brief passes: follow the decorative image guidance 
 
 ## Assignment 5: connect the existing read-only Jira source
 
-Use `/mcp` to inspect the existing approved connection. Do not install a connector or create a token. Keep the synthetic route for tests.
+Close the first Claude Code session. Ask the trainer to make `AETHERLINK_JIRA_MCP_CONFIG` available privately as the path to an existing approved Jira-only MCP configuration. Do not create a connector or copy the configuration into the repository. Verify it before the guarded restart:
+
+```bash
+test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" &&
+  test -f "$AETHERLINK_JIRA_MCP_CONFIG" &&
+  claude --setting-sources project,user --permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG" --no-chrome
+```
+
+Run `/status` to confirm the approved Vertex route. Then use `/mcp` to inspect the existing approved connection. Local settings are not loaded. If either check fails, keep live proof `OPEN`. Do not install a connector or create a token. Keep the synthetic route for tests.
 
 **Where:** Claude Code for the bounded route. Use your terminal only for preflight and the approved private run.
 
@@ -156,7 +166,7 @@ Use `/mcp` to inspect the existing approved connection. Do not install a connect
 
 **Action:** Paste Part 1. Review the proposed tests and exact tool before you approve the build.
 
-> Read the accepted design, plan, DailyBrief contract, AGENTS.md, and the Bree config example. Use /mcp to inspect the existing organisation-approved Jira connection. Identify one exact read-only tool for my own permitted work items. Do not install a connector or create a token. Write focused tests first for the live configuration boundary, exact allowed tool, schema validation, and private output path. Show the expected red failure and stop for my approval.
+> Read the accepted design, plan, DailyBrief contract, AGENTS.md, and the Bree config example. Use /mcp to inspect the existing organisation-approved Jira connection. Identify one exact read-only tool for my own permitted work items. Do not install a connector or create a token. Write focused tests first for the live configuration boundary, exact allowed tool, schema validation, and private output path. Include rejection cases for a failed or unstructured tool result, an unknown source ID, and any unexpected tool. Show the expected red failure and stop for my approval.
 
 Ask Claude to explain the boundary before you approve it:
 
@@ -164,17 +174,21 @@ Ask Claude to explain the boundary before you approve it:
 /eli5 Explain Bree's source boundary from Jira through one read-only tool and the Agent SDK to validated private HTML. Name what each boundary prevents. Do not edit files or expose live data.
 ```
 
+Inspect one successful structured result during the private human review. Choose its exact Jira key field only after that review. The mocked `issues[].key` shape is test evidence, not live proof.
+
 ### Part 2: build and check the bounded route
 
 **Action:** Paste Part 2 only after you approve the tests, tool, and boundary.
 
-> After I approve the tests and boundary, build the smallest Claude Agent SDK route through the approved model provider. Permit only the chosen Jira read tool. Map available data into the complete DailyBrief schema. Keep unavailable sections OPEN and reject unvalidated output. Accept only exact Jira keys from the successful structured tool result as live source IDs. Let only the host write validated HTML to ~/.bree/briefs/YYYY-MM-DD.html with private permissions. Add npm run live:check and npm run brief:live. Deny every other agent tool. Never store raw connector output or expose credentials, customer data, or work email. Run the synthetic tests and live:check. Show the boundaries and diff, then stop before the live run.
+> After I approve the tests and boundary, build the smallest Claude Agent SDK route through the approved model provider. Read only the selected server definition from the existing Jira-only config at AETHERLINK_JIRA_MCP_CONFIG and pass it explicitly as the SDK mcpServers option; a new SDK process does not inherit the CLI session configuration. Permit only the chosen Jira read tool. Set built-in tools to none, enable strict MCP config, and deny every other request in canUseTool. Map available data into the complete DailyBrief schema. Keep unavailable sections OPEN and reject unvalidated output. Accept only exact Jira keys from the successful structured tool result as live source IDs. Let only the host write validated HTML to ~/.bree/briefs/YYYY-MM-DD.html with private permissions. Add npm run live:check and npm run brief:live. Never store raw connector output or expose credentials, customer data, or work email. Run the synthetic tests and live:check. Show the boundaries and diff, then stop before the live run.
 
 Create the ignored local configuration. Set its three approval flags to `true` only after the connector, read-only tool status, and model route are confirmed. Add the chosen user, decision, and exact Jira read-tool name shown by `/mcp`:
 
 ```bash
-cp .bree.example.json .bree.local.json
+test -f .bree.local.json || cp .bree.example.json .bree.local.json
 ```
+
+`.bree.local.json` stores runtime approvals; it is not MCP server configuration.
 
 Run the preflight:
 
