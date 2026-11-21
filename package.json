@@ -8,6 +8,7 @@
     "mini": "tsx src/mini.ts sample/calendar-item.sample.json",
     "brief": "tsx src/main.ts --sample",
     "brief:sample": "tsx src/main.ts --sample",
+    "brief:voice": "node --import tsx src/voice.ts",
     "brief:live": "tsx src/live.ts",
     "live:check": "tsx src/live.ts --check",
     "docs:check": "node scripts/check-solo-docs.mjs",
@@ -17,10 +18,11 @@
     "test:schema": "tsx --test test/schema.test.ts",
     "test:tool": "tsx --test test/tool.test.ts",
     "test:live": "tsx --test test/live.test.ts",
+    "test:voice": "tsx --test test/voice.test.ts",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test --test-concurrency=2 test/*.test.ts"
   },
-  "engines": { "node": ">=20" },
+  "engines": { "node": ">=20.12" },
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "^0.3.272",
     "zod": "^4.0.0"

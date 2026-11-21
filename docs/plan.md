@@ -23,3 +23,7 @@ Smallest complete slice: `TEMPLATE — full synthetic HTML first, then one exact
 | Claim | Command | Exit code | Output line | Status |
 | --- | --- | --- | --- | --- |
 | `TEMPLATE` | `TEMPLATE` | `OPEN` | `OPEN` | `OPEN` |
+
+## Optional extension after A7
+
+The [voice extension](voice-extension.md) starts a separate, optional iteration after the core route and Maintain loop. It has its own boundary and red-then-green test. It is not required for Day 5 approval.

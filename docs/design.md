@@ -41,3 +41,7 @@ Status: `TEMPLATE — complete before the build`
 ## OPEN
 
 - `TEMPLATE`
+
+## Optional voice route
+
+After the core route, the participant may follow [the voice extension](voice-extension.md). This is a separate, synthetic-only route. Its tests mock the network. A real request uses the participant's personal key from ignored `.env.local`. The starter contains no prebuilt voice implementation.
