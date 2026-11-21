@@ -10,7 +10,7 @@ const item = z.object({ status, text: z.string().min(1), sourceIds: z.array(z.st
 export const dailyBriefSchema = z.object({
   title: z.string().min(1), date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), greeting: z.string().min(1),
   summary: item, moveWorkForward: item, topTodos: z.array(item).min(1), newUpdates: z.array(item).min(1),
-  yourDay: z.array(item).min(1), sources: z.array(z.object({ id: z.string().min(1), label: z.string().min(1) })).min(1)
+  yourDay: z.array(item).min(1), sources: z.array(z.object({ id: z.string().min(1), label: z.string().min(1) }))
 });
 
 export type DailyBrief = z.infer<typeof dailyBriefSchema>;

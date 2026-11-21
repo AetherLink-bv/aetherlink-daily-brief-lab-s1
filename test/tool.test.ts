@@ -11,6 +11,8 @@ test("summarises one synthetic request through a tool-free mocked SDK query", as
   });
   assert.deepEqual(options.tools, []);
   assert.deepEqual(options.allowedTools, []);
+  assert.equal(options.strictMcpConfig, true);
+  assert.deepEqual(options.mcpServers, {});
   assert.equal(result.dueAt, "15:00");
   assert.equal(result.sourceId, fixture.messageId);
 });
@@ -19,4 +21,10 @@ test("rejects a source ID the fixture did not provide", async () => {
   await assert.rejects(() => summarizeSyntheticRequest(fixture, async function* () {
     yield { type: "result", subtype: "success", result: JSON.stringify({ messageId: "MAIL-DEMO-001", summary: "Invented", action: "Invented", dueAt: "15:00", sourceId: "MAIL-LIVE-999" }) };
   }), /source ID/);
+});
+
+test("rejects a deadline the fixture did not provide", async () => {
+  await assert.rejects(() => summarizeSyntheticRequest(fixture, async function* () {
+    yield { type: "result", subtype: "success", result: JSON.stringify({ messageId: "MAIL-DEMO-001", summary: "Review", action: "Note one issue", dueAt: "23:59", sourceId: "MAIL-DEMO-001" }) };
+  }), /deadline/);
 });

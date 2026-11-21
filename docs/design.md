@@ -22,6 +22,7 @@ Synthetic fixtures → DailyBrief schema → HTML renderer → `out/latest.html`
 - One live source tool: exact name remains OPEN until `/mcp` and owner confirmation. The SDK receives the approved Jira-only server through `AETHERLINK_JIRA_MCP_CONFIG`.
 - No extra capability: no built-in, shell, file-write, messaging, or ticket-update tool.
 - Separate evidence: synthetic tests may be stored; live contents may not. Record only the dated path and status.
+- Host date: the host chooses the local `YYYY-MM-DD`; validated output must contain that same date before the host writes it.
 - Human gate: the participant accepts tests, tool name, and boundary before any private live run.
 
 ## Hooks (deterministic, hold without asking)

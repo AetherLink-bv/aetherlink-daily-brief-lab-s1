@@ -10,3 +10,14 @@ test("rejects an invalid unresolved source", () => {
   invalid.summary.sourceIds = ["jira:UNKNOWN"];
   assert.throws(() => parseDailyBrief(invalid), /Unresolved source ID/);
 });
+
+test("accepts a fully OPEN brief with no sources", () => {
+  const open = structuredClone(sample);
+  open.summary = { status: "OPEN", text: "OPEN — no summary evidence", sourceIds: [] };
+  open.moveWorkForward = { status: "OPEN", text: "OPEN — no action evidence", sourceIds: [] };
+  open.topTodos = [{ status: "OPEN", text: "OPEN — no todo evidence", sourceIds: [] }];
+  open.newUpdates = [{ status: "OPEN", text: "OPEN — no update evidence", sourceIds: [] }];
+  open.yourDay = [{ status: "OPEN", text: "OPEN — no day evidence", sourceIds: [] }];
+  open.sources = [];
+  assert.deepEqual(parseDailyBrief(open).sources, []);
+});

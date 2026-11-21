@@ -8,8 +8,9 @@ import { renderBrief } from "./render.js";
 
 const configSchema = z.object({ approvedCorporateConnector: z.boolean(), approvedReadOnlyTool: z.boolean(), authorizedModelAccount: z.boolean(), modelProvider: z.literal("vertex"), user: z.string(), decision: z.string(), mcp: z.object({ server: z.literal("jira"), tool: z.string() }) });
 export type BreeConfig = z.infer<typeof configSchema>;
-type QueryLike = (args: { prompt: string; options: Options }) => AsyncIterable<unknown>;
-type LiveDependencies = { query: QueryLike; mcpServers: Record<string, McpServerConfig>; vertexEnabled: boolean; outputPath: string };
+type LiveQuery = AsyncIterable<unknown> & { initializationResult(): Promise<{ account: { apiProvider?: string } }>; close(): void };
+type QueryLike = (args: { prompt: string; options: Options }) => LiveQuery;
+type LiveDependencies = { query: QueryLike; mcpServers: Record<string, McpServerConfig>; expectedDate: string; outputPath: string };
 
 export function checkLiveConfig(input: unknown): string[] {
   const parsed = configSchema.safeParse(input);
@@ -52,21 +53,28 @@ const resultJson = (block: Record<string, unknown>): unknown => {
 export async function runLive(config: BreeConfig, dependencies: LiveDependencies): Promise<string> {
   const missing = checkLiveConfig(config);
   if (missing.length) throw new Error(`OPEN — ${missing.join(", ")}`);
-  if (!dependencies.vertexEnabled) throw new Error("OPEN — approved Vertex route is unavailable");
   if (Object.keys(dependencies.mcpServers).length !== 1 || !dependencies.mcpServers.jira) throw new Error("OPEN — Jira-only MCP configuration is unavailable");
 
   const chosenCalls = new Set<string>();
   const permittedKeys = new Set<string>();
+  let unexpectedToolCall = false;
   let candidate: unknown;
   const stream = dependencies.query({
     prompt: `Use only ${config.mcp.tool}. Return only one complete DailyBrief JSON object for ${config.user}'s decision: ${config.decision}. Keep unavailable sections OPEN.`,
     options: { ...buildSdkOptions(config, dependencies.mcpServers), maxTurns: 2 }
   });
+  const initialization = await stream.initializationResult();
+  if (initialization.account.apiProvider !== "vertex") {
+    stream.close();
+    throw new Error("OPEN — SDK initialized with a non-Vertex provider");
+  }
   for await (const message of stream) {
     const envelope = record(message);
     if (envelope?.type === "assistant") for (const value of contentBlocks(message)) {
       const block = record(value);
-      if (block?.type === "tool_use" && block.name === config.mcp.tool && typeof block.id === "string") chosenCalls.add(block.id);
+      if (block?.type !== "tool_use") continue;
+      if (block.name === config.mcp.tool && typeof block.id === "string") chosenCalls.add(block.id);
+      else unexpectedToolCall = true;
     }
     if (envelope?.type === "user") for (const value of contentBlocks(message)) {
       const block = record(value);
@@ -82,7 +90,9 @@ export async function runLive(config: BreeConfig, dependencies: LiveDependencies
     if (envelope?.type === "result" && envelope.subtype === "success" && typeof envelope.result === "string") candidate = JSON.parse(envelope.result);
   }
 
+  if (unexpectedToolCall) throw new Error("Rejected unexpected tool call");
   const brief = parseDailyBrief(candidate);
+  if (brief.date !== dependencies.expectedDate) throw new Error("Brief date does not match the host expected date");
   const permittedIds = permittedKeys;
   for (const source of brief.sources) if (!permittedIds.has(source.id)) throw new Error(`Unpermitted live source ID: ${source.id}`);
   for (const item of [brief.summary, brief.moveWorkForward, ...brief.topTodos, ...brief.newUpdates, ...brief.yourDay]) {
@@ -112,17 +122,17 @@ if (process.argv[1]?.endsWith("live.ts")) {
     const missing = checkLiveConfig(config);
     const mcpPath = process.env.AETHERLINK_JIRA_MCP_CONFIG;
     const mcpServers = missing.length || !mcpPath ? {} : await loadJiraServer(mcpPath);
-    const vertexEnabled = process.env.CLAUDE_CODE_USE_VERTEX === "1";
     if (process.argv.includes("--check")) {
-      const open = [...missing, !vertexEnabled && "approved Vertex route", !mcpPath && "AETHERLINK_JIRA_MCP_CONFIG", !mcpServers.jira && "approved Jira-only MCP config"].filter((item): item is string => Boolean(item));
+      const open = [...missing, !mcpPath && "AETHERLINK_JIRA_MCP_CONFIG", !mcpServers.jira && "approved Jira-only MCP config"].filter((item): item is string => Boolean(item));
       console.log(open.length ? `OPEN — ${open.join(", ")}` : "READY — local approvals and configuration are present");
       if (open.length) process.exitCode = 2;
     } else {
-      const path = await runLive(config, { query, mcpServers, vertexEnabled, outputPath: privateOutputPath(new Date().toISOString().slice(0, 10)) });
+      const expectedDate = new Date().toLocaleDateString("sv-SE");
+      const path = await runLive(config, { query, mcpServers, expectedDate, outputPath: privateOutputPath(expectedDate) });
       console.log(`PASS — wrote validated private brief to ${path}`);
     }
   } catch (error) {
-    console.log("OPEN — approved local live configuration is unavailable");
+    console.log(process.argv.includes("--check") ? "OPEN — approved local live configuration is unavailable" : "OPEN — live execution or validation failed");
     process.exitCode = 2;
   }
 }

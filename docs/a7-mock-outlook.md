@@ -8,11 +8,11 @@ Maya needs to decide which fictional review request to complete before 15:00. Th
 
 ## Contract
 
-The output contains `messageId`, `summary`, `action`, `dueAt`, and `sourceId`. Both identifiers must equal the fixture's `messageId`.
+The output contains `messageId`, `summary`, `action`, `dueAt`, and `sourceId`. Both identifiers must equal the fixture's `messageId`, and `dueAt` must equal the fixture's structured deadline.
 
 ## Design
 
-`sample/outlook-email.sample.json` enters a tool-free Agent SDK query. The host validates the JSON and rejects any source ID outside the fixture. There is no Outlook connector, live email, or external tool.
+`sample/outlook-email.sample.json` enters a tool-free Agent SDK query. Strict MCP mode receives an empty server map. The host validates the JSON and rejects any source ID or deadline outside the fixture. There is no Outlook connector, live email, or external tool.
 
 ## Visual plan
 

@@ -7,6 +7,25 @@ import sample from "../sample/brief.sample.json" with { type: "json" };
 import { buildSdkOptions, checkLiveConfig, privateOutputPath, runLive, type BreeConfig } from "../src/live.js";
 
 const ready = { approvedCorporateConnector: true, approvedReadOnlyTool: true, authorizedModelAccount: true, modelProvider: "vertex", user: "Maya", decision: "Choose blocker", mcp: { server: "jira", tool: "mcp__jira__search_my_issues" } } satisfies BreeConfig;
+const liveBrief = () => {
+  const brief = structuredClone(sample);
+  brief.summary.sourceIds = ["DEMO-101"];
+  brief.moveWorkForward.sourceIds = ["DEMO-101"];
+  brief.topTodos = [{ ...brief.topTodos[0]!, sourceIds: ["DEMO-101"] }];
+  brief.newUpdates = [{ status: "OPEN", text: "OPEN — no new update", sourceIds: [] }];
+  brief.yourDay = [{ status: "OPEN", text: "OPEN — calendar is unavailable", sourceIds: [] }];
+  brief.sources = [{ id: "DEMO-101", label: "Approved Jira item" }];
+  return brief;
+};
+const liveDependencies = (messages: unknown[], outputPath: string, provider = "vertex", onIterate = () => {}) => ({
+  query: () => Object.assign((async function* () { onIterate(); yield* messages; })(), {
+    initializationResult: async () => ({ account: { apiProvider: provider } }),
+    close: () => {}
+  }),
+  mcpServers: { jira: { command: "approved-jira" } },
+  expectedDate: "2026-11-18",
+  outputPath
+});
 
 test("permits exactly one read-only tool and denies every other tool", async () => {
   const options = buildSdkOptions(ready, { jira: { command: "approved-jira" } });
@@ -46,7 +65,7 @@ test("full live boundary accepts only exact keys from successful structured outp
     { type: "user", message: { content: [{ type: "tool_result", tool_use_id: "call-1", is_error: false, content: JSON.stringify({ issues: [{ key: "DEMO-101" }] }) }] } },
     { type: "result", subtype: "success", result: JSON.stringify(liveBrief) }
   ];
-  const result = await runLive(ready, { query: async function* () { yield* messages; }, mcpServers: { jira: { command: "approved-jira" } }, vertexEnabled: true, outputPath: output });
+  const result = await runLive(ready, liveDependencies(messages, output));
   assert.equal(result, output);
   assert.match(await readFile(output, "utf8"), /Approved Jira item/);
   assert.equal((await stat(output)).mode & 0o777, 0o600);
@@ -61,15 +80,35 @@ test("rejects keys from prose, failed calls, other calls, and unlisted sources",
   candidate.newUpdates = [{ status: "OPEN", text: "OPEN — no update evidence", sourceIds: [] }];
   candidate.yourDay = [{ status: "OPEN", text: "OPEN — no day evidence", sourceIds: [] }];
   const messages = [
-    { type: "assistant", message: { content: [{ type: "text", text: "DEMO-101" }, { type: "tool_use", id: "other", name: "Bash" }, { type: "tool_use", id: "call-1", name: ready.mcp.tool }] } },
+    { type: "assistant", message: { content: [{ type: "text", text: "DEMO-101" }, { type: "tool_use", id: "call-1", name: ready.mcp.tool }] } },
     { type: "user", message: { content: [{ type: "tool_result", tool_use_id: "call-1", is_error: true, content: JSON.stringify({ issues: [{ key: "DEMO-101" }] }) }, { type: "tool_result", tool_use_id: "call-1", is_error: false, content: "DEMO-101 in prose" }, { type: "tool_result", tool_use_id: "call-1", is_error: false, content: "{malformed" }, { type: "tool_result", tool_use_id: "other", is_error: false, content: JSON.stringify({ issues: [{ key: "DEMO-101" }] }) }] } },
     { type: "result", subtype: "success", result: JSON.stringify(candidate) }
   ];
-  await assert.rejects(() => runLive(ready, { query: async function* () { yield* messages; }, mcpServers: { jira: { command: "approved-jira" } }, vertexEnabled: true, outputPath: join(tmpdir(), "must-not-write.html") }), /Unpermitted live source ID/);
+  await assert.rejects(() => runLive(ready, liveDependencies(messages, join(tmpdir(), "must-not-write.html"))), /Unpermitted live source ID/);
 });
 
 test("fails closed before query when Vertex is unavailable", async () => {
   let queried = false;
-  await assert.rejects(() => runLive(ready, { query: async function* () { queried = true; }, mcpServers: { jira: { command: "approved-jira" } }, vertexEnabled: false, outputPath: join(tmpdir(), "must-not-write.html") }), /Vertex/);
+  await assert.rejects(() => runLive(ready, liveDependencies([], join(tmpdir(), "must-not-write.html"), "firstParty", () => { queried = true; })), /non-Vertex/);
   assert.equal(queried, false);
+});
+
+test("rejects an unexpected tool call even when a selected call later succeeds", async () => {
+  const brief = liveBrief();
+  const messages = [
+    { type: "assistant", message: { content: [{ type: "tool_use", id: "bad", name: "Bash" }, { type: "tool_use", id: "call-1", name: ready.mcp.tool }] } },
+    { type: "user", message: { content: [{ type: "tool_result", tool_use_id: "call-1", is_error: false, content: JSON.stringify({ issues: [{ key: "DEMO-101" }] }) }] } },
+    { type: "result", subtype: "success", result: JSON.stringify(brief) }
+  ];
+  await assert.rejects(() => runLive(ready, liveDependencies(messages, join(tmpdir(), "unexpected.html"))), /unexpected tool call/);
+});
+
+test("rejects a validated brief whose date differs from the host expected date", async () => {
+  const messages = [
+    { type: "assistant", message: { content: [{ type: "tool_use", id: "call-1", name: ready.mcp.tool }] } },
+    { type: "user", message: { content: [{ type: "tool_result", tool_use_id: "call-1", is_error: false, content: JSON.stringify({ issues: [{ key: "DEMO-101" }] }) }] } },
+    { type: "result", subtype: "success", result: JSON.stringify(liveBrief()) }
+  ];
+  const dependencies = { ...liveDependencies(messages, join(tmpdir(), "wrong-date.html")), expectedDate: "2026-11-21" };
+  await assert.rejects(() => runLive(ready, dependencies), /host expected date/);
 });
