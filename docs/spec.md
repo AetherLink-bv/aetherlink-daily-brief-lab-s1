@@ -1,14 +1,14 @@
 # Spec — Daily brief
 
-Status: `TEMPLATE — complete before design`
+Status: `ACCEPTED — 2026-11-21`
 
 References: `reference/dia-to-bree.md` and `reference/brief-example.md`. Both contain synthetic structural guidance only.
 
-Live source: `TEMPLATE — one exact owner-confirmed read-only tool from the existing approved Jira MCP connection. Live source IDs are exact issue keys from its successful structured result. Never paste its response here.`
+Live source: one exact owner-confirmed read-only Jira tool. Its name remains OPEN until `/mcp` confirms it.
 
 ## The artifact
 
-`TEMPLATE — title, date, greeting, summary, moveWorkForward, topTodos, newUpdates, yourDay, and sources, in that order.`
+The artifact contains title, date, greeting, summary, moveWorkForward, topTodos, newUpdates, yourDay, and sources, in that order.
 
 ## The contract
 
@@ -29,7 +29,7 @@ Live source: `TEMPLATE — one exact owner-confirmed read-only tool from the exi
 
 ## House style
 
-- `TEMPLATE — tone, person, tense, what is forbidden (hype, emoji, bullet lists inside bodies).`
+- Use direct factual English for Maya. Avoid hype, emoji, and nested lists inside item text.
 
 ## What the agent may never do
 
@@ -39,18 +39,18 @@ Live source: `TEMPLATE — one exact owner-confirmed read-only tool from the exi
 
 | Given | When | Then | Proof |
 | --- | --- | --- | --- |
-| `TEMPLATE — the sample brief` | `TEMPLATE — the contract is checked` | `TEMPLATE — it passes` | `npm test` |
-| `TEMPLATE — a brief without a required section` | `TEMPLATE` | `TEMPLATE — it is rejected` | `npm test` |
+| The complete sample brief | The contract is checked | It passes | `npm run test:schema` |
+| A brief without a required section | The contract is checked | It is rejected | `npm run test:schema` |
 
 ## Evaluation cases
 
-- Complete: `TEMPLATE — every section renders with resolvable synthetic provenance.`
-- Missing: `TEMPLATE — affected content is OPEN and invents no fact.`
-- Conflict: `TEMPLATE — affected content is CONFLICT and chooses nothing silently.`
+- Complete: every section renders with resolvable synthetic provenance.
+- Missing: affected content is OPEN and invents no fact.
+- Conflict: affected content is CONFLICT and chooses nothing silently.
 
 ## OPEN
 
-- `TEMPLATE — every rule you could not settle from the reference alone.`
+- The exact approved live Jira tool remains OPEN.
 
 ## Optional voice extension
 
