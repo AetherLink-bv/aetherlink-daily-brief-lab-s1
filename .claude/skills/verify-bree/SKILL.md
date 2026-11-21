@@ -5,7 +5,7 @@ description: Verify Bree's synthetic brief and separate the private live preflig
 
 # Verify Bree
 
-Status: DRAFT. Targeted local checks passed on 2026-11-21. The full suite and two-worktree run remain assigned to remote CI.
+Status: VERIFIED. Targeted local checks passed on 2026-11-21. Remote CI proved the full suite, both fixed revisions, cleanup, and the rendered page.
 
 ## Launch
 

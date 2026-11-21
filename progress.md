@@ -9,7 +9,7 @@ Status per step. VERIFIED means the proof command ran in the current checkout; O
 | 3 | docs/design.md, docs/decisions/ADR-001, docs/plan.md, offline visual plan | complete route accepted before build | VERIFIED by fictional participant, 2026-11-21 |
 | 4 | src/render.ts, src/main.ts | npm run test:render && npm run brief:sample | VERIFIED by fictional participant, 2026-11-21 |
 | 5 | synthetic tool tests plus `src/live.ts` and private config | `npm run test:live`; `live:check` reports OPEN separately | SYNTHETIC VERIFIED; LIVE OPEN, 2026-11-21 |
-| 6 | evaluations, `verify-bree`, evidence, and local gate | targeted synthetic journey PASS; full suite and worktrees OPEN for remote CI | PARTIAL, 2026-11-21 |
+| 6 | evaluations, `verify-bree`, evidence, and local gate | local targeted journey and remote full suite, render, recovery, cleanup PASS | VERIFIED, 2026-11-21 |
 | 7 | Mock Outlook intent, existing fixture, tool-free SDK route, handoff | `npm run test:tool`; live model and Outlook remain OPEN | SYNTHETIC VERIFIED, 2026-11-21 |
 
 No secret belongs in this repository. Live connector approval, configuration, authentication, and source access remain separate checks.

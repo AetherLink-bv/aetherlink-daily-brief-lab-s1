@@ -1,6 +1,6 @@
 # Evidence — Daily brief agent
 
-Cutoff: 2026-11-21, local participant branch.
+Cutoff: 2026-11-21, participant checkpoint `0e65a7795cdef7ef68753d8965ad5370f62a543f`.
 
 | Claim | Command | Exit code | Output line quoted | Status |
 | --- | --- | ---: | --- | --- |
@@ -13,15 +13,15 @@ Cutoff: 2026-11-21, local participant branch.
 | Mock Outlook mission holds | `npm run test:tool` | 0 | `pass 3, fail 0` | PASS |
 | Page renders | `npm run brief:sample` | 0 | `Wrote out/latest.html (2136 bytes) from synthetic data` | PASS |
 | Local live configuration | `npm run live:check` | 2 | `OPEN — approved local live configuration is unavailable` | OPEN |
-| Full suite | `npm test` | OPEN | Assigned to remote CI by local resource policy | OPEN |
+| Full suite | `npm test` | 0 | `tests 23; pass 23; fail 0` | PASS in remote CI |
 
 ## Fresh local checkout
 
-OPEN locally. The full `HEAD^` and `HEAD` worktree commands are assigned to remote CI. No temporary worktree was created.
+Remote run [44863044663](https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1/actions/runs/44863044663) checked fixed revision `0e65a7795cdef7ef68753d8965ad5370f62a543f`. `docs:check`, typecheck, the 23-test suite, six evaluations, synthetic render, and the 1499×878 screenshot passed.
 
 ## Rollback proof
 
-OPEN until remote CI runs the documented previous and current revision checks.
+The same remote run checked parent `35ca6836729a6b462f1a81de0a9ad20abf8c4f73`: typecheck and 16 tests passed. Cleanup left exactly one worktree.
 
 ## Visible result
 
@@ -40,5 +40,4 @@ OPEN until remote CI runs the documented previous and current revision checks.
 ## Differences from the references
 
 - The live connector, private dated artifact, Vertex route, and exact Jira tool remain OPEN.
-- The full suite and two-worktree recovery proof remain OPEN for remote CI.
-- The generated verification skill remains DRAFT until those remote checks finish.
+- The complete remote proof passed for both fixed revisions. Live source proof remains separate and OPEN.
