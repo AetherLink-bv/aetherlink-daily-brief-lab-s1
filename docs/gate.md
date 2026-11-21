@@ -8,12 +8,14 @@ Read against: `intent.md` at revision `TEMPLATE`
 
 | Check | Observed | Is it an approval? |
 | --- | --- | --- |
-| `npm run eval` | `TEMPLATE — ordinary, missing and conflict result` | No |
-| `npm run brief:sample` | `TEMPLATE — output path and one visible line` | No |
+| `npm run eval` | `TEMPLATE — complete, missing, and conflict result` | No |
+| `npm run brief:sample` | `TEMPLATE — out/latest.html and all visible sections` | No |
 | `npm run live:check` | `TEMPLATE — READY or the exact OPEN reason; no network call` | No |
 | `verify-bree` synthetic journey | `TEMPLATE — evidence path retained after cleanup` | No |
 
-Private live connector result: `PASS | OPEN — never paste its content here.`
+Private dated artifact: `PASS | OPEN — record only ~/.bree/briefs/YYYY-MM-DD.html and never paste its contents here.`
+
+Local daily trigger proposal: `ACCEPTED | OPEN — proposal only. No scheduler is installed by the workshop.`
 
 ## What the human read
 

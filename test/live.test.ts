@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 import type { McpServerStatus, SDKControlInitializeResponse, SDKMessage } from "@anthropic-ai/claude-agent-sdk";
-import { buildLiveOptions, loadLiveConfig, runLive, type LiveConfig } from "../src/live.js";
+import type { DailyBrief } from "../src/brief.js";
+import { buildLiveOptions, loadLiveConfig, runLive, writePrivateBrief, type LiveConfig } from "../src/live.js";
 
 const config: LiveConfig = {
   approvedCorporateConnector: true,
@@ -59,13 +60,13 @@ function assistantToolMessage(tools: Array<{ id: string; name: string }>): SDKMe
   } as unknown as SDKMessage;
 }
 
-function toolResultMessage(id: string, isError = false): SDKMessage {
+function toolResultMessage(id: string, isError = false, content = JSON.stringify({ issues: [{ key: "DEMO-101" }] })): SDKMessage {
   return {
     type: "user",
     parent_tool_use_id: null,
     message: {
       role: "user",
-      content: [{ type: "tool_result", tool_use_id: id, content: "synthetic test result", is_error: isError }],
+      content: [{ type: "tool_result", tool_use_id: id, content, is_error: isError }],
     },
   } as unknown as SDKMessage;
 }
@@ -89,12 +90,19 @@ function successMessage(output: unknown): SDKMessage {
   } as unknown as SDKMessage;
 }
 
-const readyBrief = {
-  status: "READY",
-  title: "Morning brief",
-  brief: ["09:00 Stand-up — decide: bring the top blocker"],
-  sources: ["Jira issue DEMO-101"],
-  reason: "",
+const readyBrief: DailyBrief = {
+  title: "Maya's Daily Brief",
+  date: "2026-11-21",
+  greeting: "Good morning, Maya.",
+  summary: { status: "READY", text: "The checkout blocker needs a decision.", sourceIds: ["DEMO-101"] },
+  moveWorkForward: { status: "READY", text: "Bring the checkout blocker to the stand-up.", sourceIds: ["DEMO-101"] },
+  topTodos: [{ status: "READY", text: "Choose an owner for the blocker.", sourceIds: ["DEMO-101"] }],
+  newUpdates: [
+    { status: "READY", text: "The issue has a new engineering comment.", sourceIds: ["DEMO-101"] },
+    { status: "OPEN", text: "OPEN — email is not connected.", sourceIds: [] },
+  ],
+  yourDay: [{ status: "OPEN", text: "OPEN — calendar is not connected.", sourceIds: [] }],
+  sources: [{ id: "DEMO-101", label: "Jira issue DEMO-101" }],
 };
 
 test("builds an isolated SDK session with one approved tool", async () => {
@@ -169,17 +177,18 @@ test("accepts validated JSON only after the configured Jira source tool ran", as
     yield toolResultMessage("source-tool");
     yield successMessage(readyBrief);
   };
-  const result = await runLive(config, fakeRun(messages));
-  assert.equal(result.status, "READY");
+  const result = await runLive(config, fakeRun(messages), readyBrief.date);
+  assert.equal(result.title, "Maya's Daily Brief");
+  assert.equal(result.moveWorkForward.sourceIds[0], "DEMO-101");
 });
 
 test("rejects output when the approved tool result failed", async () => {
   const messages = async function* (): AsyncGenerator<SDKMessage, void> {
     yield assistantToolMessage([{ id: "source-tool", name: config.mcp.tool }]);
     yield toolResultMessage("source-tool", true);
-    yield successMessage({ status: "OPEN", title: "", brief: [], sources: [], reason: "Source access failed" });
+    yield successMessage(readyBrief);
   };
-  await assert.rejects(runLive(config, fakeRun(messages)), /approved source was not verified/);
+  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /approved source was not verified/);
 });
 
 test("rejects duplicate or unexpected MCP source calls", async () => {
@@ -192,16 +201,52 @@ test("rejects duplicate or unexpected MCP source calls", async () => {
     yield toolResultMessage("other-tool");
     yield successMessage(readyBrief);
   };
-  await assert.rejects(runLive(config, fakeRun(messages)), /approved source was not verified/);
+  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /approved source was not verified/);
 });
 
-test("rejects READY output without brief items or source references", async () => {
+test("rejects READY items without source references", async () => {
   const messages = async function* (): AsyncGenerator<SDKMessage, void> {
     yield assistantToolMessage([{ id: "source-tool", name: config.mcp.tool }]);
     yield toolResultMessage("source-tool");
-    yield successMessage({ status: "READY", title: "Morning brief", brief: [], sources: [], reason: "" });
+    yield successMessage({ ...readyBrief, summary: { ...readyBrief.summary, sourceIds: [] } });
   };
-  await assert.rejects(runLive(config, fakeRun(messages)), /READY requires/);
+  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /READY and CONFLICT items require/);
+});
+
+test("rejects source references absent from the source list", async () => {
+  const messages = async function* (): AsyncGenerator<SDKMessage, void> {
+    yield assistantToolMessage([{ id: "source-tool", name: config.mcp.tool }]);
+    yield toolResultMessage("source-tool");
+    yield successMessage({ ...readyBrief, summary: { ...readyBrief.summary, sourceIds: ["MISSING-999"] } });
+  };
+  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /unknown source ID/);
+});
+
+test("rejects a cited source ID absent from the approved tool result", async () => {
+  const messages = async function* (): AsyncGenerator<SDKMessage, void> {
+    yield assistantToolMessage([{ id: "source-tool", name: config.mcp.tool }]);
+    yield toolResultMessage("source-tool", false, "Unstructured Jira text mentions DEMO-101");
+    yield successMessage(readyBrief);
+  };
+  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /not present in the approved source result/);
+});
+
+test("does not treat an issue key inside a JSON error message as source evidence", async () => {
+  const messages = async function* (): AsyncGenerator<SDKMessage, void> {
+    yield assistantToolMessage([{ id: "source-tool", name: config.mcp.tool }]);
+    yield toolResultMessage("source-tool", false, JSON.stringify({ error: "Issue DEMO-101 was not found" }));
+    yield successMessage(readyBrief);
+  };
+  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /not present in the approved source result/);
+});
+
+test("rejects a model-provided date that differs from the host date", async () => {
+  const messages = async function* (): AsyncGenerator<SDKMessage, void> {
+    yield assistantToolMessage([{ id: "source-tool", name: config.mcp.tool }]);
+    yield toolResultMessage("source-tool");
+    yield successMessage(readyBrief);
+  };
+  await assert.rejects(runLive(config, fakeRun(messages), "2026-11-22"), /did not match the host date/);
 });
 
 test("rejects output when no structured result exists", async () => {
@@ -223,7 +268,7 @@ test("rejects output when no structured result exists", async () => {
       session_id: "session",
     } as unknown as SDKMessage;
   };
-  await assert.rejects(runLive(config, fakeRun(messages)), /approved source was not verified/);
+  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /approved source was not verified/);
 });
 
 test("fails OPEN and closes the SDK query when the inherited MCP source is unavailable", async () => {
@@ -254,4 +299,35 @@ test("rejects a personal model route and closes the SDK query", async () => {
     /Vertex route/,
   );
   assert.equal(cleanedUp, true);
+});
+
+test("writes one private dated HTML artifact and safely replaces a same-day run", async () => {
+  const parent = await mkdtemp(join(tmpdir(), "bree-private-test-"));
+  const directory = join(parent, "briefs");
+  try {
+    const firstPath = await writePrivateBrief(readyBrief, directory);
+    assert.equal(firstPath, join(directory, "2026-11-21.html"));
+    const replacement = {
+      ...readyBrief,
+      greeting: "Good morning, Maya <script>alert(1)</script>.",
+      sources: [{ id: "DEMO-101", label: "Jira <private> issue" }],
+    };
+    const secondPath = await writePrivateBrief(replacement, directory);
+    assert.equal(secondPath, firstPath);
+    const html = await readFile(secondPath, "utf8");
+    assert.match(html, /Move your work forward/);
+    assert.match(html, /Top to-dos/);
+    assert.match(html, /New updates/);
+    assert.match(html, /Your day/);
+    assert.match(html, /Sources/);
+    assert.match(html, /OPEN — calendar is not connected/);
+    assert.match(html, /&lt;script&gt;alert\(1\)&lt;\/script&gt;/);
+    assert.match(html, /Jira &lt;private&gt; issue/);
+    if (process.platform !== "win32") {
+      assert.equal((await stat(directory)).mode & 0o777, 0o700);
+      assert.equal((await stat(secondPath)).mode & 0o777, 0o600);
+    }
+  } finally {
+    await rm(parent, { recursive: true });
+  }
 });

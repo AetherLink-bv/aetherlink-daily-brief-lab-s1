@@ -2,30 +2,39 @@
 
 Status: `TRAINER EXAMPLE — accepted synthetic contract`
 
+References: `reference/dia-to-bree.md` and `reference/brief-example.md`. Both contain synthetic structural guidance only.
+
 ## Artifact
 
-The brief names the reader and shows a sourced decision line. Every line is derived from one input item. Missing input returns `OPEN`. Items that share a start time return `CONFLICT`.
+The brief renders these fields in order: `title`, `date`, `greeting`, `summary`, `moveWorkForward`, `topTodos`, `newUpdates`, `yourDay`, and `sources`.
 
 ## Contract
 
-| Field | Type | Rule | Synthetic example |
-| --- | --- | --- | --- |
-| `user` | non-empty string | Names the private reader | `Maya` |
-| `items[].id` | non-empty string | Identifies the source item | `CAL-001` |
-| `items[].start` | `HH:MM` | Preserves source time | `09:00` |
-| `items[].title` | non-empty string | Preserves source title | `Daily stand-up` |
-| `items[].decision` | non-empty string | States the user's next decision | `Bring the top blocker` |
+| Field | Type | Rule |
+| --- | --- | --- |
+| `title` | non-empty string | Names the artifact |
+| `date` | real `YYYY-MM-DD` date | Names the artifact date |
+| `greeting` | non-empty string | Contains no unsupported work claim |
+| `summary` | content item | Opens with sourced context |
+| `moveWorkForward` | content item | Shows one best-supported action |
+| `topTodos` | non-empty content item array | Preserves priority and uncertainty |
+| `newUpdates` | non-empty content item array | Claims no unsourced action |
+| `yourDay` | non-empty content item array | Shows sourced time-bound work |
+| `sources` | `{ id: string, label: string }[]` | Resolves every `sourceIds` entry |
 
-The source ID is the provenance carried by the contract. Shared HTML evidence uses only synthetic IDs. The application prints a live result to the terminal and does not write a brief file. The configured client and provider follow company retention policy.
+A content item is `{ status, text, sourceIds }`. Status is `READY`, `OPEN`, or `CONFLICT`. `READY` and `CONFLICT` require at least one resolved source ID. `OPEN` may have no source ID. `OPEN` text starts with `OPEN`; `CONFLICT` text starts with `CONFLICT`.
+
+For live Jira output, each source ID is an exact issue key extracted from the successful structured tool result. Invented, transformed, or unstructured provenance is rejected.
 
 ## Evaluation cases
 
-- Ordinary: render `<start> <title> — decide: <decision>`.
-- Missing: return `OPEN — no agenda item available`.
-- Conflict: return `CONFLICT` and do not choose silently.
+- Complete: every section renders with resolvable synthetic provenance.
+- Missing: the affected item is `OPEN` and invents no fact.
+- Conflict: the affected item is `CONFLICT` and resolves nothing silently.
 
 ## Prohibited behavior
 
-- Do not invent facts or hide missing input.
+- Do not invent facts or hide missing or conflicting evidence.
 - Do not connect work email or store work data.
-- Do not write to Jira, send messages, start a shell, or permit a second tool.
+- Do not write through Jira, send messages, start a shell, or permit a second tool.
+- Do not store raw connector output in the repository or the dated HTML artifact.

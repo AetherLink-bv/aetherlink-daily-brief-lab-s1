@@ -9,14 +9,14 @@ The lesson starts with synthetic data because tests, recordings, and shared evid
 | Assignment | Result | Proof |
 | --- | --- | --- |
 | A1 | One user, one decision, one synthetic line | `npm run test:mini && npm run mini` |
-| A2 | Accepted brief contract with provenance, `OPEN`, and `CONFLICT` | `npm run test:schema` |
+| A2 | Reverse-engineered full Daily Brief contract with provenance, `OPEN`, and `CONFLICT` | `npm run test:schema` |
 | A3 | Accepted design, decision, plan, and offline visual plan | Human review plus `/visual-plan` |
-| A4 | First sourced decision view from synthetic input | `npm run test:render && npm run brief:sample` |
-| A5 | One bounded Agent SDK route to one approved read-only MCP tool | `npm run test:live && npm run live:check` |
-| A6 | Three evaluations, a generated verification skill, and local recovery | Full local suite plus one synthetic journey |
+| A4 | Complete synthetic Daily Brief HTML | `npm run test:render && npm run brief:sample` |
+| A5 | One bounded Agent SDK route to a dated private HTML artifact | `npm run test:live && npm run live:check` |
+| A6 | Full-page evaluations, verification skill, recovery, and trigger proposal | Full local suite plus one synthetic journey |
 | A7 | One personal mission using Jira, GitLab, Confluence, or a mock Outlook email | Participant-defined proof |
 
-Every phase leaves something another person can inspect. Missing facts stay `OPEN`. Conflicting facts stay `CONFLICT`.
+Every phase leaves something another person can inspect. Missing evidence stays `OPEN`. Conflicting evidence stays `CONFLICT`.
 
 ## Start
 
@@ -65,7 +65,9 @@ Run the real route privately:
 npm run brief:live
 ```
 
-The application prints the live result to the terminal and does not write a brief file. The configured client and provider follow company retention policy. Do not record or commit the result.
+The host application writes only validated HTML to `~/.bree/briefs/YYYY-MM-DD.html` with private permissions. It does not write raw connector output. The configured client and provider follow company retention policy. Do not record or commit live contents.
+
+A6 may propose an organisation-approved local daily trigger. The workshop does not install or activate a scheduler. Automatic daily execution begins only after the participant approves and installs their own trigger.
 
 ## Project skills
 
@@ -87,6 +89,7 @@ The optional A7 Outlook mission uses only `sample/outlook-email.sample.json`. It
 - `docs/` contains the contract, design, plan, decision, evidence, and gate templates.
 - `sample/` contains synthetic data only.
 - `src/live.ts` owns the private Agent SDK route after A5.
+- `reference/dia-to-bree.md` maps the safe Dia-style structure to the `DailyBrief` schema and checks.
 
 Open `course/index.html` for the interactive explanation. Edit modules under `course/modules/`, then rebuild with `cd course && bash build.sh`.
 

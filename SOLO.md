@@ -2,7 +2,7 @@
 
 It is 08:30. Your stand-up starts at 09:00. Bree prepares one private brief from your own permitted work items in the existing, approved Jira MCP connection.
 
-You are the builder and reviewer. Claude Code helps you through the local AI-native SDLC. Each assignment leaves an artifact and a visible check. Missing information stays `OPEN`. Conflicting information stays `CONFLICT`.
+You are the builder and reviewer. Claude Code helps you through the local AI-native SDLC. Each assignment leaves an artifact and a visible check. Missing information stays `OPEN`. Conflicting evidence stays `CONFLICT`.
 
 Local fixtures are synthetic. Use them for tests, recordings, and reproducible evidence. The finished Bree route reads only your permitted work items through the existing approved Jira MCP connection.
 
@@ -28,10 +28,10 @@ Complete one assignment at a time. Inspect each diff and run the named check you
 | SDLC phase | Artifact and proof |
 | --- | --- |
 | Plan | Accepted `intent.md` and one synthetic decision line |
-| Design | Accepted contract, design, and visual plan |
-| Build | Tested renderer plus one bounded SDK and MCP route |
+| Design | Accepted Dia-to-Bree contract, design, and visual plan |
+| Build | Tested full HTML renderer plus one bounded SDK and MCP route |
 | Test | Synthetic evaluations, one scripted journey, and separate live status |
-| Deploy | A recoverable local version. Nothing is published. |
+| Deploy | A dated private HTML artifact and an approved trigger proposal. Nothing is published. |
 | Maintain | One observed result becomes the next intent and check |
 
 ## Assignment 1: choose the user and prove one line
@@ -48,9 +48,9 @@ Done when `npm run mini` prints one traceable decision line.
 
 ## Assignment 2: agree the brief contract
 
-Keep the working mini route. Define what Bree may say before adding a model or connector.
+Keep the working mini route. Reverse engineer the safe structure of a useful Daily Brief before adding a model or connector.
 
-> Read the accepted intent.md, reference/brief-example.md, and the synthetic agenda fixture. Draft docs/spec.md with the complete private brief schema, source provenance, and explicit rules for ordinary, missing, and conflicting input. Every claim must name its synthetic source or remain OPEN. Stop for my approval. After approval, write test/schema.test.ts first and run npm run test:schema to show the expected red failure. Build src/brief.ts and sample/brief.sample.json until the test passes. Add one invalid synthetic sample and prove the schema rejects it. Show the red and green evidence and the diff, then stop. Do not build the renderer, SDK route, or connector.
+> Read the accepted intent.md, reference/dia-to-bree.md, reference/brief-example.md, and sample/brief.sample.json. Reverse engineer only the safe structural pattern: title, date, greeting, summary, one move-work-forward action, top todos, new updates, your day, and sources. Draft docs/spec.md with the complete DailyBrief schema. Title and greeting are strings; date uses YYYY-MM-DD. Summary and moveWorkForward are single items. TopTodos, newUpdates, and yourDay are non-empty item arrays. Every item has status READY, OPEN, or CONFLICT, text, and sourceIds. READY and CONFLICT items have at least one source ID; OPEN may have none. Every sourceId resolves in sources, whose entries have id and label. OPEN text starts OPEN; CONFLICT text starts CONFLICT. Stop for my approval. After approval, write test/schema.test.ts first and run npm run test:schema to show the expected red failure. Build src/brief.ts and sample/brief.sample.json until the full valid sample passes. Add one invalid synthetic sample and prove the schema rejects it. Show the red and green evidence and the diff, then stop. Do not build the renderer, SDK route, or connector.
 
 ```text
 /eli5 Explain my brief contract and its red-then-green test. Name what each field protects. Do not edit files.
@@ -62,10 +62,10 @@ Done when the valid sample passes and the invalid sample is rejected.
 
 Press Shift+Tab until Claude Code shows plan mode. No implementation changes happen in this assignment.
 
-> In plan mode, read the accepted intent.md, docs/spec.md, AGENTS.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md for the smallest complete Bree route: approved read-only source → one exact MCP tool → Claude Agent SDK → private terminal brief. Keep the synthetic fixture route for deterministic tests and recordings. Give every plan step exact root-relative paths, one proof command, and a reversible rollback. Include the unavailable-source state, human approval points, and separate synthetic proof from live connector proof. Do not edit files or build. Stop for my approval. After I approve the plan, tell me to return to manual mode. Save only the accepted design documents, show the diff, and stop.
+> In plan mode, read the accepted intent.md, docs/spec.md, reference/dia-to-bree.md, AGENTS.md, and the current diff. Propose docs/design.md, one decision under docs/decisions/, and docs/plan.md for the smallest complete Bree route: synthetic fixtures → DailyBrief schema → full HTML renderer, plus one approved read-only MCP tool → Claude Agent SDK → the same schema → dated private HTML under ~/.bree/briefs/. Give every plan step exact root-relative paths, one proof command, and a reversible rollback. Include OPEN sections, host-owned file writing, human approval points, and separate synthetic proof from live source proof. Do not edit files or build. Stop for my approval. After I approve the plan, tell me to return to manual mode. Save only the accepted design documents, show the diff, and stop.
 
 ```text
-/visual-plan plan Read the accepted intent, specification, design, and plan. Create one offline HTML plan for the complete Bree journey. Show the approved source, exact read-only MCP tool, Claude Agent SDK, private brief, unavailable-source state, approval points, and evidence after each step. Use synthetic labels and no real work data. Do not change source files or invent commands.
+/visual-plan plan Read the accepted intent, specification, design, and plan. Create one offline HTML plan for the complete Bree journey. Show synthetic fixtures, the full DailyBrief schema, HTML renderer, approved source, exact read-only MCP tool, Claude Agent SDK, dated private artifact, OPEN sections, approval points, and evidence after each step. Use synthetic labels and no real work data. Do not change source files or invent commands.
 ```
 
 Done when another participant can execute the plan without a hidden permission, source, or proof step.
@@ -74,7 +74,7 @@ Done when another participant can execute the plan without a hidden permission, 
 
 Use manual mode. This assignment builds the visible result with synthetic input. It does not call a model or live connector.
 
-> Read the accepted docs/plan.md and docs/spec.md. Write test/render.test.ts first and run npm run test:render to show the expected red failure. Build src/render.ts and a sample-only src/main.ts. Escape untrusted text. Run npm run test:render and npm run brief:sample. Prove that out/latest.html contains the chosen user, decision line, source provenance, and no invented fact. Ask me for one small house-style change, add its failing test first, make it pass, regenerate the page, show the proof and diff, then stop.
+> Read the accepted docs/plan.md, docs/spec.md, and reference/dia-to-bree.md. Write test/render.test.ts first and run npm run test:render to show the expected red failure. Build src/render.ts and a sample-only src/main.ts. Render the complete DailyBrief schema as one readable HTML page with title, date, greeting, summary, move-work-forward action, top todos, new updates, your day, sources, and visible OPEN states. Escape long untrusted text and source labels. Run npm run test:render and npm run brief:sample. Prove that out/latest.html contains every section, source provenance, and no invented fact. Ask me for one small house-style change, add its failing test first, make it pass, regenerate the page, show the proof and diff, then stop.
 
 ```text
 /verify-this Prove that npm run brief:sample writes out/latest.html from synthetic data. Show the exit code, output path, source label, and unavailable-source behavior.
@@ -85,6 +85,8 @@ Optional, when Impeccable is available:
 ```text
 /impeccable critique Bree's brief view. Read only. Use the accepted specification and existing visual system. Report the three most important hierarchy or accessibility issues, then stop for approval.
 ```
+
+Optional, after the complete brief passes: follow the decorative image guidance in `reference/dia-to-bree.md`. Ask Claude to add the fixed public photo, useful alt text, and an offline-safe fallback. Treat the image as decoration, not business evidence.
 
 Done when you open `out/latest.html` and trace its decision back to the synthetic input.
 
@@ -98,7 +100,7 @@ Create the ignored local configuration. Set its three approval flags to `true` o
 cp .bree.example.json .bree.local.json
 ```
 
-> Read the accepted design, plan, brief contract, AGENTS.md, and the provided Bree config example. Use /mcp to inspect the existing organisation-approved Jira connection and identify one exact read-only tool for my own permitted work items. Do not install a connector or create a token. Write focused tests first for the live configuration boundary and exact allowed tool. Build the smallest Claude Agent SDK route through the organisation-approved model provider. Permit only that Jira read tool, disable built-in tools, bound the turns, do not persist the SDK session, and print the private brief only to the terminal. Add npm run live:check as a local preflight and npm run brief:live as the explicit live run. Deny every other tool. Return OPEN when approval, configuration, authentication, source access, or source evidence is missing. Never print a token, connector URL, raw connector response, customer data, or work email. Run the synthetic tests and live:check, show the options passed to the SDK, show the diff, and stop before the live run.
+> Read the accepted design, plan, DailyBrief contract, AGENTS.md, and the provided Bree config example. Use /mcp to inspect the existing organisation-approved Jira connection and identify one exact read-only tool for my own permitted work items. Do not install a connector or create a token. Write focused tests first for the live configuration boundary, exact allowed tool, schema validation, and private output path. Build the smallest Claude Agent SDK route through the organisation-approved model provider. Permit only that Jira read tool, map available source data into the complete DailyBrief schema, leave unavailable sections OPEN, and reject unvalidated output. Live source IDs must be exact Jira issue keys extracted from the successful structured tool result; reject invented or transformed IDs and unstructured output. The host application may write only the validated HTML artifact to ~/.bree/briefs/YYYY-MM-DD.html with private permissions. Add npm run live:check as the preflight and npm run brief:live as the explicit live run. Deny every other agent tool. Never store raw connector output or expose credentials, customer data, or work email. Run the synthetic tests and live:check, show the SDK boundary and host write boundary, show the diff, and stop before the live run.
 
 Run the preflight:
 
@@ -106,19 +108,19 @@ Run the preflight:
 npm run live:check
 ```
 
-If it reports `OPEN`, record the missing approval or configuration. When it passes, run this privately and do not record its output:
+If it reports `OPEN`, record the missing approval or configuration. When it passes, run this privately and do not record the artifact contents:
 
 ```bash
 npm run brief:live
 ```
 
-Done when synthetic tests pass, the SDK boundary allows exactly one tool, and live status is honestly recorded as `PASS` or `OPEN`.
+Done when synthetic tests pass, the SDK boundary allows exactly one tool, and the dated private HTML status is honestly recorded as `PASS` or `OPEN`.
 
 ## Assignment 6: make the proof repeatable
 
 Use synthetic data for recorded evidence. Treat live connector verification as a separate private check.
 
-> Read docs/spec.md, the synthetic evaluation fixtures, package.json, and the current application routes. Write test/eval.test.ts for ordinary, OPEN, and CONFLICT outcomes. Run npm run eval and fix only mismatches with the accepted spec. Then use the project-local create-verification-skill to generate .claude/skills/verify-bree/ from commands, routes, selectors, and outputs that exist in this repository. Its feature map must cover the synthetic brief, unavailable-source behavior, and private live preflight without storing live output. Run one complete synthetic user journey through launch, doctor, drive, evidence, and cleanup. Then run npm run typecheck, npm test, npm run eval, npm run brief:sample, and npm run live:check. Record real commands and exit codes in docs/evidence.md. Mark the live connector OPEN unless you privately ran it with approved access. Show the evidence diff and stop for approval. Do not publish anything.
+> Read docs/spec.md, the synthetic evaluation fixtures, package.json, and the current application routes. Write test/eval.test.ts for a complete brief, missing evidence with OPEN items, and conflicting evidence with CONFLICT items. Run npm run eval and fix only mismatches with the accepted spec. Then use the project-local create-verification-skill to generate .claude/skills/verify-bree/ from commands, routes, selectors, and outputs that exist in this repository. Its feature map must cover every synthetic HTML section, long-text escaping, resolved sourceIds, OPEN and CONFLICT behavior, the dated private artifact path, and the private live preflight without storing live contents. Run one complete synthetic user journey through launch, doctor, drive, evidence, and cleanup. Then run npm run typecheck, npm test, npm run eval, npm run brief:sample, and npm run live:check. Record real commands and exit codes in docs/evidence.md. Propose one organisation-approved local daily trigger with its command, working directory, logs, rollback, and owner, but do not install or activate a scheduler. Mark the live connector and dated artifact OPEN unless you privately ran them with approved access. Show the evidence diff and stop for approval. Do not publish anything.
 
 ```text
 /create-verification-skill Inspect this repository and create .claude/skills/verify-bree/. Use only commands, routes, and harnesses that exist here. Map the synthetic brief, unavailable-source result, and private live preflight. Never connect an account, write through a connector, or store live work data in evidence. Run one synthetic journey end to end. Keep the skill DRAFT if any launch, doctor, drive, evidence, or cleanup step is unproven.
