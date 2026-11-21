@@ -6,6 +6,8 @@ Bree turns your permitted work items into a private Daily Brief. You build Bree 
 
 The lesson starts with synthetic data because tests, recordings, and shared evidence must be repeatable and contain no work data. Assignment 5 uses the existing approved Jira MCP connection. Assignment 6 proves the user path and keeps live verification separate.
 
+When a named command runs, preserve its synthetic red and green output with the actual exit codes. Never reconstruct historical raw logs or record live connector contents.
+
 ## What you build
 
 | Assignment | Result | Proof |
@@ -13,7 +15,7 @@ The lesson starts with synthetic data because tests, recordings, and shared evid
 | A1 | One user, one decision, one synthetic line | `npm run test:mini && npm run mini` |
 | A2 | Reverse-engineered full Daily Brief contract with provenance, `OPEN`, and `CONFLICT` | `npm run test:schema` |
 | A3 | Accepted design, decision, plan, and offline visual plan | Human review plus `/visual-plan` |
-| A4 | Complete synthetic Daily Brief HTML | `npm run test:render && npm run brief:sample` |
+| A4 | Complete synthetic Daily Brief HTML with a fixed public illustration and text fallback | `npm run test:render && npm run brief:sample` |
 | A5 | One bounded Agent SDK route to a dated private HTML artifact | `npm run test:live && npm run live:check` |
 | A6 | Full-page evaluations, verification skill, recovery, and trigger proposal | Full local suite plus one synthetic journey |
 | A7 | One personal mission using Jira, GitLab, Confluence, or a mock Outlook email | Participant-defined proof |
@@ -40,6 +42,8 @@ cd aetherlink-daily-brief-lab-s1
 npm ci
 claude --setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome
 ```
+
+The `allowScripts` policy permits only the locked `esbuild` install script and denies the optional `fsevents` script. Review dependency changes before expanding it. See [npm install scripts](https://docs.npmjs.com/cli/commands/npm-install-scripts/).
 
 This starts Claude Code in Manual mode for A1–A4 and loads no MCP server. Local settings are excluded. The approved Vertex route must already be available through the organisation-managed environment or user settings. Confirm it with `/status` before the first prompt. If it is unavailable, keep model-assisted work `OPEN`; manual synthetic checks can continue.
 
