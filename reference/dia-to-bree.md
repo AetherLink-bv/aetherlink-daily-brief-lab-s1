@@ -31,13 +31,14 @@ The implementation reuses the workshop's established pure pipeline: validated sc
 
 The final live command writes one dated artifact outside the repository at `~/.bree/briefs/YYYY-MM-DD.html`. No automatic daily execution exists until the participant approves and installs their own local trigger.
 
-## Optional decorative image after A4 passes
+## Default decorative image in A4
 
-The complete working brief comes first. After its tests pass, the participant may add one decorative public photo from [Lorem Picsum](https://picsum.photos):
+The complete working brief includes one decorative public photo from [Lorem Picsum](https://picsum.photos):
 
-`https://picsum.photos/id/1015/1200/400`
+`https://picsum.photos/seed/bree-morning/1200/400`
 
-- Use this fixed URL. Put no work content, identifier, or query data in it.
-- Add useful alt text. Keep a local placeholder or omit the photo when offline; the complete brief must still render.
+- Use this fixed public seed URL. Put no work content, identifier, or query data in it.
+- Use empty alt text because the unknown photo is decorative. Set `referrerpolicy="no-referrer"`.
+- Keep stable visible text beside the image. The complete brief must remain readable when the image fails.
 - Treat the photo as a placeholder. It is not AI-generated, a source, or business evidence.
-- Keep network loading optional. This adds no runtime tool or connector permission.
+- Keep it outside the `DailyBrief` data contract. This adds no configuration, key, runtime tool, or connector permission.

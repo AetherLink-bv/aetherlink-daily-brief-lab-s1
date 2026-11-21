@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 
+await import(new URL("../.claude/skills/visual-plan/scripts/check-local-skill-dependencies.mjs", import.meta.url));
+
 const paths = [
   "SOLO.md",
   "docs/prompts.md",
@@ -12,11 +14,16 @@ const paths = [
   "docs/plan.md",
   "reference/dia-to-bree.md",
   "package.json",
+  "package-lock.json",
   ".gitignore",
   "AGENTS.md",
   "course/index.html",
 ];
 const files = Object.fromEntries(await Promise.all(paths.map(async (path) => [path, await readFile(path, "utf8")])));
+const packageJson = JSON.parse(files["package.json"]);
+const lock = JSON.parse(files["package-lock.json"]);
+assert.equal(packageJson.allowScripts[`esbuild@${lock.packages["node_modules/esbuild"].version}`], true);
+assert.equal(packageJson.allowScripts.fsevents, false);
 const prompts = (text) => [...text.matchAll(/^> (.+)$/gm)].map((match) => match[1]);
 const assignments = (text) => [...text.matchAll(/^## Assignment ([1-7]): /gm)].map((match) => Number(match[1]));
 const promptCountsByAssignment = (text) => {
@@ -72,7 +79,9 @@ assert.match(files["SOLO.md"], /git worktree add --detach \.\.\/daily-brief-prev
 assert.match(files["docs/spec.md"], /`summary` \| content item \|/);
 assert.match(files["docs/spec.md"], /`moveWorkForward` \| content item \|/);
 assert.match(files["reference/dia-to-bree.md"], /Missing evidence is OPEN; disagreement is CONFLICT/);
-assert.match(files["reference/dia-to-bree.md"], /https:\/\/picsum\.photos\/id\/1015\/1200\/400/);
+assert.match(files["reference/dia-to-bree.md"], /https:\/\/picsum\.photos\/seed\/bree-morning\/1200\/400/);
+assert.match(files["SOLO.md"], /stable visible fallback text/);
+assert.match(files["SOLO.md"], /Never reconstruct historical raw logs or record live connector contents/);
 assert.match(files["reference/dia-to-bree.md"], /not AI-generated, a source, or business evidence/);
 
 for (const path of ["README.md", "SOLO.md", "intent.md", "docs/spec.md", "docs/design.md", "docs/plan.md", "docs/prompts.md", "course/index.html"]) {

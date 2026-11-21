@@ -19,6 +19,7 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - run: npm audit --audit-level=moderate
       - run: npm run docs:check
       - id: implementation
         name: Detect assignment implementation
