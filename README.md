@@ -1,6 +1,8 @@
-# Bree: your personal Daily Brief agent
+# Bree: build your day-start agent
 
-Bree prepares a private morning brief from your own permitted work items through the existing, organisation-approved Jira MCP connection. You build it through the full local AI-native SDLC with Claude Code and the Claude Agent SDK.
+It is 08:30. Your stand-up starts at 09:00. You need one reliable view of the work that needs your attention.
+
+Bree turns your permitted work items into a private Daily Brief. You build Bree through the AI-native SDLC with Claude Code and the Claude Agent SDK. At every step, you create something visible, review it, and prove what it does.
 
 The lesson starts with synthetic data because tests, recordings, and shared evidence must be repeatable and contain no work data. Assignment 5 uses the existing approved Jira MCP connection. Assignment 6 proves the user path and keeps live verification separate.
 
@@ -18,15 +20,23 @@ The lesson starts with synthetic data because tests, recordings, and shared evid
 
 Every phase leaves something another person can inspect. Missing evidence stays `OPEN`. Conflicting evidence stays `CONFLICT`.
 
+After A6, close the Maintain loop in `intent.md`. Then complete A7 with a mission you choose. The core lesson ends there.
+
+## Optional ending: let Bree read the brief aloud
+
+After the core A7 result is accepted, you may complete the [optional ElevenLabs voice extension](docs/voice-extension.md). It uses only synthetic data and your personal ElevenLabs account. It is not required to complete Day 5.
+
+Keep the key in the ignored `.env.local` file. Never paste it into chat, share a trainer key, or send work data to text-to-speech.
+
 ## Start
 
-Requirements are Node.js 20 or newer, Git, Claude Code, the existing Jira MCP connection, and the approved Anthropic via Vertex route.
+Requirements are Node.js 20.12 or newer, Git, Claude Code, the existing Jira MCP connection, and the approved Anthropic via Vertex route.
 
 ```bash
 git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
 cd aetherlink-daily-brief-lab-s1
 npm ci
-claude --setting-sources project,user --no-chrome
+claude --setting-sources project,user --strict-mcp-config --no-chrome
 ```
 
 Read [SOLO.md](SOLO.md). Complete one assignment at a time.

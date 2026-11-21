@@ -28,3 +28,7 @@ Synthetic tests, screenshots, recordings, and `out/latest.html` may be stored. T
 ## Human gates
 
 The participant accepts the intent, contract, plan, visual plan, exact read-only tool, model route, and final evidence before continuing.
+
+## Optional voice route
+
+After the core route, the participant may follow [the voice extension](voice-extension.md). This is a separate, synthetic-only route. Its tests mock the network. A real request uses the participant's personal key from ignored `.env.local`. The participant starter contains no prebuilt voice implementation.

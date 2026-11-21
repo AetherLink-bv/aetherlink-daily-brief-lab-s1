@@ -29,3 +29,7 @@ Status: `TRAINER EXAMPLE — accepted for the synthetic reference solution`
 - The exact approved Jira MCP tool name is selected privately with `/mcp`.
 - Live authentication, source access, and the dated artifact are not proven by this trainer example.
 - A local daily trigger requires separate participant and organisation approval.
+
+## Optional extension after the core route
+
+The [voice extension](docs/voice-extension.md) is not part of the accepted Bree outcome. Start it only after A7 and the Maintain loop. It uses synthetic data, a personal ElevenLabs account, and a key stored only in ignored `.env.local`. It never reads or speaks live work data.

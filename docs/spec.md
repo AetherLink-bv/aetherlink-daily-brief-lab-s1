@@ -38,3 +38,7 @@ For live Jira output, each source ID is an exact issue key extracted from the su
 - Do not connect work email or store work data.
 - Do not write through Jira, send messages, start a shell, or permit a second tool.
 - Do not store raw connector output in the repository or the dated HTML artifact.
+
+## Optional voice extension
+
+The [voice extension](voice-extension.md) is outside the core `DailyBrief` contract. It may use only the validated synthetic sample. It speaks only the summary and top todos, preserves the words `OPEN` and `CONFLICT`, and never reads a live brief or connector response.

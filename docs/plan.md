@@ -20,3 +20,7 @@ Status: `TRAINER EXAMPLE — accepted plan`
 ## Rollback and gate
 
 Each code step is covered by a focused test and can be reverted independently. A participant approves each human gate before continuing. The workshop never installs or activates a scheduler.
+
+## Optional extension after A7
+
+The [voice extension](voice-extension.md) starts a separate, optional iteration after the core route and Maintain loop. It has its own boundary and red-then-green test. It is not required for Day 5 approval.
