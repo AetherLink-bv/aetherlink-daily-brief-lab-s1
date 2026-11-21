@@ -1,208 +1,37 @@
-name: Temporary Day 5 trainer recovery proof
+name: verify
 
 on:
-  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [main]
 
 permissions:
   contents: read
 
-concurrency:
-  group: temporary-day5-trainer-recovery-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
-  verify:
+  participant-route:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      max-parallel: 1
-      matrix:
-        include:
-          - label: node-20.12
-            node: 20.12.2
-            npm12: false
-          - label: node-24-current
-            node: 24
-            npm12: true
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }}
-          cache: npm
-
-      - name: Record runtime and policy
-        env:
-          EXPECT_NPM12: ${{ matrix.npm12 }}
-        run: |
-          mkdir -p recovery-evidence
-          node --version | tee recovery-evidence/node-version.txt
-          npm --version | tee recovery-evidence/bundled-npm-version.txt
-          node --input-type=module <<'JS'
-          import assert from 'node:assert/strict';
-          import {readFileSync} from 'node:fs';
-          const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
-          assert.equal(pkg.engines?.node, '>=20.12');
-          assert.equal(pkg.allowScripts?.['esbuild@0.28.2'], true);
-          assert.equal(pkg.allowScripts?.fsevents, false);
-          JS
-          if [ "$EXPECT_NPM12" = "true" ]; then
-            npx --yes npm@12.0.1 --version | tee recovery-evidence/npm-version.txt
-          else
-            cp recovery-evidence/bundled-npm-version.txt recovery-evidence/npm-version.txt
-          fi
-
-      - name: Install from the lockfile
-        env:
-          EXPECT_NPM12: ${{ matrix.npm12 }}
-        run: |
-          if [ "$EXPECT_NPM12" = "true" ]; then
-            npx --yes npm@12.0.1 ci --foreground-scripts 2>&1 | tee recovery-evidence/npm-ci.log
-            npx --yes npm@12.0.1 install-scripts ls --json > recovery-evidence/install-scripts.json
-          else
-            npm ci --foreground-scripts 2>&1 | tee recovery-evidence/npm-ci.log
-          fi
-          grep -F 'esbuild@0.28.2 postinstall' recovery-evidence/npm-ci.log
-          ! grep -Eiq 'blocked.*script|script.*blocked' recovery-evidence/npm-ci.log
-          test -x node_modules/.bin/esbuild
-
-      - name: Verify npm 12 install-script policy
-        if: matrix.npm12
-        run: |
-          node --input-type=module <<'JS'
-          import assert from 'node:assert/strict';
-          import {readFileSync} from 'node:fs';
-          const result = JSON.parse(readFileSync('recovery-evidence/install-scripts.json', 'utf8'));
-          assert.deepEqual(result, {allowScripts: []});
-          JS
-
-      - name: Prove a zero-finding audit
-        env:
-          EXPECT_NPM12: ${{ matrix.npm12 }}
-        run: |
-          if [ "$EXPECT_NPM12" = "true" ]; then
-            npx --yes npm@12.0.1 audit --json > recovery-evidence/npm-audit.json
-          else
-            npm audit --json > recovery-evidence/npm-audit.json
-          fi
-          node --input-type=module <<'JS'
-          import assert from 'node:assert/strict';
-          import {readFileSync} from 'node:fs';
-          const audit = JSON.parse(readFileSync('recovery-evidence/npm-audit.json', 'utf8'));
-          assert.equal(audit.metadata?.vulnerabilities?.total, 0);
-          JS
-
-      - name: Run the complete trainer checks
-        run: |
-          npm run docs:check
-          npm run typecheck
-          npm test
-          npm run eval
-          npm run brief:sample
-
-      - name: Upload dependency evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: trainer-recovery-${{ matrix.label }}
-          path: recovery-evidence/
-          if-no-files-found: warn
-
-  brief-browser:
-    needs: verify
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
+          node-version: 20
           cache: npm
       - run: npm ci
-      - run: npm run brief:sample
-      - name: Install temporary browser runtime
+      - run: npm audit --audit-level=moderate
+      - run: npm run docs:check
+      - id: implementation
+        name: Detect assignment implementation
         run: |
-          npm install --no-save --package-lock=false playwright@latest
-          npx playwright install --with-deps chromium
-      - name: Capture public, deterministic, and blocked image evidence
-        run: |
-          mkdir -p brief-browser-evidence
-          python3 -m http.server 8766 > "$RUNNER_TEMP/brief-http.log" 2>&1 &
-          server_pid=$!
-          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
-          for attempt in {1..40}; do
-            if curl --fail --silent --output /dev/null http://127.0.0.1:8766/out/latest.html; then break; fi
-            sleep 0.25
-          done
-          curl --fail --silent --output /dev/null http://127.0.0.1:8766/out/latest.html
-          node --input-type=module <<'JS'
-          import assert from 'node:assert/strict';
-          import {writeFile} from 'node:fs/promises';
-          import {chromium} from 'playwright';
-
-          const url = 'http://127.0.0.1:8766/out/latest.html';
-          const viewport = {width: 1499, height: 878};
-          const headings = ['Today in short', 'Move your work forward', 'Top to-dos', 'New updates', 'Your day', 'Sources'];
-          const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400"><rect width="1200" height="400" fill="#b8c7b2"/><circle cx="990" cy="95" r="58" fill="#f6e4a7"/><path d="M0 330 L260 165 L460 330 L710 120 L980 330 Z" fill="#6e8770"/><rect y="330" width="1200" height="70" fill="#526b5b"/></svg>';
-          const report = {viewport, publicPicsum: 'not-attempted', deterministicImage: false, blockedFallback: false};
-          const browser = await chromium.launch();
-          try {
-            const publicPage = await browser.newPage({viewport, reducedMotion: 'reduce'});
-            await publicPage.goto(url, {waitUntil: 'domcontentloaded'});
-            const publicImage = publicPage.locator('img[src^="https://picsum.photos/seed/bree-morning/"]');
-            await publicImage.waitFor({state: 'attached'});
-            try {
-              await publicPage.waitForFunction(() => {
-                const image = document.querySelector('img[src^="https://picsum.photos/seed/bree-morning/"]');
-                return image instanceof HTMLImageElement && image.complete;
-              }, undefined, {timeout: 12000});
-              report.publicPicsum = await publicImage.evaluate(image => image.naturalWidth > 0 ? 'loaded' : 'blocked-or-unavailable');
-            } catch {
-              report.publicPicsum = 'timeout';
-            }
-            await publicPage.screenshot({path: 'brief-browser-evidence/public-picsum-1499x878.png'});
-            await publicPage.close();
-
-            const mockContext = await browser.newContext({viewport, reducedMotion: 'reduce'});
-            await mockContext.route('https://picsum.photos/**', route => route.fulfill({status: 200, contentType: 'image/svg+xml', body: svg}));
-            const mockPage = await mockContext.newPage();
-            await mockPage.goto(url, {waitUntil: 'networkidle'});
-            const mockImage = mockPage.locator('img[src^="https://picsum.photos/seed/bree-morning/"]');
-            assert.equal(await mockImage.evaluate(image => image.complete && image.naturalWidth === 1200), true);
-            report.deterministicImage = true;
-            await mockPage.screenshot({path: 'brief-browser-evidence/mock-loaded-1499x878.png'});
-            await mockContext.close();
-
-            const blockedContext = await browser.newContext({viewport, reducedMotion: 'reduce'});
-            await blockedContext.route('https://picsum.photos/**', route => route.abort('blockedbyclient'));
-            const blockedPage = await blockedContext.newPage();
-            await blockedPage.goto(url, {waitUntil: 'networkidle'});
-            const blockedImage = blockedPage.locator('img[src^="https://picsum.photos/seed/bree-morning/"]');
-            assert.equal(await blockedImage.evaluate(image => image.complete && image.naturalWidth === 0), true);
-            const fallback = blockedPage.locator('.illustration figcaption');
-            await fallback.waitFor({state: 'visible'});
-            assert.match((await fallback.textContent()).trim(), /complete brief remains below/i);
-            for (const heading of headings) {
-              assert.equal(await blockedPage.getByRole('heading', {name: heading}).count(), 1, `${heading} remains present`);
-            }
-            assert.ok(await blockedPage.locator('.sources').isVisible());
-            report.blockedFallback = true;
-            await blockedPage.screenshot({path: 'brief-browser-evidence/blocked-fallback-1499x878.png'});
-            await blockedPage.screenshot({path: 'brief-browser-evidence/blocked-fallback-full.png', fullPage: true});
-            await blockedContext.close();
-          } finally {
-            await browser.close();
-          }
-          await writeFile('brief-browser-evidence/report.json', `${JSON.stringify(report, null, 2)}\n`);
-          JS
-      - name: Upload brief browser evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: trainer-brief-browser-evidence
-          path: |
-            brief-browser-evidence/
-            out/latest.html
-            ${{ runner.temp }}/brief-http.log
-          if-no-files-found: warn
+          if [ -d src ] && [ -d test ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.implementation.outputs.present == 'true'
+        run: npm run typecheck
+      - if: steps.implementation.outputs.present == 'true'
+        run: npm test
+      - if: steps.implementation.outputs.present == 'true'
+        run: npm run brief:sample
