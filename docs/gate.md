@@ -1,4 +1,4 @@
-# Local delivery gate — Daily brief agent
+# Local delivery gate — Bree
 
 Fresh checkout: `TEMPLATE — local path and revision`
 
@@ -10,6 +10,10 @@ Read against: `intent.md` at revision `TEMPLATE`
 | --- | --- | --- |
 | `npm run eval` | `TEMPLATE — ordinary, missing and conflict result` | No |
 | `npm run brief:sample` | `TEMPLATE — output path and one visible line` | No |
+| `npm run live:check` | `TEMPLATE — READY or the exact OPEN reason; no network call` | No |
+| `verify-bree` synthetic journey | `TEMPLATE — evidence path retained after cleanup` | No |
+
+Private live connector result: `PASS | OPEN — never paste its content here.`
 
 ## What the human read
 

@@ -1,0 +1,7 @@
+{
+  "synthetic": true,
+  "messageId": "MAIL-DEMO-001",
+  "from": "colleague@example.invalid",
+  "subject": "Review the workshop outline",
+  "body": "Please review the workshop outline before 15:00 and note one unclear instruction. This is a fictional internal work request and contains no customer data."
+}

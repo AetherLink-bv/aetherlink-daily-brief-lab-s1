@@ -2,7 +2,7 @@
 
 Status: `TEMPLATE — accepted by the participant before any build step runs`
 
-Smallest complete slice: `TEMPLATE — the first thing that renders end to end, from sample data, without a credential.`
+Smallest complete slice: `TEMPLATE — synthetic brief first, then one exact read-only Jira tool through the same contract.`
 
 ## Ordered steps
 

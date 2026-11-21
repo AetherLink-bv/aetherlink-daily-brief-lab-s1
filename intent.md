@@ -9,19 +9,21 @@ Status: `TEMPLATE — complete before the spec`
 - User: `TEMPLATE — who reads the morning brief.`
 - Decision: `TEMPLATE — the first decision this person must make.`
 
-`TEMPLATE — one observable result: how one local agenda item helps this user make that decision.`
+`TEMPLATE — one observable result: how a sourced morning signal helps this user make that decision.`
 
 ## Success checks
 
 - [ ] `TEMPLATE — a check a fresh reader can verify with one command or one look, without the author in the room.`
 - [ ] `TEMPLATE`
 - [ ] `TEMPLATE`
-- [ ] `npm run mini prints one decision line from sample/calendar-item.sample.json.`
+- [ ] `npm run mini prints one synthetic decision line.`
+- [ ] `npm run live:check reports READY or an exact OPEN reason without contacting the source.`
+- [ ] `TEMPLATE — the private live brief names its source, or live access remains OPEN.`
 
 ## Boundary
 
-- In scope: `TEMPLATE — the folder, the sources, the outputs.`
-- Out of scope: `TEMPLATE — what the agent may never do: write to a source, send anything, store a credential.`
+- In scope: `TEMPLATE — one approved read-only corporate source, the synthetic equivalent, and private terminal output.`
+- Out of scope: writing to a source, sending messages, changing tickets, public deployment, customer data, and stored live output.
 - The model never invents a fact: `TEMPLATE — what happens when a source is silent.`
 - Stop or escalate when: `TEMPLATE — a write scope is offered, personal data appears, the agent starts deciding instead of describing.`
 
@@ -35,7 +37,7 @@ Status: `TEMPLATE — complete before the spec`
 
 ## Evidence contract
 
-`TEMPLATE — which local commands, output file, fresh-checkout result and rollback proof are required. Anything unrun is OPEN.`
+`TEMPLATE — which synthetic commands, output file, preflight, private live check, fresh-checkout result, and rollback proof are required. Anything unrun is OPEN.`
 
 ## OPEN
 
