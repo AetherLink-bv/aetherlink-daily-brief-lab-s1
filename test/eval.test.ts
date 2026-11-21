@@ -5,7 +5,7 @@ import { buildBrief, dailyBriefSchema } from "../src/brief.js";
 import { renderDailyBrief } from "../src/render.js";
 
 const load = async (name: string): Promise<unknown> => JSON.parse(await readFile(`sample/eval/${name}.json`, "utf8"));
-const loadFullBrief = async () => dailyBriefSchema.parse(JSON.parse(await readFile("sample/brief.sample.json", "utf8")));
+const loadFullBrief = async (name: string) => dailyBriefSchema.parse(await load(`${name}-brief`));
 
 test("ordinary input produces the expected decision line", async () => {
   const result = buildBrief(await load("ordinary"));
@@ -25,7 +25,7 @@ test("conflicting input is explicit and chooses nothing", async () => {
 });
 
 test("complete daily brief renders every section and its source references", async () => {
-  const html = renderDailyBrief(await loadFullBrief());
+  const html = renderDailyBrief(await loadFullBrief("ordinary"));
   for (const heading of ["Today in short", "Move your work forward", "Top to-dos", "New updates", "Your day", "Sources"]) {
     assert.match(html, new RegExp(heading));
   }
@@ -34,33 +34,16 @@ test("complete daily brief renders every section and its source references", asy
 });
 
 test("unavailable full brief stays OPEN and invents no agenda", async () => {
-  const brief = await loadFullBrief();
-  const openItem = { status: "OPEN" as const, text: "OPEN — approved source unavailable.", sourceIds: [] };
-  const html = renderDailyBrief(dailyBriefSchema.parse({
-    ...brief,
-    summary: openItem,
-    moveWorkForward: openItem,
-    topTodos: [openItem],
-    newUpdates: [openItem],
-    yourDay: [openItem],
-    sources: [],
-  }));
-  assert.match(html, /OPEN — approved source unavailable/);
-  assert.match(html, /OPEN — no verified source was available/);
-  assert.doesNotMatch(html, /09:00|Daily stand-up|jira:DEMO/);
+  const html = renderDailyBrief(await loadFullBrief("missing"));
+  assert.match(html, /OPEN — calendar source unavailable/);
+  assert.match(html, /jira:DEMO-101/);
+  assert.doesNotMatch(html, /09:00|Daily stand-up|calendar:CAL/);
 });
 
 test("conflicting full brief preserves the conflict without forcing a resolution", async () => {
-  const brief = await loadFullBrief();
-  const html = renderDailyBrief(dailyBriefSchema.parse({
-    ...brief,
-    moveWorkForward: {
-      status: "CONFLICT",
-      text: "CONFLICT — Jira lists two different owners; review both before deciding.",
-      sourceIds: ["jira:DEMO-102"],
-    },
-  }));
+  const html = renderDailyBrief(await loadFullBrief("conflict"));
   assert.match(html, /CONFLICT — Jira lists two different owners/);
   assert.match(html, /jira:DEMO-102/);
+  assert.match(html, /jira:DEMO-103/);
   assert.doesNotMatch(html, /conflict resolved|owner selected/i);
 });

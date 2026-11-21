@@ -1,7 +1,7 @@
 import { chmod, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { query, type HookCallback, type McpServerStatus, type Options, type SDKControlInitializeResponse, type SDKMessage } from "@anthropic-ai/claude-agent-sdk";
+import { query, type HookCallback, type McpServerConfig, type McpServerStatus, type Options, type SDKControlInitializeResponse, type SDKMessage } from "@anthropic-ai/claude-agent-sdk";
 import { z } from "zod";
 import { dailyBriefSchema, type DailyBrief } from "./brief.js";
 import { renderDailyBrief } from "./render.js";
@@ -24,6 +24,7 @@ const configSchema = z.object({
 });
 
 export type LiveConfig = z.infer<typeof configSchema>;
+export type SelectedMcpServers = Record<string, McpServerConfig>;
 type LiveStream = AsyncGenerator<SDKMessage, void> & {
   initializationResult(): Promise<SDKControlInitializeResponse>;
   mcpServerStatus(): Promise<McpServerStatus[]>;
@@ -40,13 +41,33 @@ export function currentLocalDate(now = new Date()): string {
 export async function loadLiveConfig(
   path = ".bree.local.json",
   environment: NodeJS.ProcessEnv = process.env,
-): Promise<{ config: LiveConfig }> {
+): Promise<{ config: LiveConfig; mcpServers: SelectedMcpServers }> {
   const raw: unknown = JSON.parse(await readFile(path, "utf8"));
   const config = configSchema.parse(raw);
   if (!/^(1|true)$/i.test(environment.CLAUDE_CODE_USE_VERTEX ?? "")) {
     throw new Error("enable the approved Vertex model route");
   }
-  return { config };
+  const mcpPath = environment.AETHERLINK_JIRA_MCP_CONFIG?.trim();
+  if (!mcpPath) throw new Error("the approved Jira MCP configuration is unavailable or invalid");
+  try {
+    const mcpRaw: unknown = JSON.parse(await readFile(mcpPath, "utf8"));
+    if (typeof mcpRaw !== "object" || mcpRaw === null || Array.isArray(mcpRaw)) throw new Error();
+    const servers = Reflect.get(mcpRaw, "mcpServers");
+    if (typeof servers !== "object" || servers === null || Array.isArray(servers)) throw new Error();
+    const selected: unknown = Object.hasOwn(servers, config.mcp.server)
+      ? Reflect.get(servers, config.mcp.server)
+      : undefined;
+    if (typeof selected !== "object" || selected === null || Array.isArray(selected)) throw new Error();
+    const command = Reflect.get(selected, "command");
+    const type = Reflect.get(selected, "type");
+    const url = Reflect.get(selected, "url");
+    const validStdio = (type === undefined || type === "stdio") && typeof command === "string" && command.trim().length > 0;
+    const validRemote = (type === "http" || type === "sse") && typeof url === "string" && url.trim().length > 0;
+    if (!validStdio && !validRemote) throw new Error();
+    return { config, mcpServers: { [config.mcp.server]: selected as McpServerConfig } };
+  } catch {
+    throw new Error("the approved Jira MCP configuration is unavailable or invalid");
+  }
 }
 
 export function buildToolGuard(allowedTool: string): HookCallback {
@@ -64,11 +85,14 @@ export function buildToolGuard(allowedTool: string): HookCallback {
   };
 }
 
-export function buildLiveOptions(config: LiveConfig): Options {
+export function buildLiveOptions(config: LiveConfig, mcpServers: SelectedMcpServers): Options {
   const allowedTool = config.mcp.tool;
   return {
     tools: [],
     allowedTools: [allowedTool],
+    mcpServers,
+    strictMcpConfig: true,
+    settingSources: [],
     persistSession: false,
     permissionMode: "dontAsk",
     permissionPrompts: "host",
@@ -130,6 +154,7 @@ function toolResults(message: SDKMessage): Array<{ id: string; succeeded: boolea
 
 export async function runLive(
   config: LiveConfig,
+  mcpServers: SelectedMcpServers,
   run: LiveQuery = query,
   expectedDate = currentLocalDate(),
 ): Promise<DailyBrief> {
@@ -157,7 +182,7 @@ export async function runLive(
       "summary and moveWorkForward are items. topTodos, newUpdates and yourDay are non-empty item arrays.",
       'sources is an array of {"id":"...","label":"..."}. Use date format YYYY-MM-DD.',
     ].join("\n"),
-    options: buildLiveOptions(config),
+    options: buildLiveOptions(config, mcpServers),
   });
 
   try {
@@ -236,12 +261,12 @@ export async function writePrivateBrief(
 
 async function main(): Promise<void> {
   try {
-    const { config } = await loadLiveConfig();
+    const { config, mcpServers } = await loadLiveConfig();
     if (process.argv.includes("--check")) {
       console.log(`READY — local config permits only ${config.mcp.tool}. Authentication and source access remain OPEN until npm run brief:live.`);
       return;
     }
-    const outputPath = await writePrivateBrief(await runLive(config));
+    const outputPath = await writePrivateBrief(await runLive(config, mcpServers));
     console.log(`WROTE ${outputPath}`);
   } catch {
     console.error("OPEN — live source unavailable or not verified. Check the local config, approved account and source access.");

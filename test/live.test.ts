@@ -3,7 +3,7 @@ import { mkdtemp, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
-import type { McpServerStatus, SDKControlInitializeResponse, SDKMessage } from "@anthropic-ai/claude-agent-sdk";
+import type { McpServerConfig, McpServerStatus, SDKControlInitializeResponse, SDKMessage } from "@anthropic-ai/claude-agent-sdk";
 import type { DailyBrief } from "../src/brief.js";
 import { buildLiveOptions, loadLiveConfig, runLive, writePrivateBrief, type LiveConfig } from "../src/live.js";
 
@@ -18,6 +18,10 @@ const config: LiveConfig = {
     server: "jira",
     tool: "mcp__jira__search_issues",
   },
+};
+
+const selectedMcpServers: Record<string, McpServerConfig> = {
+  jira: { command: "approved-jira-read-bridge", args: ["--read-only"] },
 };
 
 function fakeRun(
@@ -106,12 +110,12 @@ const readyBrief: DailyBrief = {
 };
 
 test("builds an isolated SDK session with one approved tool", async () => {
-  const options = buildLiveOptions(config);
+  const options = buildLiveOptions(config, selectedMcpServers);
   assert.deepEqual(options.tools, []);
   assert.deepEqual(options.allowedTools, [config.mcp.tool]);
-  assert.equal("mcpServers" in options, false);
-  assert.equal("strictMcpConfig" in options, false);
-  assert.equal("settingSources" in options, false);
+  assert.deepEqual(options.mcpServers, selectedMcpServers);
+  assert.equal(options.strictMcpConfig, true);
+  assert.deepEqual(options.settingSources, []);
   assert.equal(options.persistSession, false);
   assert.equal(options.permissionMode, "dontAsk");
   assert.equal(typeof options.stderr, "function");
@@ -165,7 +169,53 @@ test("requires explicit approvals, matching MCP alias and the Vertex route", asy
     await writeFile(path, JSON.stringify(config));
     await assert.rejects(loadLiveConfig(path, {}), /Vertex model route/);
     await assert.rejects(loadLiveConfig(path, { CLAUDE_CODE_USE_VERTEX: "0" }), /Vertex model route/);
-    assert.deepEqual(await loadLiveConfig(path, { CLAUDE_CODE_USE_VERTEX: "1" }), { config });
+    const mcpPath = join(directory, "mcp.json");
+    await writeFile(mcpPath, JSON.stringify({
+      mcpServers: {
+        jira: selectedMcpServers.jira,
+        unrelated: { command: "unrelated-bridge" },
+      },
+    }));
+    assert.deepEqual(await loadLiveConfig(path, {
+      CLAUDE_CODE_USE_VERTEX: "1",
+      AETHERLINK_JIRA_MCP_CONFIG: mcpPath,
+    }), { config, mcpServers: selectedMcpServers });
+  } finally {
+    await rm(directory, { recursive: true });
+  }
+});
+
+test("fails closed when the approved MCP file or selected server is unavailable", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "bree-mcp-test-"));
+  const configPath = join(directory, "config.json");
+  const mcpPath = join(directory, "mcp.json");
+  const environment = {
+    CLAUDE_CODE_USE_VERTEX: "1",
+    AETHERLINK_JIRA_MCP_CONFIG: mcpPath,
+  };
+  const expectedMessage = "the approved Jira MCP configuration is unavailable or invalid";
+  try {
+    await writeFile(configPath, JSON.stringify(config));
+    await assert.rejects(loadLiveConfig(configPath, { CLAUDE_CODE_USE_VERTEX: "1" }), new Error(expectedMessage));
+    await assert.rejects(loadLiveConfig(configPath, environment), new Error(expectedMessage));
+
+    await writeFile(mcpPath, JSON.stringify({
+      mcpServers: { unrelated: { command: "private-value-must-not-appear" } },
+    }));
+    await assert.rejects(loadLiveConfig(configPath, environment), (error: unknown) => {
+      assert.ok(error instanceof Error);
+      assert.equal(error.message, expectedMessage);
+      assert.doesNotMatch(error.message, /private-value-must-not-appear/);
+      return true;
+    });
+
+    await writeFile(mcpPath, "private-value-must-not-appear { malformed");
+    await assert.rejects(loadLiveConfig(configPath, environment), (error: unknown) => {
+      assert.ok(error instanceof Error);
+      assert.equal(error.message, expectedMessage);
+      assert.doesNotMatch(error.message, /private-value-must-not-appear/);
+      return true;
+    });
   } finally {
     await rm(directory, { recursive: true });
   }
@@ -177,7 +227,7 @@ test("accepts validated JSON only after the configured Jira source tool ran", as
     yield toolResultMessage("source-tool");
     yield successMessage(readyBrief);
   };
-  const result = await runLive(config, fakeRun(messages), readyBrief.date);
+  const result = await runLive(config, selectedMcpServers, fakeRun(messages), readyBrief.date);
   assert.equal(result.title, "Maya's Daily Brief");
   assert.equal(result.moveWorkForward.sourceIds[0], "DEMO-101");
 });
@@ -188,7 +238,7 @@ test("rejects output when the approved tool result failed", async () => {
     yield toolResultMessage("source-tool", true);
     yield successMessage(readyBrief);
   };
-  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /approved source was not verified/);
+  await assert.rejects(runLive(config, selectedMcpServers, fakeRun(messages), readyBrief.date), /approved source was not verified/);
 });
 
 test("rejects duplicate or unexpected MCP source calls", async () => {
@@ -201,7 +251,7 @@ test("rejects duplicate or unexpected MCP source calls", async () => {
     yield toolResultMessage("other-tool");
     yield successMessage(readyBrief);
   };
-  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /approved source was not verified/);
+  await assert.rejects(runLive(config, selectedMcpServers, fakeRun(messages), readyBrief.date), /approved source was not verified/);
 });
 
 test("rejects READY items without source references", async () => {
@@ -210,7 +260,7 @@ test("rejects READY items without source references", async () => {
     yield toolResultMessage("source-tool");
     yield successMessage({ ...readyBrief, summary: { ...readyBrief.summary, sourceIds: [] } });
   };
-  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /READY and CONFLICT items require/);
+  await assert.rejects(runLive(config, selectedMcpServers, fakeRun(messages), readyBrief.date), /READY and CONFLICT items require/);
 });
 
 test("rejects source references absent from the source list", async () => {
@@ -219,7 +269,7 @@ test("rejects source references absent from the source list", async () => {
     yield toolResultMessage("source-tool");
     yield successMessage({ ...readyBrief, summary: { ...readyBrief.summary, sourceIds: ["MISSING-999"] } });
   };
-  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /unknown source ID/);
+  await assert.rejects(runLive(config, selectedMcpServers, fakeRun(messages), readyBrief.date), /unknown source ID/);
 });
 
 test("rejects a cited source ID absent from the approved tool result", async () => {
@@ -228,7 +278,7 @@ test("rejects a cited source ID absent from the approved tool result", async () 
     yield toolResultMessage("source-tool", false, "Unstructured Jira text mentions DEMO-101");
     yield successMessage(readyBrief);
   };
-  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /not present in the approved source result/);
+  await assert.rejects(runLive(config, selectedMcpServers, fakeRun(messages), readyBrief.date), /not present in the approved source result/);
 });
 
 test("does not treat an issue key inside a JSON error message as source evidence", async () => {
@@ -237,7 +287,7 @@ test("does not treat an issue key inside a JSON error message as source evidence
     yield toolResultMessage("source-tool", false, JSON.stringify({ error: "Issue DEMO-101 was not found" }));
     yield successMessage(readyBrief);
   };
-  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /not present in the approved source result/);
+  await assert.rejects(runLive(config, selectedMcpServers, fakeRun(messages), readyBrief.date), /not present in the approved source result/);
 });
 
 test("rejects a model-provided date that differs from the host date", async () => {
@@ -246,7 +296,7 @@ test("rejects a model-provided date that differs from the host date", async () =
     yield toolResultMessage("source-tool");
     yield successMessage(readyBrief);
   };
-  await assert.rejects(runLive(config, fakeRun(messages), "2026-11-22"), /did not match the host date/);
+  await assert.rejects(runLive(config, selectedMcpServers, fakeRun(messages), "2026-11-22"), /did not match the host date/);
 });
 
 test("rejects output when no structured result exists", async () => {
@@ -268,14 +318,14 @@ test("rejects output when no structured result exists", async () => {
       session_id: "session",
     } as unknown as SDKMessage;
   };
-  await assert.rejects(runLive(config, fakeRun(messages), readyBrief.date), /approved source was not verified/);
+  await assert.rejects(runLive(config, selectedMcpServers, fakeRun(messages), readyBrief.date), /approved source was not verified/);
 });
 
-test("fails OPEN and closes the SDK query when the inherited MCP source is unavailable", async () => {
+test("fails OPEN and closes the SDK query when the explicit MCP source is unavailable", async () => {
   let cleanedUp = false;
   const messages = async function* (): AsyncGenerator<SDKMessage, void> {};
   await assert.rejects(
-    runLive(config, fakeRun(messages, "needs-auth", [], () => { cleanedUp = true; })),
+    runLive(config, selectedMcpServers, fakeRun(messages, "needs-auth", [], () => { cleanedUp = true; })),
     /not connected or verified/,
   );
   assert.equal(cleanedUp, true);
@@ -285,7 +335,7 @@ test("rejects and closes an MCP tool without read-only annotations", async () =>
   let cleanedUp = false;
   const messages = async function* (): AsyncGenerator<SDKMessage, void> {};
   await assert.rejects(
-    runLive(config, fakeRun(messages, "connected", [{ name: "search_issues", annotations: { readOnly: false } }], () => { cleanedUp = true; })),
+    runLive(config, selectedMcpServers, fakeRun(messages, "connected", [{ name: "search_issues", annotations: { readOnly: false } }], () => { cleanedUp = true; })),
     /read-only source/,
   );
   assert.equal(cleanedUp, true);
@@ -295,7 +345,7 @@ test("rejects a personal model route and closes the SDK query", async () => {
   let cleanedUp = false;
   const messages = async function* (): AsyncGenerator<SDKMessage, void> {};
   await assert.rejects(
-    runLive(config, fakeRun(messages, "connected", [{ name: "search_issues" }], () => { cleanedUp = true; }, "firstParty")),
+    runLive(config, selectedMcpServers, fakeRun(messages, "connected", [{ name: "search_issues" }], () => { cleanedUp = true; }, "firstParty")),
     /Vertex route/,
   );
   assert.equal(cleanedUp, true);

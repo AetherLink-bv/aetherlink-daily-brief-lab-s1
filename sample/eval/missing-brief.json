@@ -1,0 +1,40 @@
+{
+  "title": "Maya's Daily Brief",
+  "date": "2026-11-21",
+  "greeting": "Good morning, Maya.",
+  "summary": {
+    "status": "READY",
+    "text": "The checkout blocker is the main verified work item.",
+    "sourceIds": ["jira:DEMO-101"]
+  },
+  "moveWorkForward": {
+    "status": "READY",
+    "text": "Ask for an owner for the checkout blocker.",
+    "sourceIds": ["jira:DEMO-101"]
+  },
+  "topTodos": [
+    {
+      "status": "READY",
+      "text": "Read the latest synthetic engineering comment.",
+      "sourceIds": ["jira:DEMO-101"]
+    }
+  ],
+  "newUpdates": [
+    {
+      "status": "READY",
+      "text": "The synthetic workshop outline is ready for review.",
+      "sourceIds": ["jira:DEMO-103"]
+    }
+  ],
+  "yourDay": [
+    {
+      "status": "OPEN",
+      "text": "OPEN — calendar source unavailable; no agenda is claimed.",
+      "sourceIds": []
+    }
+  ],
+  "sources": [
+    { "id": "jira:DEMO-101", "label": "Synthetic Jira issue: Checkout blocker" },
+    { "id": "jira:DEMO-103", "label": "Synthetic Jira issue: Workshop outline" }
+  ]
+}
