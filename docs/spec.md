@@ -1,56 +1,43 @@
-# Spec — Daily brief
+# Spec — Bree Daily Brief
 
-Status: `TEMPLATE — complete before design`
+Status: `TRAINER EXAMPLE — accepted synthetic contract`
 
 References: `reference/dia-to-bree.md` and `reference/brief-example.md`. Both contain synthetic structural guidance only.
 
-Live source: `TEMPLATE — one exact owner-confirmed read-only tool from the existing approved Jira MCP connection. Live source IDs are exact issue keys from its successful structured result. Never paste its response here.`
+## Artifact
 
-## The artifact
+The brief renders these fields in order: `title`, `date`, `greeting`, `summary`, `moveWorkForward`, `topTodos`, `newUpdates`, `yourDay`, and `sources`.
 
-`TEMPLATE — title, date, greeting, summary, moveWorkForward, topTodos, newUpdates, yourDay, and sources, in that order.`
+## Contract
 
-## The contract
+| Field | Type | Rule |
+| --- | --- | --- |
+| `title` | non-empty string | Names the artifact |
+| `date` | real `YYYY-MM-DD` date | Names the artifact date |
+| `greeting` | non-empty string | Contains no unsupported work claim |
+| `summary` | content item | Opens with sourced context |
+| `moveWorkForward` | content item | Shows one best-supported action |
+| `topTodos` | non-empty content item array | Preserves priority and uncertainty |
+| `newUpdates` | non-empty content item array | Claims no unsourced action |
+| `yourDay` | non-empty content item array | Shows sourced time-bound work |
+| `sources` | `{ id: string, label: string }[]` | Resolves every `sourceIds` entry |
 
-| Field | Type | Rule | Example from the reference |
-| --- | --- | --- | --- |
-| `title` | string | Names the artifact | `Maya's Daily Brief` |
-| `date` | `YYYY-MM-DD` | Names the artifact date | `2026-11-21` |
-| `greeting` | string | Contains no work claim | `Good morning, Maya.` |
-| `summary` | content item | Opens with sourced context | Synthetic example |
-| `moveWorkForward` | content item | One best-supported action | Synthetic example |
-| `topTodos` | content item list | Preserves uncertainty | Synthetic example |
-| `newUpdates` | content item list | Claims no unsourced action | Synthetic example |
-| `yourDay` | content item list | Shows sourced time-bound work | Synthetic example |
-| `sources` | `{ id: string, label: string }[]` | Resolves every `sourceIds` entry | Synthetic labels only |
-| Content item | `{ status, text, sourceIds }` | READY and CONFLICT have at least one resolved ID; OPEN may have none | OPEN |
+A content item is `{ status, text, sourceIds }`. Status is `READY`, `OPEN`, or `CONFLICT`. `READY` and `CONFLICT` require at least one resolved source ID. `OPEN` may have no source ID. `OPEN` text starts with `OPEN`; `CONFLICT` text starts with `CONFLICT`.
 
-`OPEN` text starts with `OPEN`. `CONFLICT` text starts with `CONFLICT`.
-
-## House style
-
-- `TEMPLATE — tone, person, tense, what is forbidden (hype, emoji, bullet lists inside bodies).`
-
-## What the agent may never do
-
-- Invent a fact, hide OPEN evidence, connect work email, write through a source, expose customer data, or store raw connector output.
-
-## Acceptance examples
-
-| Given | When | Then | Proof |
-| --- | --- | --- | --- |
-| `TEMPLATE — the sample brief` | `TEMPLATE — the contract is checked` | `TEMPLATE — it passes` | `npm test` |
-| `TEMPLATE — a brief without a required section` | `TEMPLATE` | `TEMPLATE — it is rejected` | `npm test` |
+For live Jira output, each source ID is an exact issue key extracted from the successful structured tool result. Invented, transformed, or unstructured provenance is rejected.
 
 ## Evaluation cases
 
-- Complete: `TEMPLATE — every section renders with resolvable synthetic provenance.`
-- Missing: `TEMPLATE — affected content is OPEN and invents no fact.`
-- Conflict: `TEMPLATE — affected content is CONFLICT and chooses nothing silently.`
+- Complete: every section renders with resolvable synthetic provenance.
+- Missing: the affected item is `OPEN` and invents no fact.
+- Conflict: the affected item is `CONFLICT` and resolves nothing silently.
 
-## OPEN
+## Prohibited behavior
 
-- `TEMPLATE — every rule you could not settle from the reference alone.`
+- Do not invent facts or hide missing or conflicting evidence.
+- Do not connect work email or store work data.
+- Do not write through Jira, send messages, start a shell, or permit a second tool.
+- Do not store raw connector output in the repository or the dated HTML artifact.
 
 ## Optional voice extension
 

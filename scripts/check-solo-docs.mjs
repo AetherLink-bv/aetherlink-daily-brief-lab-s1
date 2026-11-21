@@ -48,6 +48,15 @@ for (const [path, text] of Object.entries(files)) {
 assert.match(files["README.md"], /existing approved Jira MCP connection/);
 assert.match(files["README.md"], /Do not connect work email/);
 assert.match(files["README.md"], /organisation-approved Anthropic via Vertex model route/);
+assert.match(files["README.md"], /Node\.js 20\.12 or newer/);
+assert.match(files["README.md"], /--setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome/);
+assert.match(files["README.md"], /AETHERLINK_JIRA_MCP_CONFIG/);
+assert.match(files["README.md"], /--strict-mcp-config --mcp-config "\$AETHERLINK_JIRA_MCP_CONFIG"/);
+assert.match(files["SOLO.md"], /AETHERLINK_JIRA_MCP_CONFIG/);
+assert.match(files["SOLO.md"], /\.bree\.local\.json.*not.*MCP server configuration/is);
+assert.match(files["SOLO.md"], /mcpServers option/);
+assert.match(files["SOLO.md"], /built-in tools to none/);
+assert.match(files["SOLO.md"], /canUseTool/);
 assert.match(files["SOLO.md"], /\/mcp/);
 assert.match(files["SOLO.md"], /npm run brief:live/);
 assert.match(files["SOLO.md"], /\/visual-plan/);

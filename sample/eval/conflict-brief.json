@@ -1,0 +1,41 @@
+{
+  "title": "Maya's Daily Brief",
+  "date": "2026-11-21",
+  "greeting": "Good morning, Maya.",
+  "summary": {
+    "status": "CONFLICT",
+    "text": "CONFLICT — two synthetic Jira issues name different owners for the same review.",
+    "sourceIds": ["jira:DEMO-102", "jira:DEMO-103"]
+  },
+  "moveWorkForward": {
+    "status": "CONFLICT",
+    "text": "CONFLICT — Jira lists two different owners; review both before deciding.",
+    "sourceIds": ["jira:DEMO-102", "jira:DEMO-103"]
+  },
+  "topTodos": [
+    {
+      "status": "READY",
+      "text": "Compare both synthetic owner claims without choosing one.",
+      "sourceIds": ["jira:DEMO-102", "jira:DEMO-103"]
+    }
+  ],
+  "newUpdates": [
+    {
+      "status": "CONFLICT",
+      "text": "CONFLICT — the synthetic owner fields disagree.",
+      "sourceIds": ["jira:DEMO-102", "jira:DEMO-103"]
+    }
+  ],
+  "yourDay": [
+    {
+      "status": "READY",
+      "text": "09:00 Daily stand-up — review the unresolved owner conflict.",
+      "sourceIds": ["calendar:CAL-001"]
+    }
+  ],
+  "sources": [
+    { "id": "jira:DEMO-102", "label": "Synthetic Jira issue: Onboarding review owner A" },
+    { "id": "jira:DEMO-103", "label": "Synthetic Jira issue: Onboarding review owner B" },
+    { "id": "calendar:CAL-001", "label": "Synthetic calendar event: Daily stand-up" }
+  ]
+}

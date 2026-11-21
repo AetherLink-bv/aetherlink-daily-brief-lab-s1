@@ -1,11 +1,12 @@
 {
-  "user": "TEMPLATE — who reads the decision line",
+  "user": "Maya",
+  "source": "synthetic:calendar-item.sample.json",
   "items": [
     {
       "id": "CAL-001",
       "start": "09:00",
       "title": "Daily stand-up",
-      "decision": "TEMPLATE — the decision before this meeting"
+      "decision": "Bring the top blocker"
     }
   ]
 }

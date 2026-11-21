@@ -1,0 +1,11 @@
+{
+  "user": "Maya",
+  "source": "synthetic:calendar-item.invalid.json",
+  "items": [
+    {
+      "id": "CAL-BROKEN",
+      "title": "Daily stand-up",
+      "decision": "Bring the top blocker"
+    }
+  ]
+}

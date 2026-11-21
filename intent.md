@@ -1,47 +1,34 @@
-# Intent — Daily brief agent
+# Intent — Bree Daily Brief
 
-Status: `TEMPLATE — complete before the spec`
+Status: `TRAINER EXAMPLE — accepted for the synthetic reference solution`
 
-## Outcome
+## User and decision
 
-### User and decision
-
-- User: `TEMPLATE — who reads the morning brief.`
-- Decision: `TEMPLATE — the first decision this person must make.`
-
-`TEMPLATE — one observable result: how a sourced morning signal helps this user make that decision.`
+- User: Maya.
+- Decision: Bring the top blocker to the 09:00 stand-up.
+- Visible result: one complete, sourced Daily Brief HTML page.
 
 ## Success checks
 
-- [ ] `TEMPLATE — a check a fresh reader can verify with one command or one look, without the author in the room.`
-- [ ] `TEMPLATE`
-- [ ] `TEMPLATE`
-- [ ] `npm run mini prints one synthetic decision line.`
-- [ ] `npm run live:check reports READY or an exact OPEN reason without contacting the source.`
-- [ ] `TEMPLATE — the private dated HTML brief names its sources, or live access remains OPEN.`
+- `npm run mini` prints the expected synthetic learning-slice line.
+- `npm run brief:sample` writes every Daily Brief section to `out/latest.html`.
+- `npm run eval` proves complete, `OPEN`, and `CONFLICT` outcomes.
+- `npm run live:check` validates only the local boundary.
+- A private `npm run brief:live` writes `~/.bree/briefs/YYYY-MM-DD.html` only after approved access succeeds.
 
 ## Boundary
 
-- In scope: `TEMPLATE — one approved read-only corporate source, the synthetic equivalent, and validated private HTML at ~/.bree/briefs/YYYY-MM-DD.html.`
-- Out of scope: writing to a source, sending messages, changing tickets, public deployment, customer data, raw connector storage, and live output inside this repository.
-- The model never invents a fact: `TEMPLATE — what happens when a source is silent.`
-- Stop or escalate when: `TEMPLATE — a write scope is offered, personal data appears, the agent starts deciding instead of describing.`
-
-## Owners
-
-| Role | Name | Responsibility |
-| --- | --- | --- |
-| Reader | `TEMPLATE` | Reads the brief and makes the named decision |
-| Builder | `TEMPLATE` | Owns the contract, the code and the local proof |
-| Gate | `TEMPLATE` | Accepts or rejects each local result against this file |
-
-## Evidence contract
-
-`TEMPLATE — which synthetic commands, output file, preflight, private live check, fresh-checkout result, and rollback proof are required. Anything unrun is OPEN.`
+- Read only Maya's permitted work items through one existing approved Jira MCP tool.
+- Use the organisation-approved Vertex model route.
+- Never connect work email, write through a source, send a message, or expose raw connector output.
+- Store only synthetic fixtures and evidence in the repository.
+- Install no scheduler during the workshop.
 
 ## OPEN
 
-- `TEMPLATE — every unknown, one per line. Unknowns are written down, not guessed.`
+- The exact approved Jira MCP tool name is selected privately with `/mcp`.
+- Live authentication, source access, and the dated artifact are not proven by this trainer example.
+- A local daily trigger requires separate participant and organisation approval.
 
 ## Optional extension after the core route
 
