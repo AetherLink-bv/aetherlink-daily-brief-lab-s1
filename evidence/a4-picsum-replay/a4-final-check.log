@@ -1,0 +1,19 @@
+npm notice run aetherlink-daily-brief@0.1.0 test:render
+npm notice run tsx --test test/render.test.ts
+✔ renders every brief section and provenance (2.971125ms)
+✔ renders the fixed decorative illustration with a visible fallback (0.270875ms)
+✔ escapes untrusted text and source labels (0.267667ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 387.342333
+npm notice run aetherlink-daily-brief@0.1.0 brief:sample
+npm notice run tsx src/main.ts --sample
+Wrote out/latest.html (2472 bytes) from synthetic data
+Verified 7 synthetic items, 3 source labels, OPEN state, and fixed Picsum fallback.
+
+EXIT_CODE=0

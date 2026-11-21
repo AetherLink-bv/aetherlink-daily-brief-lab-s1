@@ -1,0 +1,5 @@
+npm notice run aetherlink-daily-brief@0.1.0 brief:sample
+npm notice run tsx src/main.ts --sample
+Wrote out/latest.html (2472 bytes) from synthetic data
+
+EXIT_CODE=0

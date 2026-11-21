@@ -1,0 +1,38 @@
+npm notice run aetherlink-daily-brief@0.1.0 test:render
+npm notice run tsx --test test/render.test.ts
+✔ renders every brief section and provenance (3.142125ms)
+✖ renders the fixed decorative illustration with a visible fallback (1.383375ms)
+✔ escapes untrusted text and source labels (0.2895ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 2
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 636.113209
+
+✖ failing tests:
+
+test at test/render.test.ts:13:1
+✖ renders the fixed decorative illustration with a visible fallback (1.383375ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /src="https:\/\/picsum\.photos\/seed\/bree-morning\/1200\/400"/. Input:
+  
+  '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>The Wednesday Brief</title><style>body{font:17px system-ui;max-width:800px;margin:auto;padding:32px;color:#172033}header{border-bottom:2px solid #172033}.status{font-size:.75rem;font-weight:800;padding:.2rem .45rem;border-radius:.25rem}.ready{background:#d7f5df}.open{background:#ffe08a}.conflict{background:#ffd4d4}li{margin:.8rem 0}small{display:block;color:#536070}</style></head><body><header><h1>The Wednesday Brief</h1><p>2026-11-18</p><p>Good morning, Maya.</p></header><main><section><h2>Summary</h2><ul><li><span class="status ready">READY</span> Your 09:00 stand-up is the first decision point today.<small>Sources: calendar:CAL-001</small></li></ul></section><section><h2>Push your work forward</h2><ul><li><span class="status ready">READY</span> Bring the checkout blocker to the stand-up and ask for an owner.<small>Sources: jira:DEMO-101</small></li></ul></section><section><h2>Top to-dos</h2><ul><li><span class="status ready">READY</span> Read the latest engineering comment before deciding an owner.<small>Sources: jira:DEMO-101</small></li><li><span class="status conflict">CONFLICT</span> CONFLICT — two owners are named for the onboarding review.<small>Sources: jira:DEMO-102</small></li></ul></section><section><h2>New updates</h2><ul><li><span class="status ready">READY</span> The checkout issue received a new engineering comment.<small>Sources: jira:DEMO-101</small></li><li><span class="status open">OPEN</span> OPEN — email updates are not connected in this workshop.</li></ul></section><section><h2>Your day</h2><ul><li><span class="status ready">READY</span> 09:00 Daily stand-up — decide who owns the checkout blocker.<small>Sources: calendar:CAL-001</small></li></ul></section><section><h2>Sources</h2><ul><li><strong>jira:DEMO-101</strong> — Synthetic Jira issue: Checkout blocker</li><li><strong>jira:DEMO-102</strong> — Synthetic Jira issue: Onboarding review</li><li><strong>calendar:CAL-001</strong> — Synthetic calendar event: Daily stand-up</li></ul></section></main></body></html>'
+  
+      at TestContext.<anonymous> (/private/tmp/day5-recovery-20261121/participant-replay/test/render.test.ts:15:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1325:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:911:18)
+      at Test.postRun (node:internal/test_runner/test:1465:19)
+      at Test.run (node:internal/test_runner/test:1390:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>The Wednesday Brief</title><style>body{font:17px system-ui;max-width:800px;margin:auto;padding:32px;color:#172033}header{border-bottom:2px solid #172033}.status{font-size:.75rem;font-weight:800;padding:.2rem .45rem;border-radius:.25rem}.ready{background:#d7f5df}.open{background:#ffe08a}.conflict{background:#ffd4d4}li{margin:.8rem 0}small{display:block;color:#536070}</style></head><body><header><h1>The Wednesday Brief</h1><p>2026-11-18</p><p>Good morning, Maya.</p></header><main><section><h2>Summary</h2><ul><li><span class="status ready">READY</span> Your 09:00 stand-up is the first decision point today.<small>Sources: calendar:CAL-001</small></li></ul></section><section><h2>Push your work forward</h2><ul><li><span class="status ready">READY</span> Bring the checkout blocker to the stand-up and ask for an owner.<small>Sources: jira:DEMO-101</small></li></ul></section><section><h2>Top to-dos</h2><ul><li><span class="status ready">READY</span> Read the latest engineering comment before deciding an owner.<small>Sources: jira:DEMO-101</small></li><li><span class="status conflict">CONFLICT</span> CONFLICT — two owners are named for the onboarding review.<small>Sources: jira:DEMO-102</small></li></ul></section><section><h2>New updates</h2><ul><li><span class="status ready">READY</span> The checkout issue received a new engineering comment.<small>Sources: jira:DEMO-101</small></li><li><span class="status open">OPEN</span> OPEN — email updates are not connected in this workshop.</li></ul></section><section><h2>Your day</h2><ul><li><span class="status ready">READY</span> 09:00 Daily stand-up — decide who owns the checkout blocker.<small>Sources: calendar:CAL-001</small></li></ul></section><section><h2>Sources</h2><ul><li><strong>jira:DEMO-101</strong> — Synthetic Jira issue: Checkout blocker</li><li><strong>jira:DEMO-102</strong> — Synthetic Jira issue: Onboarding review</li><li><strong>calendar:CAL-001</strong> — Synthetic calendar event: Daily stand-up</li></ul></section></main></body></html>',
+    expected: /src="https:\/\/picsum\.photos\/seed\/bree-morning\/1200\/400"/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+EXIT_CODE=1
