@@ -11,10 +11,10 @@ Every row is a claim with the command that proves it, the exit code observed, an
 | The live boundary holds | `npm run test:live` | `0` | `# pass 15` | `VERIFIED` |
 | The evaluation cases hold | `npm run eval` | `0` | `# pass 6` | `VERIFIED` |
 | The learning slice holds | `npm run test:mini` | `0` | `# pass 1` | `VERIFIED` |
-| The full suite holds | `npm test` | `OPEN` | `OPEN — awaiting current CI` | `OPEN` |
+| The full suite holds | `npm test` | `0` | `# pass 32; # fail 0` | `VERIFIED — remote CI` |
 | The page renders | `npm run brief:sample` | `0` | `WROTE out/latest.html` | `VERIFIED` |
 
-The targeted checks cover 30 tests in total. This does not replace the full-suite CI result.
+The targeted checks cover 30 tests in total. The full 32-test suite, typecheck, documentation check, and sample render passed in [GitHub Actions](https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1/actions/runs/44856586902) at trainer revision `d6e3203`.
 
 ## Fresh local checkout
 
