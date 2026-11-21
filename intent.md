@@ -43,6 +43,14 @@ Require the named synthetic commands, `out/latest.html`, `live:check`, and workt
 
 - Exact approved Jira tool, Vertex access, and private live run remain OPEN.
 
+## Next iteration
+
+- Command: `npm run live:check`.
+- Safe signal: READY or an exact OPEN reason without contacting Jira.
+- Remaining risk: organisation approval and authentication are unproven.
+- Improvement: restart A5 with an explicit approved Jira-only MCP config and the Vertex route.
+- Check: the mocked boundary still rejects prose keys, failed calls, and every unlisted source ID.
+
 ## Optional extension after the core route
 
 The [voice extension](docs/voice-extension.md) is not part of the accepted Bree outcome. Start it only after A7 and the Maintain loop. It uses synthetic data, a personal ElevenLabs account, and a key stored only in ignored `.env.local`. It never reads or speaks live work data.
