@@ -20,7 +20,7 @@ Local fixtures are synthetic. Use them for tests, recordings, and reproducible e
 
 Run every command from the project folder, `aetherlink-daily-brief-lab-s1`. It is also called the repository root. The slides show it as "Work in this folder".
 
-The slides name each prompt `SOLO N · Part M`. That is Assignment N, Part M in this file.
+The slides name each prompt `SOLO N`, or `SOLO N · Part M`. That is Assignment N, Part M in this file.
 
 ```bash
 npm ci
@@ -162,7 +162,7 @@ test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" &&
   claude --setting-sources project,user --permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG" --no-chrome
 ```
 
-The two `test` checks print nothing when they pass. If Claude Code does not start, a check failed: keep live proof `OPEN`.
+The two `test` checks print nothing when they pass. If Claude Code does not start and you are back at the terminal prompt, a check failed: keep live proof `OPEN`.
 
 Run `/status` to confirm the approved Vertex route. Then use `/mcp` to inspect the existing approved connection. Local settings are not loaded. If either check fails, keep live proof `OPEN`. Do not install a connector or create a token. Keep the synthetic route for tests.
 
@@ -253,6 +253,11 @@ git worktree add --detach ../daily-brief-previous HEAD^
 git worktree add --detach ../daily-brief-current HEAD
 (cd ../daily-brief-previous && npm ci && npm run typecheck && npm test && npm run brief:sample)
 (cd ../daily-brief-current && npm ci && npm run typecheck && npm test && npm run eval && npm run brief:sample)
+```
+
+When both lines end without an error, open `out/latest.html` in the folder `daily-brief-previous` and in the folder `daily-brief-current`. Then remove the two folders:
+
+```bash
 git worktree remove ../daily-brief-previous
 git worktree remove ../daily-brief-current
 git worktree list

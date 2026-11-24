@@ -36,7 +36,7 @@ Keep the key in the ignored `.env.local` file. Never paste it into chat, share a
 
 Requirements are Node.js 20.12 or newer, Git, Claude Code, the existing Jira MCP connection, and the approved Anthropic via Vertex route.
 
-The clone makes a new folder, `aetherlink-daily-brief-lab-s1`. That is the project folder, also called the repository root. Run every later command from that folder.
+The clone makes a new folder, `aetherlink-daily-brief-lab-s1`. That is the project folder, also called the repository root. After the `cd` line you are in that folder. Run every later command from there.
 
 ```bash
 git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
@@ -73,13 +73,15 @@ test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" &&
   claude --setting-sources project,user --permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG" --no-chrome
 ```
 
+The two `test` checks print nothing when they pass. If Claude Code does not start and you are back at the terminal prompt, a check failed.
+
 Run `/status` to confirm the approved Vertex route. Then run `/mcp` and inspect the existing approved Jira connection. If either check fails, keep live proof `OPEN`. Do not install a connector or create a token.
 
 ```bash
 test -f .bree.local.json || cp .bree.example.json .bree.local.json
 ```
 
-Edit the ignored local file with the exact Jira read tool shown by `/mcp`, plus the user and decision. Set all three approval flags to `true` only after the connector, tool-owner read-only status, and model route are confirmed. `.bree.local.json` stores runtime approvals; it is not MCP server configuration. Never create or store a token for this workshop.
+Edit the ignored local file with the exact Jira read tool shown by `/mcp`, plus the user and decision. Set all three approval flags to `true` only after the connector, tool-owner read-only status, and model route are confirmed. `.bree.local.json` stores runtime approvals; it is not MCP server configuration. Never create or store a token for this session.
 
 The Agent SDK starts a separate process. `src/live.ts` must read only the selected server definition from `AETHERLINK_JIRA_MCP_CONFIG` and pass it through the SDK `mcpServers` option. It must set built-in tools to none, enable strict MCP config, and deny every tool except the exact approved Jira tool in `canUseTool`.
 
