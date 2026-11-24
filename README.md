@@ -36,6 +36,8 @@ Keep the key in the ignored `.env.local` file. Never paste it into chat, share a
 
 Requirements are Node.js 20.12 or newer, Git, Claude Code, the existing Jira MCP connection, and the approved Anthropic via Vertex route.
 
+The clone makes a new folder, `aetherlink-daily-brief-lab-s1`. That is the project folder, also called the repository root. Run every later command from that folder.
+
 ```bash
 git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
 cd aetherlink-daily-brief-lab-s1
@@ -52,7 +54,7 @@ Read [SOLO.md](SOLO.md). Complete one assignment at a time.
 ## Permission boundary
 
 - Use only the existing approved Jira MCP connection and your own permitted work items.
-- Use only the organisation-approved Anthropic via Vertex model route already configured for the workshop.
+- Use only the organisation-approved Anthropic via Vertex model route already configured for this session.
 - Do not connect work email. Use only sanitised, non-sensitive pasted text when the trainer explicitly asks for it.
 - Keep Bree private. Do not publish live output.
 - Do not store customer data, work data, credentials, connector responses, or live briefs in this repository.
@@ -95,11 +97,11 @@ npm run brief:live
 
 The host application writes only validated HTML to `~/.bree/briefs/YYYY-MM-DD.html` with private permissions. It does not write raw connector output. The configured client and provider follow company retention policy. Do not record or commit live contents.
 
-A6 may propose an organisation-approved local daily trigger. The workshop does not install or activate a scheduler. Automatic daily execution begins only after the participant approves and installs their own trigger.
+A6 may propose an organisation-approved local daily trigger. This session does not install or activate a scheduler. Automatic daily execution begins only after the participant approves and installs their own trigger.
 
 ## Project skills
 
-The repository includes the core workshop skills:
+The repository includes the core skills for this session:
 
 - `/visual-plan` creates the A3 offline review artifact.
 - `/create-verification-skill` generates the A6 project-specific `verify-bree` skill.

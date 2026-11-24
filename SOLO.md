@@ -11,12 +11,16 @@ Local fixtures are synthetic. Use them for tests, recordings, and reproducible e
 - Use Bree privately for your own work. Do not publish the brief or its live output.
 - Never add customer data, credentials, connector responses, or live briefs to prompts, fixtures, screenshots, recordings, evidence files, or commits.
 - Use only the existing, organisation-approved Jira MCP connection and your own permitted work items.
-- Use only the organisation-approved Anthropic via Vertex model route configured for this workshop.
+- Use only the organisation-approved Anthropic via Vertex model route configured for this session.
 - Do not connect work email. Paste only sanitised, non-sensitive text when an exercise explicitly needs mail-like input.
 - Give Bree one exact read-only source tool. Do not give it shell, file-write, messaging, or ticket-update tools.
 - Stop when the connector offers write scope, the source contains customer data, or permission is unclear.
 
 ## Start synthetic work
+
+Run every command from the project folder, `aetherlink-daily-brief-lab-s1`. It is also called the repository root. The slides show it as "Work in this folder".
+
+The slides name each prompt `SOLO N · Part M`. That is Assignment N, Part M in this file.
 
 ```bash
 npm ci
@@ -158,6 +162,8 @@ test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" &&
   claude --setting-sources project,user --permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG" --no-chrome
 ```
 
+The two `test` checks print nothing when they pass. If Claude Code does not start, a check failed: keep live proof `OPEN`.
+
 Run `/status` to confirm the approved Vertex route. Then use `/mcp` to inspect the existing approved connection. Local settings are not loaded. If either check fails, keep live proof `OPEN`. Do not install a connector or create a token. Keep the synthetic route for tests.
 
 **Where:** Claude Code for the bounded route. Use your terminal only for preflight and the approved private run.
@@ -188,7 +194,7 @@ Create the ignored local configuration. Set its three approval flags to `true` o
 test -f .bree.local.json || cp .bree.example.json .bree.local.json
 ```
 
-`.bree.local.json` stores runtime approvals; it is not MCP server configuration.
+This command prints nothing when it works. `.bree.local.json` stores runtime approvals; it is not MCP server configuration.
 
 Run the preflight:
 
@@ -240,7 +246,7 @@ Use synthetic data for recorded evidence. Treat live connector verification as a
 
 > Propose one organisation-approved local daily trigger with its command, working directory, logs, rollback, and owner, but do not install or activate a scheduler. Mark the live connector and dated artifact OPEN unless you privately ran them with approved access. Show the evidence diff and stop for approval. Do not publish anything.
 
-Commit only the accepted result. Test the previous and current commits in temporary worktrees:
+Commit only the accepted result. Test the previous and current commits in temporary worktrees. A worktree is a second folder with another version of the same project. `HEAD` is your last commit. `HEAD^` is the commit before it. The two folders appear next to the project folder, and you stay in the project folder:
 
 ```bash
 git worktree add --detach ../daily-brief-previous HEAD^
