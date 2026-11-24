@@ -163,15 +163,17 @@ Optional, when Impeccable is available:
 
 ## Assignment 5: connect the existing read-only Jira source
 
-Close the first Claude Code session. Ask the trainer to make `AETHERLINK_JIRA_MCP_CONFIG` available privately as the path to an existing approved Jira-only MCP configuration. Do not create a connector or copy the configuration into the repository. Verify it before the guarded restart:
+Close the first Claude Code session. Your organisation provides `AETHERLINK_JIRA_MCP_CONFIG`: the path to an existing approved Jira-only MCP configuration. It must be set before the session. The trainer has no access to it and cannot provide it. If it is missing, ask a colleague from your organisation. Until then, start Claude Code again with the command from "Start synthetic work", and keep live proof `OPEN`. In Assignment 5, tell Claude Code that the tool name is `OPEN`: the tests then use a mocked tool. Do not create a connector or copy the configuration into the repository. Verify it before the guarded restart:
 
 ```bash
-test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" &&
-  test -f "$AETHERLINK_JIRA_MCP_CONFIG" &&
-  claude --setting-sources project,user --permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG" --no-chrome
+test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" && test -f "$AETHERLINK_JIRA_MCP_CONFIG" && echo "Config found" || echo "Config missing"
 ```
 
-The two `test` checks print nothing when they pass. If Claude Code does not start and you are back at the terminal prompt, a check failed: keep live proof `OPEN`.
+You see `Config found`. If you see `Config missing`, keep live proof `OPEN` and do not start the live session. After `Config found`, start Claude Code with only that configuration:
+
+```bash
+claude --setting-sources project,user --permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG" --no-chrome
+```
 
 Run `/status` to confirm the approved Vertex route. Then use `/mcp` to inspect the existing approved connection. Local settings are not loaded. If either check fails, keep live proof `OPEN`. Do not install a connector or create a token. Keep the synthetic route for tests.
 
@@ -223,6 +225,8 @@ npm run brief:live
 
 Open the dated HTML privately. Record only `PASS` or `OPEN` for the source and artifact.
 
+This part changes no file in the project folder, so there is no version to save.
+
 **Visible result:** Synthetic tests pass, exactly one tool is allowed, and the private artifact status is honestly `PASS` or `OPEN`.
 
 ## Assignment 6: make the proof repeatable
@@ -239,13 +243,15 @@ Use synthetic data for recorded evidence. Treat live connector verification as a
 
 ### Part 2: make the proof repeatable
 
-**Action:** Paste Part 2. Then run the generated skill and inspect its evidence.
-
-> Use the project-local create-verification-skill to generate .claude/skills/verify-bree/ from commands, routes, selectors, and outputs that exist in this repository. Cover every synthetic HTML section, long-text escaping, resolved sourceIds, OPEN and CONFLICT behavior, the dated private artifact path, and the private live preflight without storing live contents. Run one complete synthetic journey through launch, doctor, drive, evidence, and cleanup. Run npm run typecheck, npm test, npm run eval, npm run brief:sample, and npm run live:check. Record real commands and exit codes in docs/evidence.md. Show the evidence diff and stop.
+**Action:** Run the skill generator first. It writes `.claude/skills/verify-bree/` and runs one synthetic journey.
 
 ```text
 /create-verification-skill Inspect this repository and create .claude/skills/verify-bree/. Use only commands, routes, and harnesses that exist here. Map the synthetic brief, unavailable-source result, and private live preflight. Never connect an account, write through a connector, or store live work data in evidence. Run one synthetic journey end to end. Keep the skill DRAFT if any launch, doctor, drive, evidence, or cleanup step is unproven.
 ```
+
+Then paste Part 2. It checks the generated skill, runs the five checks and records the evidence.
+
+> Read .claude/skills/verify-bree/. Confirm that it covers every synthetic HTML section, long-text escaping, resolved sourceIds, OPEN and CONFLICT behavior, the dated private artifact path, and the private live preflight without storing live contents. Add what is missing. Run npm run typecheck, npm test, npm run eval, npm run brief:sample, and npm run live:check. Record real commands and exit codes in docs/evidence.md. Show the evidence diff and stop.
 
 **Visible result:** `docs/evidence.md` records real commands and exit codes for one cleaned-up synthetic journey.
 
@@ -293,7 +299,7 @@ Choose one mission:
 
 Start with one approved source and one owner-confirmed read-only tool. Add another source only after the first mission is proven.
 
-The Jira, GitLab and Confluence missions need a session that loads that approved source. Ask the trainer. Without one, choose the mock Outlook mission and start Claude Code with the `claude --setting-sources …` command from "Start synthetic work".
+The Jira, GitLab and Confluence missions need a session that loads that approved source from your organisation. The trainer cannot provide it. Without one, choose the mock Outlook mission (a made-up email in the project) and start Claude Code with the `claude --setting-sources …` command from "Start synthetic work".
 
 The mock Outlook mission is different. It uses the synthetic fixture only. It does not connect Outlook or read work email.
 
