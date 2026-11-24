@@ -13,6 +13,7 @@ const paths = [
   "docs/design.md",
   "docs/plan.md",
   "reference/dia-to-bree.md",
+  "reference/solo-details.md",
   "package.json",
   "package-lock.json",
   ".gitignore",
@@ -20,6 +21,8 @@ const paths = [
   "course/index.html",
 ];
 const files = Object.fromEntries(await Promise.all(paths.map(async (path) => [path, await readFile(path, "utf8")])));
+// The prompts are short. The exact requirements of each part are in reference/solo-details.md.
+const solo = `${files["SOLO.md"]}\n${files["reference/solo-details.md"]}`;
 const packageJson = JSON.parse(files["package.json"]);
 const lock = JSON.parse(files["package-lock.json"]);
 assert.equal(packageJson.allowScripts[`esbuild@${lock.packages["node_modules/esbuild"].version}`], true);
@@ -61,26 +64,26 @@ assert.match(files["README.md"], /AETHERLINK_JIRA_MCP_CONFIG/);
 assert.match(files["README.md"], /--strict-mcp-config --mcp-config "\$AETHERLINK_JIRA_MCP_CONFIG"/);
 assert.match(files["SOLO.md"], /AETHERLINK_JIRA_MCP_CONFIG/);
 assert.match(files["SOLO.md"], /\.bree\.local\.json.*not.*MCP server configuration/is);
-assert.match(files["SOLO.md"], /mcpServers option/);
-assert.match(files["SOLO.md"], /built-in tools to none/);
-assert.match(files["SOLO.md"], /canUseTool/);
+assert.match(solo, /mcpServers option/);
+assert.match(solo, /built-in tools to none/);
+assert.match(solo, /canUseTool/);
 assert.match(files["SOLO.md"], /\/mcp/);
 assert.match(files["SOLO.md"], /npm run brief:live/);
 assert.match(files["SOLO.md"], /\/visual-plan/);
 assert.match(files["SOLO.md"], /create-verification-skill/);
-assert.match(files["SOLO.md"], /sample\/brief\.sample\.json/);
-assert.match(files["SOLO.md"], /Summary and moveWorkForward are single items/);
-assert.match(files["SOLO.md"], /TopTodos, newUpdates, and yourDay are non-empty item arrays/);
-assert.match(files["SOLO.md"], /READY and CONFLICT items have at least one source ID; OPEN may have none/);
-assert.match(files["SOLO.md"], /Accept only exact Jira keys .* as live source IDs/);
-assert.match(files["SOLO.md"], /~\/\.bree\/briefs\/YYYY-MM-DD\.html/);
+assert.match(solo, /sample\/brief\.sample\.json/);
+assert.match(solo, /Summary and moveWorkForward are single items/);
+assert.match(solo, /TopTodos, newUpdates, and yourDay are non-empty item arrays/);
+assert.match(solo, /READY and CONFLICT items have at least one source ID; OPEN may have none/);
+assert.match(solo, /Accept only exact Jira keys .* as live source IDs/);
+assert.match(solo, /~\/\.bree\/briefs\/YYYY-MM-DD\.html/);
 assert.match(files["SOLO.md"], /do not install or activate a scheduler/);
 assert.match(files["SOLO.md"], /git worktree add --detach \.\.\/daily-brief-previous HEAD\^/);
 assert.match(files["docs/spec.md"], /`summary` \| content item \|/);
 assert.match(files["docs/spec.md"], /`moveWorkForward` \| content item \|/);
 assert.match(files["reference/dia-to-bree.md"], /Missing evidence is OPEN; disagreement is CONFLICT/);
 assert.match(files["reference/dia-to-bree.md"], /https:\/\/picsum\.photos\/seed\/bree-morning\/1200\/400/);
-assert.match(files["SOLO.md"], /stable visible fallback text/);
+assert.match(solo, /stable visible fallback text/);
 assert.match(files["SOLO.md"], /Never reconstruct historical raw logs or record live connector contents/);
 assert.match(files["reference/dia-to-bree.md"], /not AI-generated, a source, or business evidence/);
 
@@ -132,4 +135,20 @@ await Promise.all([
   access("reference/brief-example.md"),
 ]);
 
+
+// Every short prompt that names a section finds that section in the details file.
+for (const [, section] of files["SOLO.md"].matchAll(/reference\/solo-details\.md, section (A\d(?: Part \d)?)/g)) {
+  assert.match(files["reference/solo-details.md"], new RegExp(`^## ${section}$`, "m"), `no section ${section} in reference/solo-details.md`);
+}
+for (const prompt of prompts(files["SOLO.md"])) assert.ok(prompt.split(/\s+/).length <= 75, `a SOLO prompt is longer than 75 words: ${prompt.slice(0, 40)}`);
+// Every SOLO prompt has the six lines of the Day 1 template, in that order.
+for (const prompt of prompts(files["SOLO.md"])) assert.match(prompt, /^Goal: .+ Context: .+ Constraints: .+ Done when: .+ Output: .+ Check: .+$/, `not the six-line template: ${prompt.slice(0, 40)}`);
+// Every prompt names its section. A requirement that a prompt moved to the details file is in that prompt's section.
+const sectionOf = name => (files["reference/solo-details.md"].split(/^## /m).find(part => part.startsWith(`${name}\n`)) ?? "");
+for (const prompt of prompts(files["SOLO.md"])) assert.match(prompt, /reference\/solo-details\.md, section A\d(?: Part \d)?/, `a SOLO prompt names no section: ${prompt.slice(0, 40)}`);
+for (const [section, needs] of Object.entries({
+  "A2 Part 1": [/Summary and moveWorkForward are single items/, /TopTodos, newUpdates, and yourDay are non-empty item arrays/, /READY and CONFLICT items have at least one source ID; OPEN may have none/],
+  "A4 Part 1": [/https:\/\/picsum\.photos\/seed\/bree-morning\/1200\/400/, /referrerpolicy="no-referrer"/, /stable visible fallback text/],
+  "A5 Part 2": [/mcpServers option/, /built-in tools to none/, /canUseTool/, /strict MCP config/, /Accept only exact Jira keys .* as live source IDs/, /~\/\.bree\/briefs\/YYYY-MM-DD\.html/, /exits with code 0 for READY and code 3 for OPEN/],
+})) for (const need of needs) assert.match(sectionOf(section), need, `${section} must hold ${need}`);
 console.log("PASS — seven assignments, twelve canonical prompt parts, core DailyBrief route, and optional synthetic voice extension align");
