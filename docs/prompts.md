@@ -38,7 +38,7 @@ These twelve prompt parts are identical to A1–A6 in `SOLO.md`. A7 is participa
 
 ## Assignment 5: connect the existing read-only Jira source
 
-Before Part 1, close the synthetic-only session. Ask the trainer to make the existing approved Jira-only config path available privately as `AETHERLINK_JIRA_MCP_CONFIG`. Verify the file before restarting Claude Code with `--permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG"`. Confirm the approved Vertex route with `/status` and the Jira-only connection with `/mcp`. Missing access stays `OPEN`. `.bree.local.json` stores runtime approvals; it is not MCP server configuration.
+Before Part 1, close the synthetic-only session. Your organisation provides the path to the existing approved Jira-only config as `AETHERLINK_JIRA_MCP_CONFIG`. The trainer has no access to it. Verify the file before restarting Claude Code with `--permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG"`. Confirm the approved Vertex route with `/status` and the Jira-only connection with `/mcp`. Missing access stays `OPEN`. `.bree.local.json` stores runtime approvals; it is not MCP server configuration.
 
 ### Part 1
 
@@ -56,7 +56,7 @@ Before Part 1, close the synthetic-only session. Ask the trainer to make the exi
 
 ### Part 2
 
-> Use the project-local create-verification-skill to generate .claude/skills/verify-bree/ from commands, routes, selectors, and outputs that exist in this repository. Cover every synthetic HTML section, long-text escaping, resolved sourceIds, OPEN and CONFLICT behavior, the dated private artifact path, and the private live preflight without storing live contents. Run one complete synthetic journey through launch, doctor, drive, evidence, and cleanup. Run npm run typecheck, npm test, npm run eval, npm run brief:sample, and npm run live:check. Record real commands and exit codes in docs/evidence.md. Show the evidence diff and stop.
+> Read .claude/skills/verify-bree/. Confirm that it covers every synthetic HTML section, long-text escaping, resolved sourceIds, OPEN and CONFLICT behavior, the dated private artifact path, and the private live preflight without storing live contents. Add what is missing. Run npm run typecheck, npm test, npm run eval, npm run brief:sample, and npm run live:check. Record real commands and exit codes in docs/evidence.md. Show the evidence diff and stop.
 
 ### Part 3
 
