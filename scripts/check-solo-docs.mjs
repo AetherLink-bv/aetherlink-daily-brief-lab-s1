@@ -106,6 +106,9 @@ for (const path of ["SOLO.md", "docs/prompts.md", "README.md", "docs/spec.md", "
   assert.doesNotMatch(files[path], /sample\/daily-brief\.sample\.json|private terminal brief|terminal-only result/i, path);
 }
 
+// Only Assignment 1 fills intent.md, and its prompt names one section. A placeholder anywhere else is never filled.
+assert.doesNotMatch(files["intent.md"].replace(/^### User and decision$[\s\S]*?(?=^## )/m, ""), /TEMPLATE/, "intent.md has a TEMPLATE placeholder outside the User and decision section");
+
 const scripts = JSON.parse(files["package.json"]).scripts;
 for (const name of ["mini", "test:mini", "test:schema", "test:render", "eval", "test:live", "live:check", "brief:live", "test:voice", "brief:voice"]) {
   assert.ok(scripts[name], `package.json is missing ${name}`);
