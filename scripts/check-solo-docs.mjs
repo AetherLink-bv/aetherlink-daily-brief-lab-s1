@@ -135,7 +135,6 @@ await Promise.all([
   access("reference/brief-example.md"),
 ]);
 
-console.log("PASS — seven assignments, twelve canonical prompt parts, core DailyBrief route, and optional synthetic voice extension align");
 
 // Every short prompt that names a section finds that section in the details file.
 for (const [, section] of files["SOLO.md"].matchAll(/reference\/solo-details\.md, section (A\d(?: Part \d)?)/g)) {
@@ -144,3 +143,12 @@ for (const [, section] of files["SOLO.md"].matchAll(/reference\/solo-details\.md
 for (const prompt of prompts(files["SOLO.md"])) assert.ok(prompt.split(/\s+/).length <= 75, `a SOLO prompt is longer than 75 words: ${prompt.slice(0, 40)}`);
 // Every SOLO prompt has the six lines of the Day 1 template, in that order.
 for (const prompt of prompts(files["SOLO.md"])) assert.match(prompt, /^Goal: .+ Context: .+ Constraints: .+ Done when: .+ Output: .+ Check: .+$/, `not the six-line template: ${prompt.slice(0, 40)}`);
+// Every prompt names its section. A requirement that a prompt moved to the details file is in that prompt's section.
+const sectionOf = name => (files["reference/solo-details.md"].split(/^## /m).find(part => part.startsWith(`${name}\n`)) ?? "");
+for (const prompt of prompts(files["SOLO.md"])) assert.match(prompt, /reference\/solo-details\.md, section A\d(?: Part \d)?/, `a SOLO prompt names no section: ${prompt.slice(0, 40)}`);
+for (const [section, needs] of Object.entries({
+  "A2 Part 1": [/Summary and moveWorkForward are single items/, /TopTodos, newUpdates, and yourDay are non-empty item arrays/, /READY and CONFLICT items have at least one source ID; OPEN may have none/],
+  "A4 Part 1": [/https:\/\/picsum\.photos\/seed\/bree-morning\/1200\/400/, /referrerpolicy="no-referrer"/, /stable visible fallback text/],
+  "A5 Part 2": [/mcpServers option/, /built-in tools to none/, /canUseTool/, /strict MCP config/, /Accept only exact Jira keys .* as live source IDs/, /~\/\.bree\/briefs\/YYYY-MM-DD\.html/, /exits with code 0 for READY and code 3 for OPEN/],
+})) for (const need of needs) assert.match(sectionOf(section), need, `${section} must hold ${need}`);
+console.log("PASS — seven assignments, twelve canonical prompt parts, core DailyBrief route, and optional synthetic voice extension align");

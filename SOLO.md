@@ -33,11 +33,11 @@ Complete one assignment at a time. Inspect each diff and run the named check you
 
 ### How the prompts are written
 
-Each prompt has the six lines of Day 1: Goal, Context, Constraints, Done when, Output, Check. The prompts are short. The exact requirements of a part are in `reference/solo-details.md`, and the prompt names its section.
+Each prompt has the six lines of Day 1, with their Day 1 meaning: Goal is the result you want, Context what the model needs to know, Constraints what it must not do, Done when what good looks like, Output the format you want back, and Check how you verify it. The prompts are short. The exact requirements of a part are in `reference/solo-details.md`, and every prompt names its section.
 
-- Assignments 1 and 2: paste the prompt.
-- Assignments 3 and 4, and Assignment 6, Parts 1 and 3: find the six lines in the prompt, then paste it.
-- Assignment 5, and Assignment 6, Part 2: write the prompt in a note first, in six lines. Compare it with the prompt in this file. Then send only the prompt in this file.
+- Assignments 1 and 2, and Assignment 6, Parts 1 and 3: paste the prompt.
+- Assignments 3 and 4, and Assignment 6, Part 2: find the six lines in the prompt, then paste it.
+- Assignment 5, Parts 1 and 2: write the prompt in a note first, in six lines. Compare it with the prompt in this file. Then send only the prompt in this file.
 
 The prompt in this file is always the backup. It gives every participant the same result.
 
@@ -85,7 +85,7 @@ Use manual mode. Choose one reader and one decision that the brief should suppor
 
 **Action:** Paste Part 1. Answer one question at a time. Approve the wording before Claude edits files.
 
-> Goal: choose one user and one morning decision. Context: intent.md and sample/calendar-item.sample.json. Constraints: ask me one question at a time; change no file before I approve the wording. Done when: the User and decision section of intent.md has no TEMPLATE line, and the sample file names my user and my decision. Output: the diff. Check: I read the diff; then stop.
+> Goal: one user and one morning decision for the brief. Context: intent.md, sample/calendar-item.sample.json and reference/solo-details.md, section A1 Part 1. Constraints: do not ask more than one question at a time; change no file before I approve the wording. Done when: the User and decision section of intent.md has no TEMPLATE line, and the sample file names my user and my decision. Output: the diff. Check: I read the diff.
 
 ```text
 /grilling Challenge whether my chosen user, decision, and boundary are observable. Ask one question at a time. Do not edit files.
@@ -95,7 +95,7 @@ Use manual mode. Choose one reader and one decision that the brief should suppor
 
 **Action:** Paste Part 2 only after you accept the change to `intent.md`.
 
-> Goal: one calendar item becomes one decision line. Context: intent.md and reference/solo-details.md, section A1 Part 2. Constraints: write the test first; build only the mini-path. Done when: npm run test:mini is green and npm run mini prints the line. Output: the red run, the green run and the diff, then stop. Check: real output only; mark doubts as OPEN.
+> Goal: one calendar item becomes one decision line. Context: intent.md and reference/solo-details.md, section A1 Part 2. Constraints: no code before its test is red; nothing beyond the mini-path; do not go on after the diff. Done when: npm run test:mini is green and npm run mini prints the line. Output: the red run, the green run and the diff. Check: real output only; mark doubts as OPEN.
 
 **Visible result:** `npm run mini` prints one traceable decision line.
 
@@ -109,7 +109,7 @@ Keep the working mini route. Reverse engineer the safe structure of a useful Dai
 
 **Action:** Paste Part 1. Read `docs/spec.md` section by section before you approve it.
 
-> Goal: a contract for a complete DailyBrief in docs/spec.md. Context: intent.md, reference/dia-to-bree.md and reference/solo-details.md, section A2 Part 1. Constraints: write no code and no tests. Done when: the contract has every section and the rules for READY, OPEN and CONFLICT. Output: the proposed docs/spec.md. Check: stop for my approval.
+> Goal: a contract for a complete DailyBrief in docs/spec.md. Context: intent.md, reference/dia-to-bree.md and reference/solo-details.md, section A2 Part 1. Constraints: no code and no tests; do not go on before I approve. Done when: the contract has every section and the rules for READY, OPEN and CONFLICT. Output: the proposed docs/spec.md. Check: I approve it, or I ask for one change.
 
 ```text
 /eli5 Explain my brief contract. Name what each field and status protects. Do not edit files.
@@ -121,7 +121,7 @@ Approve the contract or request one precise revision.
 
 **Action:** Paste Part 2 only after you accept `docs/spec.md`.
 
-> Goal: a schema that checks the contract. Context: docs/spec.md and reference/solo-details.md, section A2 Part 2. Constraints: write the test first; do not build the renderer or a connector. Done when: npm run test:schema is green and one invalid sample is rejected. Output: the red run, the green run and the diff, then stop. Check: real output only; mark doubts as OPEN.
+> Goal: a schema in src/brief.ts that checks the contract. Context: docs/spec.md and reference/solo-details.md, section A2 Part 2. Constraints: no code before its test is red; no renderer and no connector; do not go on after the diff. Done when: npm run test:schema is green and one invalid sample is rejected. Output: the red run, the green run and the diff. Check: real output only; mark doubts as OPEN.
 
 **Visible result:** `npm run test:schema` passes for the valid sample and rejects the invalid sample.
 
@@ -131,9 +131,9 @@ Press Shift+Tab until Claude Code shows plan mode. No implementation changes hap
 
 **Where:** Claude Code in plan mode.
 
-**Action:** Paste the prompt. Review both routes, every proof command, and every rollback before approval.
+**Action:** Find the six lines in the prompt below, then paste it. Review both routes, every proof command, and every rollback before approval.
 
-> Goal: a design, one decision record and a plan for the complete Bree route. Context: intent.md, docs/spec.md and reference/solo-details.md, section A3. Constraints: stay in plan mode; edit no file before I approve. Done when: every plan step has a path, a proof command and a rollback. Output: the proposal. Check: stop for my approval.
+> Goal: a design, one decision record and a plan for the complete Bree route. Context: intent.md, docs/spec.md and reference/solo-details.md, section A3. Constraints: do not leave plan mode and edit no file before I approve. Done when: every plan step has a path, a proof command and a rollback. Output: the proposal; after my approval, the saved documents and the diff. Check: I approve it, or I ask for one change.
 
 ```text
 /visual-plan plan Read the accepted intent, specification, design, and plan. Create one offline HTML plan for the complete Bree journey. Show synthetic fixtures, the full DailyBrief schema, HTML renderer, approved source, exact read-only MCP tool, Claude Agent SDK, dated private artifact, OPEN sections, approval points, and evidence after each step. Use synthetic labels and no real work data. Do not change source files or invent commands.
@@ -149,9 +149,9 @@ Use manual mode. This assignment builds the visible result with synthetic input.
 
 ### Part 1: build and prove the full brief
 
-**Action:** Paste Part 1. Inspect the red test, the green rerun, and the generated page.
+**Action:** Find the six lines in Part 1 below, then paste it. Inspect the red test, the green rerun, and the generated page.
 
-> Goal: the sample brief becomes one HTML page at out/latest.html. Context: docs/plan.md, docs/spec.md and reference/solo-details.md, section A4 Part 1. Constraints: write the test first; local sample data only, no model call. Done when: npm run test:render is green and npm run brief:sample writes the page. Output: the red run, the green run and the diff, then stop. Check: real output only; mark doubts as OPEN.
+> Goal: the sample brief becomes one HTML page at out/latest.html. Context: docs/plan.md, docs/spec.md and reference/solo-details.md, section A4 Part 1. Constraints: no code before its test is red; no model call and no live data; do not go on after the diff. Done when: npm run test:render is green and npm run brief:sample writes the page. Output: the red run, the green run and the diff. Check: real output only; mark doubts as OPEN.
 
 ```text
 /verify-this Prove that npm run brief:sample writes out/latest.html from synthetic data. Show the exit code, output path, source label, and unavailable-source behavior.
@@ -165,9 +165,9 @@ Optional, when Impeccable is available:
 
 ### Part 2: improve one house-style detail
 
-**Action:** Paste Part 2. Accept one small visual change only after its failing test is visible.
+**Action:** Find the six lines in Part 2 below, then paste it. Accept one small visual change only after its failing test is visible.
 
-> Goal: one small house-style change. Context: out/latest.html from Part 1. Constraints: ask me which change; write its failing renderer test first; change the presentation only. Done when: npm run test:render and npm run brief:sample pass. Output: the changed detail and the diff, then stop. Check: real output only; mark doubts as OPEN.
+> Goal: one small house-style change. Context: out/latest.html and reference/solo-details.md, section A4 Part 2. Constraints: no change before I name it; no code before its test is red; no change to the facts or the schema; do not go on after the diff. Done when: npm run test:render and npm run brief:sample pass. Output: the changed detail and the diff. Check: real output only; mark doubts as OPEN.
 
 **Visible result:** Open `out/latest.html` and trace its decision back to the synthetic input.
 
@@ -193,7 +193,7 @@ Run `/status` to confirm the approved Vertex route. Then use `/mcp` to inspect t
 
 **Action:** Write this prompt in a note first, in six lines. Take two minutes. Compare it with Part 1 below. Then send only Part 1, so that nothing runs twice. Review the proposed tests and exact tool before you approve the build.
 
-> Goal: tests for the boundary of the live route. Context: docs/plan.md, docs/spec.md and reference/solo-details.md, section A5 Part 1. Constraints: ask me for the exact name of the one read-only Jira tool; do not build the route; install nothing. Done when: the new tests fail for the right reason. Output: the red run. Check: stop for my approval.
+> Goal: tests for the boundary of the live route. Context: docs/plan.md, docs/spec.md and reference/solo-details.md, section A5 Part 1. Constraints: no route yet; no installs; no tool name of your own: ask me for it, and accept OPEN. Done when: the new tests fail for the right reason. Output: the red run. Check: I approve the tool and the tests.
 
 Ask Claude to explain the boundary before you approve it:
 
@@ -207,7 +207,7 @@ Inspect one successful structured result during the private human review. Choose
 
 **Action:** Only after you approve the tests, tool, and boundary: write this prompt in a note first, compare it with Part 2 below, then send only Part 2.
 
-> Goal: the smallest live route with the Claude Agent SDK. Context: reference/solo-details.md, section A5 Part 2. Constraints: only the approved Jira read tool, through the approved MCP config; do not run npm run brief:live. Done when: the tests are green and npm run live:check prints READY or OPEN. Output: the boundaries and the diff, then stop. Check: real output only; mark doubts as OPEN.
+> Goal: the smallest live route with the Claude Agent SDK. Context: reference/solo-details.md, section A5 Part 2. Constraints: no tool other than the approved Jira read tool; no MCP config other than the approved one; do not run npm run brief:live. Done when: the tests are green and npm run live:check prints READY or OPEN. Output: the boundaries and the diff. Check: real output only; mark doubts as OPEN.
 
 Create the ignored local configuration. Set its three approval flags to `true` only after the connector, read-only tool status, and model route are confirmed. Add the chosen user, decision, and exact Jira read-tool name shown by `/mcp`:
 
@@ -247,7 +247,7 @@ Use synthetic data for recorded evidence. Treat live connector verification as a
 
 **Where:** Claude Code in manual mode.
 
-> Goal: test/eval.test.ts proves three cases: a complete brief, missing evidence and conflicting evidence. Context: docs/spec.md and the three -brief.json files in sample/eval/. Constraints: fix only mismatches with the spec. Done when: npm run eval is green; missing stays OPEN and conflicting stays CONFLICT. Output: the three outcomes and the diff, then stop. Check: real output only; mark doubts as OPEN.
+> Goal: test/eval.test.ts proves three cases: a complete brief, missing evidence and conflicting evidence. Context: docs/spec.md, the three -brief.json files in sample/eval/ and reference/solo-details.md, section A6 Part 1. Constraints: no change to the spec; fix only mismatches with it; do not go on after the diff. Done when: npm run eval is green; missing stays OPEN and conflicting stays CONFLICT. Output: the three outcomes and the diff. Check: real output only; mark doubts as OPEN.
 
 **Visible result:** `npm run eval` proves the complete, `OPEN`, and `CONFLICT` cases.
 
@@ -259,9 +259,9 @@ Use synthetic data for recorded evidence. Treat live connector verification as a
 /create-verification-skill Inspect this repository and create .claude/skills/verify-bree/. Use only commands, routes, and harnesses that exist here. Map the synthetic brief, unavailable-source result, and private live preflight. Never connect an account, write through a connector, or store live work data in evidence. Run one synthetic journey end to end. Keep the skill DRAFT if any launch, doctor, drive, evidence, or cleanup step is unproven.
 ```
 
-Then write the next prompt in a note first, in six lines. Compare it with Part 2 below and send only Part 2. It checks the generated skill, runs the five checks and records the evidence.
+Then find the six lines in Part 2 below, and paste it. It checks the generated skill, runs the five checks and records the evidence.
 
-> Goal: proof that a colleague can repeat. Context: .claude/skills/verify-bree/ and reference/solo-details.md, section A6 Part 2. Constraints: store no live content. Done when: the five checks ran, and docs/evidence.md has each command with its real exit code. Output: the evidence diff. Check: a command that nobody ran is OPEN; then stop.
+> Goal: proof that a colleague can repeat. Context: .claude/skills/verify-bree/ and reference/solo-details.md, section A6 Part 2. Constraints: no live content in the skill or the evidence; do not go on after the evidence diff. Done when: the five checks ran, and docs/evidence.md has each command with its real exit code. Output: the evidence diff. Check: a command that nobody ran is OPEN.
 
 **Visible result:** `docs/evidence.md` records real commands and exit codes for one cleaned-up synthetic journey.
 
@@ -269,7 +269,7 @@ Then write the next prompt in a note first, in six lines. Compare it with Part 2
 
 **Action:** Paste Part 3. Review the command, working directory, logs, rollback, and owner. Do not enable the trigger.
 
-> Goal: a proposal for one local daily trigger in docs/gate.md. Context: docs/evidence.md and docs/gate.md. Constraints: do not install or activate a scheduler; publish nothing. Done when: docs/gate.md names the command, working directory, logs, rollback and owner. Output: the diff. Check: mark the live source and the dated page OPEN unless I tell you that I ran them; then stop for my approval.
+> Goal: a proposal for one organisation-approved local daily trigger in docs/gate.md. Context: docs/evidence.md, docs/gate.md and reference/solo-details.md, section A6 Part 3. Constraints: do not install or activate a scheduler; publish nothing; do not go on before I approve. Done when: docs/gate.md names the command, working directory, logs, rollback and owner. Output: the diff. Check: the live source and the dated page stay OPEN unless I tell you that I ran them.
 
 Commit only the accepted result. Test the previous and current commits in temporary worktrees. A worktree is a second folder with another version of the same project. `HEAD` is your last commit. `HEAD^` is the commit before it. The two folders appear next to the project folder, and you stay in the project folder:
 
