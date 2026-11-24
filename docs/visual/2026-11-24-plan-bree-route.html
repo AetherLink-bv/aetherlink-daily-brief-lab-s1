@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bree route: visual plan</title>
+<style>
+  /* Neutral fallback tokens: the repository has no DESIGN.md or tokens.css. */
+  :root {
+    --bg: #fbfbfa; --fg: #1c1c1a; --muted: #5f5f5a; --rule: #dcdcd6; --surface: #f1f1ed;
+    --accent: #2f5bd3; --ok: #1f7a4d; --warn: #9a5b00; --bad: #b42318;
+    --sans: ui-sans-serif, system-ui, sans-serif; --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  [data-theme="dark"] {
+    --bg: #141413; --fg: #ececea; --muted: #a3a39c; --rule: #33332f; --surface: #1d1d1b;
+    --accent: #8aa8ff; --ok: #5cc28c; --warn: #e0a64a; --bad: #ff7a6e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141413; --fg: #ececea; --muted: #a3a39c; --rule: #33332f; --surface: #1d1d1b;
+      --accent: #8aa8ff; --ok: #5cc28c; --warn: #e0a64a; --bad: #ff7a6e;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 var(--sans); }
+  main { max-width: 56rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+  h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 .4rem; }
+  h2 { font-size: 1.2rem; margin: 2.5rem 0 .6rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+  .thesis { font-size: 1.1rem; }
+  dl.meta { display: grid; grid-template-columns: max-content 1fr; gap: .2rem 1rem; color: var(--muted); font-size: .9rem; }
+  dl.meta dt { font-weight: 600; } dl.meta dd { margin: 0; }
+  code { font-family: var(--mono); font-size: .88em; }
+  table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+  caption { text-align: left; font-weight: 600; padding-bottom: .4rem; }
+  th, td { text-align: left; vertical-align: top; padding: .45rem .5rem; border-bottom: 1px solid var(--rule); }
+  th { color: var(--muted); font-weight: 600; }
+  .table-scroll { overflow-x: auto; }
+  .note { border: 1px solid var(--rule); background: var(--surface); padding: .75rem 1rem; border-radius: 6px; }
+  .open { font-weight: 600; color: var(--warn); }
+  figure { margin: 1.5rem 0; } figcaption { color: var(--muted); font-size: .88rem; }
+  figure svg { width: 100%; height: auto; }
+  svg .box { fill: var(--surface); stroke: var(--fg); stroke-width: 1.2; }
+  svg .box-open { fill: var(--surface); stroke: var(--warn); stroke-width: 1.6; stroke-dasharray: 5 3; }
+  svg .box-out { fill: var(--surface); stroke: var(--ok); stroke-width: 1.6; }
+  svg text { fill: var(--fg); font: 12px var(--sans); }
+  svg text.sub { fill: var(--muted); font: 10.5px var(--mono); }
+  svg text.lane { fill: var(--muted); font: 600 12px var(--sans); }
+  svg .arrow { stroke: var(--fg); stroke-width: 1.4; fill: none; }
+  svg .same { stroke: var(--accent); stroke-width: 1.4; stroke-dasharray: 4 3; fill: none; }
+  svg marker path { fill: var(--fg); }
+  @media (max-width: 480px) { main { padding: 1.5rem 1rem 3rem; } h1 { font-size: 1.5rem; } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Bree route: from synthetic brief to a private dated page</h1>
+    <p class="thesis">Build the full Daily Brief with synthetic data first, then add exactly one read-only Jira tool through the same schema and renderer, and let only the host write the page.</p>
+    <dl class="meta">
+      <dt>Status</dt><dd>Accepted plan (A3), nothing built yet beyond A1 and A2</dd>
+      <dt>Branch</dt><dd><code>run/day5-real-run</code> at <code>d6675bc</code></dd>
+      <dt>Updated</dt><dd>24 Nov 2026</dd>
+      <dt>Sources</dt><dd><code>intent.md</code>, <code>docs/spec.md</code>, <code>docs/design.md</code>, <code>docs/plan.md</code>, <code>docs/decisions/ADR-001-host-writes-validated-html.md</code></dd>
+      <dt>Data</dt><dd>Synthetic labels only. No real work data on this page.</dd>
+    </dl>
+  </header>
+
+  <section>
+    <h2>The route in one picture</h2>
+    <figure>
+      <svg viewBox="0 0 920 330" role="img" aria-labelledby="route-title route-desc">
+        <title id="route-title">Synthetic route and live route sharing one schema and one renderer</title>
+        <desc id="route-desc">Top lane: synthetic fixtures, DailyBrief schema, HTML renderer, out/latest.html. Bottom lane: approved Jira MCP connection, one read-only tool, Claude Agent SDK, the same schema, the same renderer, host writer to a dated private file. Dashed lines join the shared schema and renderer.</desc>
+        <defs>
+          <marker id="head" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z"/></marker>
+        </defs>
+        <text class="lane" x="15" y="22">Synthetic route (steps 1 and 2): proof is stored in the repository</text>
+        <text class="lane" x="15" y="182">Live route (steps 3 to 5): only PASS or OPEN is stored</text>
+
+        <rect class="box" x="319" y="40" width="130" height="64" rx="4"/>
+        <text x="329" y="62">Synthetic fixtures</text><text class="sub" x="329" y="80">sample/brief.</text><text class="sub" x="329" y="94">sample.json</text>
+        <rect class="box" x="471" y="40" width="130" height="64" rx="4"/>
+        <text x="481" y="62">DailyBrief schema</text><text class="sub" x="481" y="80">src/brief.ts</text>
+        <rect class="box" x="623" y="40" width="130" height="64" rx="4"/>
+        <text x="633" y="62">HTML renderer</text><text class="sub" x="633" y="80">src/render.ts</text>
+        <rect class="box-out" x="775" y="40" width="130" height="64" rx="4"/>
+        <text x="785" y="62">out/latest.html</text><text class="sub" x="785" y="80">not tracked by git</text>
+        <path class="arrow" d="M449 72 H469" marker-end="url(#head)"/>
+        <path class="arrow" d="M601 72 H621" marker-end="url(#head)"/>
+        <path class="arrow" d="M753 72 H773" marker-end="url(#head)"/>
+
+        <rect class="box" x="15" y="200" width="130" height="64" rx="4"/>
+        <text x="25" y="222">Approved Jira MCP</text><text class="sub" x="25" y="240">existing connection</text><text class="sub" x="25" y="254">own items only</text>
+        <rect class="box-open" x="167" y="200" width="130" height="64" rx="4"/>
+        <text x="177" y="222">ONE read-only tool</text><text class="sub" x="177" y="240">name: OPEN until</text><text class="sub" x="177" y="254">/mcp is inspected</text>
+        <rect class="box" x="319" y="200" width="130" height="64" rx="4"/>
+        <text x="329" y="222">Claude Agent SDK</text><text class="sub" x="329" y="240">src/live.ts</text><text class="sub" x="329" y="254">no built-in tools</text>
+        <rect class="box" x="471" y="200" width="130" height="64" rx="4"/>
+        <text x="481" y="222">Same schema</text><text class="sub" x="481" y="240">src/brief.ts</text><text class="sub" x="481" y="254">reject if invalid</text>
+        <rect class="box" x="623" y="200" width="130" height="64" rx="4"/>
+        <text x="633" y="222">Same renderer</text><text class="sub" x="633" y="240">src/render.ts</text>
+        <rect class="box-out" x="775" y="200" width="130" height="64" rx="4"/>
+        <text x="785" y="222">Host writer</text><text class="sub" x="785" y="240">~/.bree/briefs/</text><text class="sub" x="785" y="254">YYYY-MM-DD.html</text>
+        <path class="arrow" d="M145 232 H165" marker-end="url(#head)"/>
+        <path class="arrow" d="M297 232 H317" marker-end="url(#head)"/>
+        <path class="arrow" d="M449 232 H469" marker-end="url(#head)"/>
+        <path class="arrow" d="M601 232 H621" marker-end="url(#head)"/>
+        <path class="arrow" d="M753 232 H773" marker-end="url(#head)"/>
+
+        <path class="same" d="M536 104 V200"/>
+        <path class="same" d="M688 104 V200"/>
+        <text class="sub" x="546" y="158">same code</text>
+        <text class="sub" x="698" y="158">same code</text>
+        <text class="lane" x="15" y="304">Only the host process writes a file. The model returns data, never a file. Dashed outline = unknown until a person checks it.</text>
+      </svg>
+      <figcaption>The two routes meet at the schema and the renderer. That is why a synthetic pass proves the page and a live run proves the source, and neither proves the other.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>What the brief must contain (the full DailyBrief schema)</h2>
+    <div class="table-scroll">
+      <table>
+        <caption>Fields in order, from docs/spec.md</caption>
+        <thead><tr><th scope="col">Field</th><th scope="col">Type</th><th scope="col">Rule that protects the reader</th></tr></thead>
+        <tbody>
+          <tr><td><code>title</code></td><td>string</td><td>Not empty</td></tr>
+          <tr><td><code>date</code></td><td><code>YYYY-MM-DD</code></td><td>Names the artifact day and the dated file name</td></tr>
+          <tr><td><code>greeting</code></td><td>string</td><td>Not empty; carries no work claim</td></tr>
+          <tr><td><code>summary</code></td><td>one item</td><td>Sourced opening context</td></tr>
+          <tr><td><code>moveWorkForward</code></td><td>one item</td><td>One best-supported action</td></tr>
+          <tr><td><code>topTodos</code></td><td>non-empty list of items</td><td>Keeps uncertainty visible</td></tr>
+          <tr><td><code>newUpdates</code></td><td>non-empty list of items</td><td>Claims no unsourced action</td></tr>
+          <tr><td><code>yourDay</code></td><td>non-empty list of items</td><td>Sourced, time-bound work</td></tr>
+          <tr><td><code>sources</code></td><td>list of <code>{ id, label }</code></td><td>Every <code>sourceIds</code> entry must resolve here</td></tr>
+          <tr><td>item</td><td><code>{ status, text, sourceIds }</code></td><td><code>READY</code>, <code>OPEN</code> or <code>CONFLICT</code>. READY and CONFLICT need at least one source ID. OPEN text starts <code>OPEN</code>. CONFLICT text starts <code>CONFLICT</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Scope</h2>
+    <ul>
+      <li><strong>In scope:</strong> synthetic fixtures, the schema, one renderer, one bounded SDK route with one exact read-only tool, a host writer, repeatable proof, a trigger proposal.</li>
+      <li><strong>Out of scope:</strong> writing to a source, sending messages, changing tickets, work email, public deployment, storing raw connector output, installing a scheduler.</li>
+      <li><strong>Assumption:</strong> the approved Jira connection and the approved Vertex route may not exist in a session. Then live proof stays <span class="open">OPEN</span>.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Execution map and the evidence each step leaves</h2>
+    <div class="table-scroll">
+      <table>
+        <caption>Eight steps in dependency order. Paths are relative to the repository root.</caption>
+        <thead><tr><th scope="col">#</th><th scope="col">Step</th><th scope="col">Files</th><th scope="col">Proof command</th><th scope="col">Evidence after the step</th><th scope="col">Approval point</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>A4 P1 renderer</td><td><code>test/render.test.ts</code>, <code>src/render.ts</code>, <code>src/main.ts</code></td><td><code>npm run test:render &amp;&amp; npm run brief:sample</code></td><td>Red then green exit codes; <code>out/latest.html</code> with every section</td><td>Maya accepts this plan before step 1</td></tr>
+          <tr><td>2</td><td>A4 P2 one house-style detail</td><td><code>test/render.test.ts</code>, <code>src/render.ts</code></td><td><code>npm run test:render &amp;&amp; npm run brief:sample</code></td><td>Failing test first, then green; whole brief still renders</td><td>Maya names the change</td></tr>
+          <tr><td>3</td><td>A5 P1 live boundary tests</td><td><code>test/live.test.ts</code></td><td><code>npm run test:live</code></td><td>Expected red failure</td><td>Maya approves tests and the one exact tool</td></tr>
+          <tr><td>4</td><td>A5 P2 bounded SDK route</td><td><code>src/live.ts</code>, <code>.bree.local.json</code> (ignored)</td><td><code>npm run test:live &amp;&amp; npm run live:check</code></td><td>Green tests; <code>READY</code> or exact <span class="open">OPEN</span> reason; no source contacted</td><td>A person approves before the live run</td></tr>
+          <tr><td>5</td><td>A5 P3 private live run</td><td><code>~/.bree/briefs/YYYY-MM-DD.html</code> (outside the repository)</td><td><code>npm run brief:live</code></td><td>Only <code>PASS</code> or <code>OPEN</code> recorded; contents never copied</td><td>A person runs it; the agent never does</td></tr>
+          <tr><td>6</td><td>A6 P1 three evidence cases</td><td><code>test/eval.test.ts</code></td><td><code>npm run eval</code></td><td>Complete, OPEN and CONFLICT outcomes</td><td>Maya reads the three outcomes</td></tr>
+          <tr><td>7</td><td>A6 P2 verification skill</td><td><code>.claude/skills/verify-bree/</code>, <code>docs/evidence.md</code></td><td><code>npm run typecheck</code>, <code>npm test</code>, <code>npm run eval</code>, <code>npm run brief:sample</code>, then <code>npm run live:check</code></td><td>Real commands and exit codes in <code>docs/evidence.md</code></td><td>Maya reads the evidence diff</td></tr>
+          <tr><td>8</td><td>A6 P3 trigger proposal</td><td><code>docs/gate.md</code></td><td><code>git diff --stat</code></td><td>Only documents change; no scheduler exists</td><td>Maya approves the proposal; nothing is activated</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Risks and how each is undone</h2>
+    <div class="table-scroll">
+      <table>
+        <caption>Rollback for any step: <code>git revert --no-edit</code> on that step's commit.</caption>
+        <thead><tr><th scope="col">Risk</th><th scope="col">Signal</th><th scope="col">Response</th><th scope="col">Rollback</th></tr></thead>
+        <tbody>
+          <tr><td>Untrusted text becomes HTML</td><td>Test string with markup appears unescaped</td><td>Escape every text and label in the renderer</td><td>Revert step 1; <code>rm -rf out</code></td></tr>
+          <tr><td>A second tool or a write path is reachable</td><td><code>canUseTool</code> allows another name</td><td>Deny by default; tests reject any other tool</td><td>Revert step 4; <code>rm .bree.local.json</code></td></tr>
+          <tr><td>The model invents a fact</td><td>READY item without a resolvable source ID</td><td>Schema rejects it; item becomes OPEN</td><td>Revert the step that introduced it</td></tr>
+          <tr><td>Synthetic proof is read as live proof</td><td>A claim cites <code>brief:sample</code> for source access</td><td>Record live status as PASS or OPEN only</td><td>Correct <code>docs/evidence.md</code></td></tr>
+          <tr><td>A private page is left behind</td><td>File under <code>~/.bree/briefs/</code></td><td>Keep outside the repository</td><td><code>rm ~/.bree/briefs/YYYY-MM-DD.html</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Open questions</h2>
+    <p class="note"><strong>Blocker (step 3):</strong> <span class="open">OPEN</span> the exact Jira read-tool name and the issue-key field of its structured result. Owner: Maya with the tool owner, after inspecting <code>/mcp</code>.</p>
+    <p class="note"><strong>Blocker (step 4):</strong> <span class="open">OPEN</span> whether the approved Vertex route is available in this session (<code>/status</code>). Without it, model-assisted live work stays OPEN.</p>
+    <p class="note"><strong>Not a blocker (step 8):</strong> <span class="open">OPEN</span> which local trigger the organisation approves. A proposal only; nothing is installed.</p>
+  </section>
+</main>
+</body>
+</html>
