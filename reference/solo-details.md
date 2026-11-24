@@ -3,7 +3,7 @@
 The prompts in `SOLO.md` use the six lines of Day 1: Goal, Context, Constraints, Done when, Output, Check. They are short.
 This file holds the exact requirements of each part. Claude Code reads the section that the prompt names.
 
-The sentences below are the requirements of the long prompts that were used until November 2026. You can also paste a whole section as your prompt. That gives the same result.
+The sentences below are the requirements of the long prompts that were used until November 2026.
 
 ## A1 Part 1
 
@@ -59,7 +59,7 @@ The sentences below are the requirements of the long prompts that were used unti
 
 - Read the accepted docs/plan.md, docs/spec.md, and reference/dia-to-bree.md.
 - Write test/render.test.ts first and run npm run test:render to show the expected red failure.
-- Build src/render.ts and a sample-only src/main.ts.
+- Build src/render.ts and a sample-only src/main.ts. npm run brief:sample prints the output path and one source line, for example `source: sample/brief.sample.json (synthetic)`.
 - Render the complete DailyBrief schema as one readable HTML page with title, date, greeting, summary, move-work-forward action, top todos, new updates, your day, sources, and visible OPEN states.
 - Include the fixed public illustration https://picsum.photos/seed/bree-morning/1200/400 with empty alt text, referrerpolicy="no-referrer", and stable visible fallback text.
 - Keep it outside the DailyBrief contract, put no work data in its URL, and keep the brief usable when the image fails.
@@ -123,6 +123,6 @@ The sentences below are the requirements of the long prompts that were used unti
 ## A6 Part 3
 
 - Propose one organisation-approved local daily trigger with its command, working directory, logs, rollback, and owner, but do not install or activate a scheduler.
-- Mark the live connector and dated artifact OPEN unless you privately ran them with approved access.
+- Mark the live connector and dated artifact OPEN unless I tell you that I ran them with approved access.
 - Show the evidence diff and stop for approval.
 - Do not publish anything.
