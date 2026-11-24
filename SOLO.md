@@ -22,6 +22,14 @@ Run every command from the project folder, `aetherlink-daily-brief-lab-s1`. It i
 
 The slides name each prompt `SOLO N`, or `SOLO N · Part M`. That is Assignment N, Part M in this file.
 
+Save your work after every part that you accept. A commit is a saved version of the project:
+
+```bash
+git add -A && git commit -m "A1 P1"
+```
+
+Change the message for each part: `A1 P2`, `A2 P1`, and so on. Assignment 6 compares your last two commits, so it needs these saved versions. If Git asks who you are, run `git config user.name "Your name"` and `git config user.email "you@example.com"` once.
+
 ```bash
 npm ci
 claude --setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome
@@ -93,7 +101,7 @@ Keep the working mini route. Reverse engineer the safe structure of a useful Dai
 > Read the accepted intent.md, reference/dia-to-bree.md, reference/brief-example.md, and sample/brief.sample.json. Reverse engineer only the safe structural pattern: title, date, greeting, summary, one move-work-forward action, top todos, new updates, your day, and sources. Draft docs/spec.md with the complete DailyBrief schema. Title and greeting are strings; date uses YYYY-MM-DD. Summary and moveWorkForward are single items. TopTodos, newUpdates, and yourDay are non-empty item arrays. Every item has status READY, OPEN, or CONFLICT, text, and sourceIds. READY and CONFLICT items have at least one source ID; OPEN may have none. Every sourceId resolves in sources, whose entries have id and label. OPEN text starts OPEN; CONFLICT text starts CONFLICT. Stop for my approval.
 
 ```text
-/eli5 Explain my brief contract and its red-then-green test. Name what each field protects. Do not edit files.
+/eli5 Explain my brief contract. Name what each field and status protects. Do not edit files.
 ```
 
 Approve the contract or request one precise revision.
@@ -202,7 +210,7 @@ Run the preflight:
 npm run live:check
 ```
 
-If it reports `OPEN`, record the missing approval or configuration.
+If it reports `OPEN`, record the missing approval or configuration. `OPEN` ends with an exit code that is not 0. That is the honest status, not a broken build.
 
 ### Part 3: create the private live brief
 
@@ -283,6 +291,8 @@ Choose one mission:
 - Mock Outlook: summarise one synthetic work request from `sample/outlook-email.sample.json`.
 
 Start with one approved source and one owner-confirmed read-only tool. Add another source only after the first mission is proven.
+
+The Jira, GitLab and Confluence missions need a session that loads that approved source. Ask the trainer. Without one, choose the mock Outlook mission and start Claude Code with the command from "Start synthetic work".
 
 The mock Outlook mission is different. It uses the synthetic fixture only. It does not connect Outlook or read work email.
 

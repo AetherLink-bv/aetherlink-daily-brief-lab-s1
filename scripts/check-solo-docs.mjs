@@ -84,7 +84,8 @@ assert.match(files["SOLO.md"], /stable visible fallback text/);
 assert.match(files["SOLO.md"], /Never reconstruct historical raw logs or record live connector contents/);
 assert.match(files["reference/dia-to-bree.md"], /not AI-generated, a source, or business evidence/);
 
-for (const path of ["README.md", "SOLO.md", "intent.md", "docs/spec.md", "docs/design.md", "docs/plan.md", "docs/prompts.md", "course/index.html"]) {
+// A participant rewrites intent.md, docs/spec.md, docs/design.md and docs/plan.md, so only the files they do not rewrite must keep the link.
+for (const path of ["README.md", "SOLO.md", "docs/prompts.md", "course/index.html"]) {
   assert.match(files[path], /voice-extension\.md/, `${path} must link to the optional voice extension`);
 }
 
@@ -110,9 +111,8 @@ for (const name of ["mini", "test:mini", "test:schema", "test:render", "eval", "
   assert.ok(scripts[name], `package.json is missing ${name}`);
 }
 
-const isTrainerSolution = /TRAINER EXAMPLE/.test(files["intent.md"]);
-assert.equal(await exists("src/voice.ts"), isTrainerSolution, "only the trainer solution contains src/voice.ts");
-assert.equal(await exists("test/voice.test.ts"), isTrainerSolution, "only the trainer solution contains test/voice.test.ts");
+// The optional voice extension tells a participant to make both files, so they may exist. They exist together.
+assert.equal(await exists("src/voice.ts"), await exists("test/voice.test.ts"), "src/voice.ts and test/voice.test.ts exist together");
 
 await Promise.all([
   access(".bree.example.json"),

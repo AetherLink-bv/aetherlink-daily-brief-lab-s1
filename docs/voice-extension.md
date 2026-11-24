@@ -99,7 +99,7 @@ Record only the command, exit code, output path, and synthetic input label in `d
 
 ## Troubleshooting
 
-- **Missing key before the request:** confirm `.env.local` contains `ELEVENLABS_API_KEY` and the package script loads that file. Never print the value.
+- **Missing key before the request:** confirm `.env.local` contains `ELEVENLABS_API_KEY` and `src/voice.ts` loads that file. Never print the value.
 - **401:** create or copy the key again, then confirm the request uses the exact `xi-api-key` header.
 - **402 or quota error:** stop. The account has insufficient credits. Skip the optional extension or wait for the quota to reset.
 - **403:** confirm the key allows Text to Speech and the selected model is available on the account.
