@@ -299,7 +299,7 @@ Choose one mission:
 
 Start with one approved source and one owner-confirmed read-only tool. Add another source only after the first mission is proven.
 
-The Jira, GitLab and Confluence missions need a session that loads that approved source from your organisation. The trainer cannot provide it. Without one, choose the mock Outlook mission (a made-up email in the project) and start Claude Code with the `claude --setting-sources …` command from "Start synthetic work".
+For the Jira mission, start Claude Code with the `--mcp-config "$AETHERLINK_JIRA_MCP_CONFIG"` command from Assignment 5. The GitLab and Confluence missions need a session that loads that approved source from your organisation. The trainer cannot provide it. Without one, choose the mock Outlook mission (a made-up email in the project) and start Claude Code with the `claude --setting-sources …` command from "Start synthetic work".
 
 The mock Outlook mission is different. It uses the synthetic fixture only. It does not connect Outlook or read work email.
 
