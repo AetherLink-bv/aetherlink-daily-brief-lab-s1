@@ -42,3 +42,13 @@ The temporary checkouts ended clean: after `git worktree remove` twice, `git sta
 - `OPEN` states: the brief shows the item text and the state label; the reference example shows the same two.
 - The sample brief's title is `The Wednesday Brief`, dated 2026-11-18. The reference example is `Maya's Daily Brief`, dated 2026-11-21. The three eval fixtures use the reference title and date.
 - Live source: no Jira tool was inspected (`/mcp` unavailable), so the live route has only mocked evidence.
+
+## Optional voice extension (synthetic, mocked)
+
+| Claim | Command | Exit code | Output line quoted | Status |
+| --- | --- | --- | --- | --- |
+| The voice route works against a mocked response and spends no credits | `npm run test:voice` | 0 | `ℹ pass 9` | PASS |
+| One spoken synthetic brief exists | `npm run brief:voice` | not run | not run (no personal key, no account) | OPEN |
+| `npm run docs:check` after adding `src/voice.ts` | `npm run docs:check` | 1 | `AssertionError [ERR_ASSERTION]: only the trainer solution contains src/voice.ts` | FAIL (the repository's own check forbids the file the extension tells the participant to create) |
+
+Input label for any future run: `sample/brief.sample.json` (synthetic). The key, request text and audio are not recorded.
