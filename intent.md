@@ -6,10 +6,10 @@ Status: `TEMPLATE — complete before the spec`
 
 ### User and decision
 
-- User: `TEMPLATE — who reads the morning brief.`
-- Decision: `TEMPLATE — the first decision this person must make.`
+- User: Maya, a team member who reads the brief at 08:30.
+- Decision: Which blocker is the top one to bring to the 09:00 stand-up.
 
-`TEMPLATE — one observable result: how a sourced morning signal helps this user make that decision.`
+Observable result: the brief names one blocker with its source ID, so Maya walks into the 09:00 stand-up knowing what to ask for. If no blocker is sourced, the brief says `OPEN` and invents none.
 
 ## Success checks
 
