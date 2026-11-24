@@ -1,4 +1,4 @@
-import { parseBrief, type DailyBrief, type Item } from "./brief.js";
+import { parseBrief, STATUSES, type DailyBrief, type Item } from "./brief.js";
 
 const ILLUSTRATION = "https://picsum.photos/seed/bree-morning/1200/400";
 
@@ -20,6 +20,7 @@ main{max-width:46rem;margin:0 auto;padding:2rem 1.25rem 4rem;overflow-wrap:anywh
 h1{font-size:1.9rem;line-height:1.2;margin:0 0 .3rem}
 h2{font-size:1.15rem;margin:2rem 0 .5rem;padding-top:.8rem;border-top:1px solid var(--rule)}
 .date{color:var(--muted);margin:0}
+.tally{color:var(--muted);font:600 .8rem ui-monospace,Menlo,monospace;margin:0}
 figure{margin:1.2rem 0}
 figure img{display:block;width:100%;height:auto;max-height:12rem;object-fit:cover;background:var(--surface);border-radius:6px}
 figcaption{color:var(--muted);font-size:.85rem;margin-top:.3rem}
@@ -50,6 +51,8 @@ function renderItem(item: Item, labels: Map<string, string>): string {
 export function renderBrief(input: DailyBrief): string {
   const brief = parseBrief(input);
   const labels = new Map(brief.sources.map((source) => [source.id, source.label]));
+  const all = [brief.summary, brief.moveWorkForward, ...brief.topTodos, ...brief.newUpdates, ...brief.yourDay];
+  const tally = STATUSES.map((s) => `${all.filter((item) => item.status === s).length} ${s}`).join(" · ");
   const list = (items: Item[]) => `<ul>${items.map((item) => renderItem(item, labels)).join("")}</ul>`;
   return `<!doctype html>
 <html lang="en">
@@ -66,6 +69,7 @@ export function renderBrief(input: DailyBrief): string {
 <h1>${escapeHtml(brief.title)}</h1>
 <p class="date">${escapeHtml(brief.date)}</p>
 <p class="greeting">${escapeHtml(brief.greeting)}</p>
+<p class="tally">${tally}</p>
 </header>
 <figure>
 <img src="${ILLUSTRATION}" alt="" referrerpolicy="no-referrer" width="1200" height="400">

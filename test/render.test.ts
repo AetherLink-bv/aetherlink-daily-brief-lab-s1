@@ -89,6 +89,15 @@ test("invented facts: only brief text, labels and ids appear in the body", async
   assert.ok(!html.includes("CAL-001"));
 });
 
+test("house style: a tally line under the greeting counts items by state", async () => {
+  const brief = await sample();
+  const html = renderBrief(brief);
+  assert.match(html, /<p class="greeting">Good morning, Maya\.<\/p>\s*<p class="tally">5 READY · 1 OPEN · 1 CONFLICT<\/p>/);
+  brief.newUpdates[1] = { status: "READY", text: "A sourced update.", sourceIds: ["jira:DEMO-101"] };
+  brief.topTodos[1] = { status: "READY", text: "A sourced todo.", sourceIds: ["jira:DEMO-101"] };
+  assert.ok(renderBrief(brief).includes('<p class="tally">7 READY · 0 OPEN · 0 CONFLICT</p>'));
+});
+
 test("an unvalidated brief is not rendered", () => {
   assert.throws(() => renderBrief({} as unknown as DailyBrief));
 });
