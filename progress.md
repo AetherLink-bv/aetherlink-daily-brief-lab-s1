@@ -5,7 +5,7 @@ Status per step. VERIFIED means the proof command ran in the current checkout; O
 | Step | Artifact | Proof | Status |
 | --- | --- | --- | --- |
 | 1 | intent.md, sample/calendar-item.sample.json, src/mini.ts, test/mini.test.ts | npm run test:mini && npm run mini | VERIFIED 2026-11-24 (Maya reran both; exit 0) |
-| 2 | docs/spec.md, src/brief.ts, sample, test/schema.test.ts | npm test (schema) | OPEN |
+| 2 | docs/spec.md, src/brief.ts, sample, test/schema.test.ts | npm test (schema) | VERIFIED 2026-11-24 (Maya reran `npm run test:schema`; exit 0) |
 | 3 | docs/design.md, docs/decisions/ADR-001, docs/plan.md, offline visual plan | complete route accepted before build | OPEN |
 | 4 | src/render.ts, src/main.ts | npm run brief:sample | OPEN |
 | 5 | synthetic tool tests plus `src/live.ts` and private config | `npm run test:live && npm run live:check`; private live status recorded separately | OPEN |

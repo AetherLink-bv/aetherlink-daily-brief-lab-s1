@@ -1,0 +1,40 @@
+{
+  "title": "The Wednesday Brief",
+  "date": "2026-11-18",
+  "greeting": "Good morning, Maya.",
+  "summary": {
+    "status": "READY",
+    "text": "Your 09:00 stand-up is the first decision point today.",
+    "sourceIds": ["calendar:CAL-001"]
+  },
+  "moveWorkForward": {
+    "status": "READY",
+    "text": "Bring the checkout blocker to the stand-up and ask for an owner.",
+    "sourceIds": ["jira:DEMO-999"]
+  },
+  "topTodos": [
+    {
+      "status": "READY",
+      "text": "Read the latest engineering comment before deciding an owner.",
+      "sourceIds": ["jira:DEMO-101"]
+    }
+  ],
+  "newUpdates": [
+    {
+      "status": "OPEN",
+      "text": "OPEN — email updates are not connected in this workshop.",
+      "sourceIds": []
+    }
+  ],
+  "yourDay": [
+    {
+      "status": "READY",
+      "text": "09:00 Daily stand-up — decide who owns the checkout blocker.",
+      "sourceIds": ["calendar:CAL-001"]
+    }
+  ],
+  "sources": [
+    { "id": "jira:DEMO-101", "label": "Synthetic Jira issue: Checkout blocker" },
+    { "id": "calendar:CAL-001", "label": "Synthetic calendar event: Daily stand-up" }
+  ]
+}
