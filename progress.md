@@ -1,11 +1,11 @@
 # Progress — Daily brief agent lab
 
-Status per step. VERIFIED means the proof command ran in the current checkout; OPEN means not yet.
+Status per assignment. VERIFIED means the proof command ran in the current checkout; OPEN means not yet.
 
-| Step | Artifact | Proof | Status |
+| Assignment | Artifact | Proof | Status |
 | --- | --- | --- | --- |
 | 1 | intent.md, sample/calendar-item.sample.json, src/mini.ts, test/mini.test.ts | npm run test:mini && npm run mini | OPEN |
-| 2 | docs/spec.md, src/brief.ts, sample, test/schema.test.ts | npm test (schema) | OPEN |
+| 2 | docs/spec.md, src/brief.ts, sample, test/schema.test.ts | npm run test:schema | OPEN |
 | 3 | docs/design.md, docs/decisions/ADR-001, docs/plan.md, offline visual plan | complete route accepted before build | OPEN |
 | 4 | src/render.ts, src/main.ts | npm run brief:sample | OPEN |
 | 5 | synthetic tool tests plus `src/live.ts` and private config | `npm run test:live && npm run live:check`; private live status recorded separately | OPEN |

@@ -116,7 +116,7 @@ The optional A7 Outlook mission uses only `sample/outlook-email.sample.json`. It
 ## Files
 
 - `SOLO.md` is the participant route and canonical prompt source.
-- `docs/prompts.md` contains the same six main prompts.
+- `docs/prompts.md` contains the same twelve prompt parts.
 - `intent.md` and `progress.md` record the accepted outcome and current evidence.
 - `docs/` contains the contract, design, plan, decision, evidence, and gate templates.
 - `sample/` contains synthetic data only.

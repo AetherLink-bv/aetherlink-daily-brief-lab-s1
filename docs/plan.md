@@ -6,9 +6,9 @@ Smallest complete slice: `TEMPLATE — full synthetic HTML first, then one exact
 
 ## Ordered steps
 
-| # | Step | Files | Proof command | Expected | Risk |
-| --- | --- | --- | --- | --- | --- |
-| 1 | `TEMPLATE` | `TEMPLATE — exact root-relative paths` | `TEMPLATE` | `TEMPLATE` | `TEMPLATE` |
+| # | Step | Files | Proof command | Expected | Risk | Rollback |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | `TEMPLATE` | `TEMPLATE — exact root-relative paths` | `TEMPLATE` | `TEMPLATE` | `TEMPLATE` | `TEMPLATE — how to undo this step` |
 
 ## Rollback
 
