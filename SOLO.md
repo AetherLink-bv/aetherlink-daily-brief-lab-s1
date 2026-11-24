@@ -217,7 +217,7 @@ If it reports `OPEN`, record the missing approval or configuration. `OPEN` usual
 
 ### Part 3: create the private live brief
 
-**Action:** After a person approves Part 2, run this privately. Do not paste a new prompt into Claude Code.
+**Action:** After a person approves Part 2, run this privately. Without the Jira config, do not run it: record `OPEN`. Do not paste a new prompt into Claude Code.
 
 ```bash
 npm run brief:live

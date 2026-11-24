@@ -65,7 +65,7 @@ Approval of a connector does not automatically approve every model account. Loca
 
 ## Configure the live route
 
-A4 works without an account or network call. Before A5, close the first Claude Code session. Your organisation provides `AETHERLINK_JIRA_MCP_CONFIG`: the path to an existing approved Jira-only MCP configuration. It must be set before the session. The trainer has no access to it and cannot provide it. If it is missing, ask a colleague from your organisation. Until then, start Claude Code again with the first command of this guide, and keep live proof `OPEN`. Do not create a connector or copy the configuration into the repository. Verify the file before the guarded restart:
+A4 works without an account or network call. Before A5, close the first Claude Code session. Your organisation provides `AETHERLINK_JIRA_MCP_CONFIG`: the path to an existing approved Jira-only MCP configuration. It must be set before the session. The trainer has no access to it and cannot provide it. If it is missing, ask a colleague from your organisation. Until then, start Claude Code again with the `claude --setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome` command, and keep live proof `OPEN`. Leave `.bree.local.json` as copied: its status stays `OPEN`. Do not create a connector or copy the configuration into the repository. Verify the file before the guarded restart:
 
 ```bash
 test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" && test -f "$AETHERLINK_JIRA_MCP_CONFIG" && echo "Config found" || echo "Config missing"
