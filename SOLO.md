@@ -22,14 +22,6 @@ Run every command from the project folder, `aetherlink-daily-brief-lab-s1`. It i
 
 The slides name each prompt `SOLO N`, or `SOLO N · Part M`. That is Assignment N, Part M in this file.
 
-Save your work after every part that you accept. A commit is a saved version of the project:
-
-```bash
-git add -A && git commit -m "A1 P1"
-```
-
-Change the message for each part: `A1 P2`, `A2 P1`, and so on. Assignment 6 compares your last two commits, so it needs these saved versions. If Git asks who you are, run `git config user.name "Your name"` and `git config user.email "you@example.com"` once.
-
 ```bash
 npm ci
 claude --setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome
@@ -38,6 +30,15 @@ claude --setting-sources project,user --permission-mode default --strict-mcp-con
 This starts Manual mode and loads no MCP server for A1–A4. Local settings are excluded. Confirm the organisation-approved Vertex route with `/status` before the first prompt. If it is unavailable, keep model-assisted work `OPEN`; manual synthetic checks can continue.
 
 Complete one assignment at a time. Inspect each diff and run the named check yourself before you continue.
+
+Save your work after every part that you accept. A commit is a saved version of the project. Claude Code keeps its own terminal, so open a second terminal window in the project folder and type:
+
+```bash
+git status --short
+git add -A && git commit -m "A1 P1"
+```
+
+The first command lists what changed. Stop if it shows a file that you did not make. Change the message for each part: `A1 P2`, `A2 P1`, and so on. Assignment 6 compares your last two commits, so it needs these saved versions. If Git asks who you are, run `git config user.name "Your name"` and `git config user.email "you@example.com"` once, then run the commit again.
 
 When a named command runs, preserve its synthetic red and green output with the actual exit codes. Never reconstruct historical raw logs or record live connector contents.
 
@@ -210,7 +211,7 @@ Run the preflight:
 npm run live:check
 ```
 
-If it reports `OPEN`, record the missing approval or configuration. `OPEN` ends with an exit code that is not 0. That is the honest status, not a broken build.
+If it reports `OPEN`, record the missing approval or configuration. `OPEN` usually ends with an exit code that is not 0. That is the honest status, not a broken build.
 
 ### Part 3: create the private live brief
 
@@ -292,7 +293,7 @@ Choose one mission:
 
 Start with one approved source and one owner-confirmed read-only tool. Add another source only after the first mission is proven.
 
-The Jira, GitLab and Confluence missions need a session that loads that approved source. Ask the trainer. Without one, choose the mock Outlook mission and start Claude Code with the command from "Start synthetic work".
+The Jira, GitLab and Confluence missions need a session that loads that approved source. Ask the trainer. Without one, choose the mock Outlook mission and start Claude Code with the `claude --setting-sources …` command from "Start synthetic work".
 
 The mock Outlook mission is different. It uses the synthetic fixture only. It does not connect Outlook or read work email.
 

@@ -4,3 +4,9 @@ out/
 .env.*
 .bree.local.json
 *.log
+.DS_Store
+.vscode/
+.idea/
+.claude/settings.local.json
+.mcp.json
+*.mp3
