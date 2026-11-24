@@ -166,12 +166,14 @@ Optional, when Impeccable is available:
 Close the first Claude Code session. Ask the trainer to make `AETHERLINK_JIRA_MCP_CONFIG` available privately as the path to an existing approved Jira-only MCP configuration. Do not create a connector or copy the configuration into the repository. Verify it before the guarded restart:
 
 ```bash
-test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" &&
-  test -f "$AETHERLINK_JIRA_MCP_CONFIG" &&
-  claude --setting-sources project,user --permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG" --no-chrome
+test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" && test -f "$AETHERLINK_JIRA_MCP_CONFIG" && echo "Config found" || echo "Config missing"
 ```
 
-The two `test` checks print nothing when they pass. If Claude Code does not start and you are back at the terminal prompt, a check failed: keep live proof `OPEN`.
+You see `Config found`. If you see `Config missing`, keep live proof `OPEN` and do not start the live session. After `Config found`, start Claude Code with only that configuration:
+
+```bash
+claude --setting-sources project,user --permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG" --no-chrome
+```
 
 Run `/status` to confirm the approved Vertex route. Then use `/mcp` to inspect the existing approved connection. Local settings are not loaded. If either check fails, keep live proof `OPEN`. Do not install a connector or create a token. Keep the synthetic route for tests.
 
@@ -222,6 +224,8 @@ npm run brief:live
 ```
 
 Open the dated HTML privately. Record only `PASS` or `OPEN` for the source and artifact.
+
+This part changes no file in the project folder, so there is no version to save.
 
 **Visible result:** Synthetic tests pass, exactly one tool is allowed, and the private artifact status is honestly `PASS` or `OPEN`.
 
@@ -293,7 +297,7 @@ Choose one mission:
 
 Start with one approved source and one owner-confirmed read-only tool. Add another source only after the first mission is proven.
 
-The Jira, GitLab and Confluence missions need a session that loads that approved source. Ask the trainer. Without one, choose the mock Outlook mission and start Claude Code with the `claude --setting-sources …` command from "Start synthetic work".
+The Jira, GitLab and Confluence missions need a session that loads that approved source. Ask the trainer. Without one, choose the mock Outlook mission (a made-up email in the project) and start Claude Code with the `claude --setting-sources …` command from "Start synthetic work".
 
 The mock Outlook mission is different. It uses the synthetic fixture only. It does not connect Outlook or read work email.
 
