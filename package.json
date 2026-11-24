@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Daily Brief workshop: build a complete private HTML brief, then optionally query one approved Jira source through company Vertex.",
+  "description": "Daily Brief session: build a complete private HTML brief, then optionally query one approved Jira source through company Vertex.",
   "scripts": {
     "mini": "tsx src/mini.ts sample/calendar-item.sample.json",
     "brief": "tsx src/main.ts --sample",

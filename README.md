@@ -36,6 +36,8 @@ Keep the key in the ignored `.env.local` file. Never paste it into chat, share a
 
 Requirements are Node.js 20.12 or newer, Git, Claude Code, the existing Jira MCP connection, and the approved Anthropic via Vertex route.
 
+The clone makes a new folder, `aetherlink-daily-brief-lab-s1`. That is the project folder, also called the repository root. After the `cd` line you are in that folder. Run every later command from there.
+
 ```bash
 git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
 cd aetherlink-daily-brief-lab-s1
@@ -52,7 +54,7 @@ Read [SOLO.md](SOLO.md). Complete one assignment at a time.
 ## Permission boundary
 
 - Use only the existing approved Jira MCP connection and your own permitted work items.
-- Use only the organisation-approved Anthropic via Vertex model route already configured for the workshop.
+- Use only the organisation-approved Anthropic via Vertex model route already configured for this session.
 - Do not connect work email. Use only sanitised, non-sensitive pasted text when the trainer explicitly asks for it.
 - Keep Bree private. Do not publish live output.
 - Do not store customer data, work data, credentials, connector responses, or live briefs in this repository.
@@ -71,13 +73,15 @@ test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" &&
   claude --setting-sources project,user --permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG" --no-chrome
 ```
 
+The two `test` checks print nothing when they pass. If Claude Code does not start and you are back at the terminal prompt, a check failed.
+
 Run `/status` to confirm the approved Vertex route. Then run `/mcp` and inspect the existing approved Jira connection. If either check fails, keep live proof `OPEN`. Do not install a connector or create a token.
 
 ```bash
 test -f .bree.local.json || cp .bree.example.json .bree.local.json
 ```
 
-Edit the ignored local file with the exact Jira read tool shown by `/mcp`, plus the user and decision. Set all three approval flags to `true` only after the connector, tool-owner read-only status, and model route are confirmed. `.bree.local.json` stores runtime approvals; it is not MCP server configuration. Never create or store a token for this workshop.
+Edit the ignored local file with the exact Jira read tool shown by `/mcp`, plus the user and decision. Set all three approval flags to `true` only after the connector, tool-owner read-only status, and model route are confirmed. `.bree.local.json` stores runtime approvals; it is not MCP server configuration. Never create or store a token for this session.
 
 The Agent SDK starts a separate process. `src/live.ts` must read only the selected server definition from `AETHERLINK_JIRA_MCP_CONFIG` and pass it through the SDK `mcpServers` option. It must set built-in tools to none, enable strict MCP config, and deny every tool except the exact approved Jira tool in `canUseTool`.
 
@@ -95,11 +99,11 @@ npm run brief:live
 
 The host application writes only validated HTML to `~/.bree/briefs/YYYY-MM-DD.html` with private permissions. It does not write raw connector output. The configured client and provider follow company retention policy. Do not record or commit live contents.
 
-A6 may propose an organisation-approved local daily trigger. The workshop does not install or activate a scheduler. Automatic daily execution begins only after the participant approves and installs their own trigger.
+A6 may propose an organisation-approved local daily trigger. This session does not install or activate a scheduler. Automatic daily execution begins only after the participant approves and installs their own trigger.
 
 ## Project skills
 
-The repository includes the core workshop skills:
+The repository includes the core skills for this session:
 
 - `/visual-plan` creates the A3 offline review artifact.
 - `/create-verification-skill` generates the A6 project-specific `verify-bree` skill.

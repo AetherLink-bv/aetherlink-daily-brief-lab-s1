@@ -93,7 +93,7 @@ Do not commit the MP3. The existing `out/` ignore rule keeps it outside Git.
 - The HTML brief still passes its tests and opens unchanged.
 - `git status --short` shows no key, MP3, live data, or private brief.
 
-Delete the `Bree workshop` key after the workshop if you will not use it again.
+Delete the `Bree workshop` key after the session if you will not use it again.
 
 Record only the command, exit code, output path, and synthetic input label in `docs/evidence.md`. Do not record the key, request body, audio contents, or account details.
 
@@ -103,7 +103,7 @@ Record only the command, exit code, output path, and synthetic input label in `d
 - **401:** create or copy the key again, then confirm the request uses the exact `xi-api-key` header.
 - **402 or quota error:** stop. The account has insufficient credits. Skip the optional extension or wait for the quota to reset.
 - **403:** confirm the key allows Text to Speech and the selected model is available on the account.
-- **429:** wait for the current request to finish, then retry once. Do not add an automatic retry loop during the workshop.
+- **429:** wait for the current request to finish, then retry once. Do not add an automatic retry loop during this session.
 - **No MP3:** inspect the status and `content-type` without printing the request text or key. Keep the previous HTML artifact.
 
 If the account or API is unavailable, mark the voice artifact `OPEN`. The completed HTML brief remains the accepted product.

@@ -15,7 +15,7 @@ Read against: `intent.md` at revision `TEMPLATE`
 
 Private dated artifact: `PASS | OPEN — record only ~/.bree/briefs/YYYY-MM-DD.html and never paste its contents here.`
 
-Local daily trigger proposal: `ACCEPTED | OPEN — proposal only. No scheduler is installed by the workshop.`
+Local daily trigger proposal: `ACCEPTED | OPEN — proposal only. No scheduler is installed in this session.`
 
 ## What the human read
 
