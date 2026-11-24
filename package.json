@@ -8,6 +8,7 @@
     "mini": "tsx src/mini.ts sample/calendar-item.sample.json",
     "brief": "tsx src/main.ts --sample",
     "brief:sample": "tsx src/main.ts --sample",
+    "outlook": "tsx src/outlook.ts sample/outlook-email.sample.json",
     "brief:voice": "node --import tsx src/voice.ts",
     "brief:live": "tsx src/live.ts",
     "live:check": "tsx src/live.ts --check",

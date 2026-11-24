@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outlook request mission: visual plan</title>
+<style>
+  :root { --bg:#fbfbfa; --fg:#1c1c1a; --muted:#5f5f5a; --rule:#dcdcd6; --surface:#f1f1ed; --warn:#9a5b00; --ok:#1f7a4d;
+    --sans: ui-sans-serif, system-ui, sans-serif; --mono: ui-monospace, Menlo, monospace; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#141413; --fg:#ececea; --muted:#a3a39c; --rule:#33332f; --surface:#1d1d1b; --warn:#e0a64a; --ok:#5cc28c; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.55 var(--sans); }
+  main { max-width:50rem; margin:0 auto; padding:2rem 1.25rem 4rem; }
+  h1 { font-size:1.7rem; line-height:1.2; margin:0 0 .4rem; }
+  h2 { font-size:1.15rem; margin:2rem 0 .5rem; padding-top:.8rem; border-top:1px solid var(--rule); }
+  dl.meta { display:grid; grid-template-columns:max-content 1fr; gap:.2rem 1rem; color:var(--muted); font-size:.9rem; }
+  dl.meta dt { font-weight:600; } dl.meta dd { margin:0; }
+  code { font-family:var(--mono); font-size:.88em; }
+  table { width:100%; border-collapse:collapse; font-size:.9rem; }
+  caption { text-align:left; font-weight:600; padding-bottom:.4rem; }
+  th, td { text-align:left; vertical-align:top; padding:.45rem .5rem; border-bottom:1px solid var(--rule); }
+  th { color:var(--muted); font-weight:600; }
+  .table-scroll { overflow-x:auto; }
+  .open { font-weight:600; color:var(--warn); }
+  figure { margin:1.2rem 0; } figcaption { color:var(--muted); font-size:.88rem; } figure svg { width:100%; height:auto; }
+  svg .box { fill:var(--surface); stroke:var(--fg); stroke-width:1.2; }
+  svg .out { fill:var(--surface); stroke:var(--ok); stroke-width:1.6; }
+  svg .dash { fill:var(--surface); stroke:var(--warn); stroke-width:1.6; stroke-dasharray:5 3; }
+  svg text { fill:var(--fg); font:12px var(--sans); } svg text.sub { fill:var(--muted); font:10.5px var(--mono); }
+  svg .arrow { stroke:var(--fg); stroke-width:1.4; fill:none; } svg marker path { fill:var(--fg); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Mission: summarise one synthetic work request</h1>
+    <p>Read one synthetic email, say what is requested and by when in one sourced line, and keep a missing deadline <span class="open">OPEN</span>.</p>
+    <dl class="meta">
+      <dt>Status</dt><dd>Accepted plan (A7)</dd>
+      <dt>Branch</dt><dd><code>run/day5-real-run</code></dd>
+      <dt>Updated</dt><dd>24 Nov 2026</dd>
+      <dt>Sources</dt><dd><code>docs/missions/outlook-request/intent.md</code>, <code>contract.md</code>, <code>design.md</code></dd>
+      <dt>Data</dt><dd>Synthetic fixture only. No Outlook, no work email, no live data.</dd>
+    </dl>
+  </header>
+
+  <section>
+    <h2>The route in one picture</h2>
+    <figure>
+      <svg viewBox="0 0 900 250" role="img" aria-labelledby="t d">
+        <title id="t">Deterministic summary route and the bounded SDK route</title>
+        <desc id="d">Top lane: synthetic email fixture, summariser, item, printed line. Bottom lane: untrusted email text, Agent SDK with no tools and no MCP, structured item, output check against the message ID.</desc>
+        <defs><marker id="h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z"/></marker></defs>
+        <rect class="box" x="15" y="30" width="190" height="64" rx="4"/><text x="25" y="52">Synthetic email</text><text class="sub" x="25" y="70">sample/outlook-email.</text><text class="sub" x="25" y="84">sample.json</text>
+        <rect class="box" x="245" y="30" width="190" height="64" rx="4"/><text x="255" y="52">Summariser</text><text class="sub" x="255" y="70">src/outlook.ts</text><text class="sub" x="255" y="84">refuses non-synthetic</text>
+        <rect class="box" x="475" y="30" width="190" height="64" rx="4"/><text x="485" y="52">Item (READY or OPEN)</text><text class="sub" x="485" y="70">ItemSchema, src/brief.ts</text>
+        <rect class="out" x="705" y="30" width="180" height="64" rx="4"/><text x="715" y="52">One printed line</text><text class="sub" x="715" y="70">npm run outlook</text>
+        <path class="arrow" d="M205 62 H243" marker-end="url(#h)"/><path class="arrow" d="M435 62 H473" marker-end="url(#h)"/><path class="arrow" d="M665 62 H703" marker-end="url(#h)"/>
+        <rect class="box" x="15" y="150" width="190" height="64" rx="4"/><text x="25" y="172">Email text as data</text><text class="sub" x="25" y="190">marked untrusted</text>
+        <rect class="dash" x="245" y="150" width="190" height="64" rx="4"/><text x="255" y="172">Agent SDK, no tools</text><text class="sub" x="255" y="190">defined, not run</text><text class="sub" x="255" y="204">no MCP, deny all</text>
+        <rect class="box" x="475" y="150" width="190" height="64" rx="4"/><text x="485" y="172">Structured item</text><text class="sub" x="485" y="190">same item shape</text>
+        <rect class="out" x="705" y="150" width="180" height="64" rx="4"/><text x="715" y="172">Output check</text><text class="sub" x="715" y="190">only the message ID</text>
+        <path class="arrow" d="M205 182 H243" marker-end="url(#h)"/><path class="arrow" d="M435 182 H473" marker-end="url(#h)"/><path class="arrow" d="M665 182 H703" marker-end="url(#h)"/>
+      </svg>
+      <figcaption>Dashed outline: defined and tested with mocks, never run against a model in this session.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Steps and the evidence each leaves</h2>
+    <div class="table-scroll">
+      <table>
+        <caption>Steps in order</caption>
+        <thead><tr><th scope="col">#</th><th scope="col">Step</th><th scope="col">Files</th><th scope="col">Check</th><th scope="col">Evidence</th><th scope="col">Approval</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Intent, contract, design</td><td><code>docs/missions/outlook-request/*.md</code></td><td><code>npm run docs:check</code></td><td>exit code</td><td>Maya accepts</td></tr>
+          <tr><td>2</td><td>Red test</td><td><code>test/tool.test.ts</code></td><td><code>npm run test:tool</code></td><td>red exit code</td><td>Maya reads the failure</td></tr>
+          <tr><td>3</td><td>Summariser and SDK options</td><td><code>src/outlook.ts</code>, <code>package.json</code></td><td><code>npm run test:tool</code></td><td>green exit code</td><td>Maya reads the diff</td></tr>
+          <tr><td>4</td><td>One synthetic journey</td><td>none</td><td><code>npm run outlook</code></td><td>output line</td><td>none</td></tr>
+          <tr><td>5</td><td>Live access</td><td>none</td><td>none</td><td><span class="open">OPEN</span> by design: no source exists</td><td>n/a</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Open questions</h2>
+    <p><span class="open">OPEN</span> the bounded SDK route has not been run against a model. Owner: Maya, in a session that has the approved model route.</p>
+  </section>
+</main>
+</body>
+</html>
