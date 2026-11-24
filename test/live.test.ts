@@ -89,8 +89,8 @@ test("a truthy string is not an approval: flags must be the boolean true", async
 test("canUseTool allows exactly the approved tool", async () => {
   const canUse = makeCanUseTool(TOOL);
   const signal = new AbortController().signal;
-  const allowed = await canUse(TOOL, { jql: "synthetic" }, { signal, toolUseID: "t1" });
-  assert.equal(allowed.behavior, "allow");
+  const allowed = await canUse(TOOL, { jql: "synthetic" }, { signal, toolUseID: "t1", requestId: "r1" });
+  assert.equal(allowed?.behavior, "allow");
 });
 
 test("canUseTool denies every unexpected tool, including near misses", async () => {
@@ -101,8 +101,8 @@ test("canUseTool denies every unexpected tool, including near misses", async () 
     "mcp__jira__synthetic_update_issue",
     `${TOOL}_x`, `x${TOOL}`, TOOL.toUpperCase(), ` ${TOOL}`, "mcp__other__synthetic_search_own_issues", "",
   ]) {
-    const result = await canUse(name, {}, { signal, toolUseID: "t" });
-    assert.equal(result.behavior, "deny", `must deny ${JSON.stringify(name)}`);
+    const result = await canUse(name, {}, { signal, toolUseID: "t", requestId: "r" });
+    assert.equal(result?.behavior, "deny", `must deny ${JSON.stringify(name)}`);
   }
 });
 
