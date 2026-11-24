@@ -70,7 +70,7 @@ These skills are already included in the repository. Do not install a separate s
 | A1 | `/grilling` | Challenge the user, decision, and boundary | Focused questions before any edit |
 | A2 | `/eli5` | Explain the contract in plain language | A field-by-field explanation |
 | A3 | `/visual-plan` | Make the accepted route reviewable | One offline HTML plan |
-| A4 | `/verify-this` | Prove the synthetic artifact | Exit code, output path, source, and `OPEN` behavior |
+| A4 | `/verify-this` | Prove the synthetic artifact | Exit code, output path, and source line |
 | A5 | `/eli5` | Explain the live source boundary | A plain-language boundary check |
 | A6 | `/create-verification-skill` | Make the proof repeatable | A repository-specific verification skill |
 | A7 | `/handoff` | Continue your own mission safely | The full fresh-session prompt in chat |
@@ -154,7 +154,7 @@ Use manual mode. This assignment builds the visible result with synthetic input.
 > Goal: the sample brief becomes one HTML page at out/latest.html. Context: docs/plan.md, docs/spec.md and reference/solo-details.md, section A4 Part 1. Constraints: no code before its test is red; no model call and no live data; do not go on after the diff. Done when: npm run test:render is green and npm run brief:sample writes the page. Output: the red run, the green run and the diff. Check: real output only; mark doubts as OPEN.
 
 ```text
-/verify-this Prove that npm run brief:sample writes out/latest.html from synthetic data. Show the exit code, output path, source label, and unavailable-source behavior.
+/verify-this Prove that npm run brief:sample writes out/latest.html from synthetic data. Show the exit code, the output path, and the source line that it prints.
 ```
 
 Optional, when Impeccable is available:
