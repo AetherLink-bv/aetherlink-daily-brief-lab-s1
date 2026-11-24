@@ -43,6 +43,16 @@ Observable result: the brief names one blocker with its source ID, so Maya walks
 
 - `TEMPLATE — every unknown, one per line. Unknowns are written down, not guessed.`
 
+## Next iteration
+
+Observed result: `npm run live:check` exited 3 and printed `OPEN — live source proof is not ready:` with five reasons (approvals false, Jira tool placeholder, `AETHERLINK_JIRA_MCP_CONFIG` not set).
+
+- Command: `npm run live:check`
+- One safe output signal: the first line, `OPEN — live source proof is not ready:`, followed by reason lines that name configuration fields only, never source content.
+- Remaining risk: live access is unproven. No Jira tool was inspected with `/mcp`, so the exact read-only tool and its issue-key field are unknown. `READY` would still not prove authentication or source access.
+- One improvement: with the trainer-provided `AETHERLINK_JIRA_MCP_CONFIG`, inspect `/mcp`, record the exact read-only tool name in the ignored `.bree.local.json`, and set the three approvals only after each is confirmed.
+- One check: `npm run live:check` prints `READY` and exits 0 on the participant's own machine, followed by one private `npm run brief:live` whose status is recorded as `PASS` or `OPEN` only.
+
 ## Optional extension after the core route
 
 The [voice extension](docs/voice-extension.md) is not part of the accepted Bree outcome. Start it only after A7 and the Maintain loop. It uses synthetic data, a personal ElevenLabs account, and a key stored only in ignored `.env.local`. It never reads or speaks live work data.

@@ -20,11 +20,18 @@ Exit code 3 for `live:check` is this repository's choice (`EXIT_OPEN` in `src/li
 
 ## Fresh local checkout
 
-`OPEN — filled in A6 Part 3, which runs the previous and current commits in temporary worktrees.`
+Two temporary worktrees next to the project folder, 2026-11-24: `../daily-brief-previous` at `edfac27` (A6 P2, `HEAD^`) and `../daily-brief-current` at `3fddd63` (the A6 P3 commit before this evidence was added, `HEAD`).
+
+| Folder | Commands | Exit code | Output line quoted |
+| --- | --- | --- | --- |
+| previous | `npm ci && npm run typecheck && npm test && npm run brief:sample` | 0 | `source: sample/brief.sample.json (synthetic)`; `ℹ pass 49` |
+| current | `npm ci && npm run typecheck && npm test && npm run eval && npm run brief:sample` | 0 | `source: sample/brief.sample.json (synthetic)`; `ℹ pass 4` (eval) |
+
+Both folders listed `out/latest.html` before removal. `cmp` reported the two pages identical (the commits differ only in documents), tally `5 READY · 1 OPEN · 1 CONFLICT` in both. Both worktrees were removed; `git worktree list` then shows only the project folder.
 
 ## Rollback proof
 
-`OPEN — filled in A6 Part 3.`
+The temporary checkouts ended clean: after `git worktree remove` twice, `git status --short` printed nothing. A scratch line appended to `docs/evidence.md` showed ` M docs/evidence.md`; `git restore docs/evidence.md` returned `git status --short` to empty (0 lines).
 
 ## Visible result
 

@@ -1,38 +1,53 @@
 # Local delivery gate — Bree
 
-Fresh checkout: `TEMPLATE — local path and revision`
+Fresh checkout: `temporary worktrees at edfac27 (previous) and 3fddd63 (current), both removed afterwards; commands and exit codes in docs/evidence.md`
 
-Read against: `intent.md` at revision `TEMPLATE`
+Read against: `intent.md` at revision `the A6 P3 commit`
 
 ## What the local checks observed
 
 | Check | Observed | Is it an approval? |
 | --- | --- | --- |
-| `npm run eval` | `TEMPLATE — complete, missing, and conflict result` | No |
-| `npm run brief:sample` | `TEMPLATE — out/latest.html and all visible sections` | No |
-| `npm run live:check` | `TEMPLATE — READY or the exact OPEN reason; no network call` | No |
-| `verify-bree` synthetic journey | `TEMPLATE — evidence path retained after cleanup` | No |
+| `npm run eval` | Complete, missing and conflict cases pass (`ℹ pass 4`, exit 0) | No |
+| `npm run brief:sample` | `out/latest.html` written; six sections, source lines, tally and visible `OPEN` and `CONFLICT` items (exit 0) | No |
+| `npm run live:check` | `OPEN`, exit 3: approvals false, tool name not inspected, `AETHERLINK_JIRA_MCP_CONFIG` not set; no network call | No |
+| `verify-bree` synthetic journey | `journey result: PASS`; evidence file kept after cleanup | No |
 
-Private dated artifact: `PASS | OPEN — record only ~/.bree/briefs/YYYY-MM-DD.html and never paste its contents here.`
+Private dated artifact: `OPEN — ~/.bree/briefs/YYYY-MM-DD.html. npm run brief:live was not run. Nothing is recorded about its contents.`
 
-Local daily trigger proposal: `ACCEPTED | OPEN — proposal only. No scheduler is installed in this session.`
+Local daily trigger proposal: `OPEN — proposal only, below. No scheduler is installed or activated in this session.`
+
+## Proposed local daily trigger (not installed)
+
+| Field | Proposal |
+| --- | --- |
+| Trigger | One macOS user LaunchAgent, label `local.bree.daily-brief`, weekdays 08:15, so the brief exists before the 08:30 read. The organisation must confirm that a user LaunchAgent is an approved local scheduler. `OPEN` |
+| Command | `npm run brief:live` |
+| Working directory | The project folder `aetherlink-daily-brief-lab-s1` (the repository root; absolute path set by its owner when installing) |
+| Logs | `~/.bree/logs/daily-brief.out.log` and `daily-brief.err.log`, outside the repository. The command prints only `PASS`, `OPEN` and the artifact path, never source content. |
+| Preconditions | `npm run live:check` prints `READY`; the three approval flags in `.bree.local.json` are true; `AETHERLINK_JIRA_MCP_CONFIG` is available to the job. All `OPEN` today. |
+| Rollback | Unload the agent with `launchctl bootout gui/$(id -u) ~/Library/LaunchAgents/local.bree.daily-brief.plist`, delete that plist, and delete `~/.bree/logs/`. The brief files in `~/.bree/briefs/` can stay or be deleted by their owner. |
+| Owner | Maya (reader and owner of the schedule). The gate owner named in `intent.md` accepts or rejects it. |
+| Stop conditions | `live:check` is `OPEN`; the connector offers write scope; the artifact would land in the repository. |
+
+Live connector: `OPEN`. Dated artifact: `OPEN`. Nothing is published.
 
 ## What the human read
 
-- Success check proven locally: `TEMPLATE — quote the line from intent.md`
-- Boundary touched: `TEMPLATE — quote the line, or NONE`
-- Rollback proof: `TEMPLATE — command and clean status after restore`
+- Success check proven locally: `npm run mini prints one synthetic decision line.` (see intent.md)
+- Boundary touched: `NONE`
+- Rollback proof: `git restore docs/evidence.md` then `git status --short` prints nothing (docs/evidence.md, Rollback proof)
 
 ## Decision
 
-`PASS | FAIL | OPEN` — `TEMPLATE — one sentence, by name, with the date`
+`OPEN` — the synthetic route passes; the live source, the private artifact and the trigger approval are `OPEN`. Maya, 2026-11-24.
 
 ## Handoff
 
-- Receiver: `TEMPLATE — the next person who opens the local folder`
-- Start from: `TEMPLATE — exact local revision`
-- Run: `TEMPLATE — exact read-only command`
-- Compare: `TEMPLATE — expected signal and known limitation`
-- Open work: `TEMPLATE — item, owner, due, stop condition`
+- Receiver: the next person who opens the local folder
+- Start from: the A6 P3 commit on branch `run/day5-real-run`
+- Run: `bash .claude/skills/verify-bree/journey.sh` (read-only apart from `out/`)
+- Compare: `journey result: PASS`, and `live:check` exit 3 until approvals and the Jira tool are confirmed
+- Open work: confirm the Jira read tool with `/mcp` (owner: Maya with the tool owner); approve the trigger type (owner: the organisation); stop condition: any write scope offered
 
 Do not treat this record, an agent claim or historical output as fresh evidence.
