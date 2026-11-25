@@ -84,13 +84,13 @@ test -f .bree.local.json || cp .bree.example.json .bree.local.json
 
 Edit the ignored local file: put in the exact Jira read tool shown by `/mcp`, plus the user and decision. Never create or store a token for this session.
 
-The Agent SDK starts a separate process. `src/live.ts` loads MCP servers only from local settings (`settingSources: ['local']`): that is the Jira server you added in this folder, and no user settings or plugins. It sets built-in tools to none, allows only the exact approved Jira tool, and denies every other tool in `canUseTool` and in a `PreToolUse` hook. The hook also stops a tool that a local allow rule would let through.
+The Agent SDK starts a separate process. In `src/live.ts`, `settingSources: ['local']` selects local SDK settings. Other servers may still be visible to the SDK. Bree disables built-in tools, allows only the exact approved Jira tool, and denies every other tool in `canUseTool` and in a `PreToolUse` hook. The hook also stops a tool that a local allow rule would let through.
 
 ```bash
 npm run live:check
 ```
 
-This is a local preflight. It does not contact the source. A successful preflight still leaves authentication and source access unproven.
+This check runs offline. `READY` means the file names the jira server, a user, a decision and a tool in the expected format. It cannot confirm that the tool exists, only reads, or is accessible to your account. If you cannot confirm the read-only mark in `/mcp`, keep the placeholder and record `OPEN`.
 
 Run the real route privately:
 
