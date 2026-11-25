@@ -32,10 +32,10 @@ Complete one assignment at a time. Inspect each diff and run the named check you
 
 ### How the prompts are written
 
-Each prompt has the six lines of Day 1, with their Day 1 meaning: Goal is the result you want, Context what the model needs to know, Constraints what it must not do, Done when what good looks like, Output the format you want back, and Check how you verify it. The prompts are short. The exact requirements of a part are in `reference/solo-details.md`, and every prompt names its section.
+Each prompt has the six parts of Day 1, with their Day 1 meaning: Goal is the result you want, Context what the model needs to know, Constraints what it must not do, Done when what good looks like, Output the format you want back, and Check how you verify it. The prompts are short. The exact requirements of a part are in `reference/solo-details.md`, and every prompt names its section.
 
 - Assignments 1 and 2, and Assignment 6, Parts 1 and 3: paste the prompt.
-- Assignments 3 and 4, and Assignment 6, Part 2: find the six lines in the prompt, then paste it.
+- Assignments 3 and 4, and Assignment 6, Part 2: find the six parts in the prompt, then paste it.
 - Assignment 5, Parts 1 and 2: write the prompt in a note first, in six lines. Compare it with the prompt in this file. Then send only the prompt in this file.
 
 The prompt in this file is always the backup. It gives every participant the same result.
@@ -130,7 +130,7 @@ Press Shift+Tab until Claude Code shows plan mode. No implementation changes hap
 
 **Where:** Claude Code in plan mode.
 
-**Action:** Find the six lines in the prompt below, then paste it. Review both routes, every proof command, and every rollback before approval.
+**Action:** Find the six parts in the prompt below, then paste it. Review both routes, every proof command, and every rollback before approval.
 
 > Goal: a design, one decision record and a plan for the complete Bree route. Context: intent.md, docs/spec.md and reference/solo-details.md, section A3. Constraints: do not leave plan mode and edit no file before I approve. Done when: every plan step has a path, a proof command and a rollback. Output: the proposal; after my approval, the saved documents and the diff. Check: I approve it, or I ask for one change.
 
@@ -148,7 +148,7 @@ Use manual mode. This assignment builds the visible result with synthetic input.
 
 ### Part 1: build and prove the full brief
 
-**Action:** Find the six lines in Part 1 below, then paste it. Inspect the red test, the green rerun, and the generated page.
+**Action:** Find the six parts in Part 1 below, then paste it. Inspect the red test, the green rerun, and the generated page.
 
 > Goal: the sample brief becomes one HTML page at out/latest.html. Context: docs/plan.md, docs/spec.md and reference/solo-details.md, section A4 Part 1. Constraints: no code before its test is red; no model call and no live data; do not go on after the diff. Done when: npm run test:render is green and npm run brief:sample writes the page. Output: the red run, the green run and the diff. Check: real output only; mark doubts as OPEN.
 
@@ -164,7 +164,7 @@ Optional, when Impeccable is available:
 
 ### Part 2: improve one house-style detail
 
-**Action:** Find the six lines in Part 2 below, then paste it. Accept one small visual change only after its failing test is visible.
+**Action:** Find the six parts in Part 2 below, then paste it. Accept one small visual change only after its failing test is visible.
 
 > Goal: one small house-style change. Context: out/latest.html and reference/solo-details.md, section A4 Part 2. Constraints: no change before I name it; no code before its test is red; no change to the facts or the schema; do not go on after the diff. Done when: npm run test:render and npm run brief:sample pass. Output: the changed detail and the diff. Check: real output only; mark doubts as OPEN.
 
@@ -184,7 +184,7 @@ Start Claude Code again with the same command as at the start. It loads the Jira
 claude --permission-mode default
 ```
 
-Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. No mark? Treat the tool as one that can change something. Manual mode asks before every Jira call: say yes only to a tool that reads. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository. In Assignment 5, tell Claude Code the tool name, or that it is `OPEN`: the tests then use a mocked tool. Keep the synthetic route for tests.
+Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. No mark? Treat the tool as one that can change something. When Claude Code asks for permission, approve only that one read call. Decline any request to allow future calls automatically. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository. In Assignment 5, tell Claude Code the tool name, or that it is `OPEN`: the tests then use a mocked tool. Keep the synthetic route for tests.
 
 **Where:** Claude Code for the bounded route. Use your terminal only for preflight and the approved private run.
 
@@ -258,7 +258,7 @@ Use synthetic data for recorded evidence. Treat live connector verification as a
 /create-verification-skill Inspect this repository and create .claude/skills/verify-bree/. Use only commands, routes, and harnesses that exist here. Map the synthetic brief, unavailable-source result, and private live preflight. Never connect an account, write through a connector, or store live work data in evidence. Run one synthetic journey end to end. Keep the skill DRAFT if any launch, doctor, drive, evidence, or cleanup step is unproven.
 ```
 
-Then find the six lines in Part 2 below, and paste it. It checks the generated skill, runs the five checks and records the evidence.
+Then find the six parts in Part 2 below, and paste it. It checks the generated skill, runs the five checks and records the evidence.
 
 > Goal: proof that a colleague can repeat. Context: .claude/skills/verify-bree/ and reference/solo-details.md, section A6 Part 2. Constraints: no live content in the skill or the evidence; do not go on after the evidence diff. Done when: the five checks ran, and docs/evidence.md has each command with its real exit code. Output: the evidence diff. Check: a command that nobody ran is OPEN.
 
