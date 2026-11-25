@@ -34,7 +34,7 @@ Keep the key in the ignored `.env.local` file. Never paste it into chat, share a
 
 ## Start
 
-Requirements are Node.js 20.12 or newer, Git, Claude Code, and for Assignment 5 a Jira login.
+Install Node.js 20.12 or newer, Git and Claude Code. In Assignment 5, a Jira login is needed for the private run in Part 3. The earlier parts use mocked tools for testing.
 
 The clone makes a new folder, `aetherlink-daily-brief-lab-s1`. That is the project folder, also called the repository root. After the `cd` line you are in that folder. Run every later command from there.
 
@@ -53,7 +53,7 @@ Read [SOLO.md](SOLO.md). Complete one assignment at a time.
 
 ## Permission boundary
 
-- Use only the Jira server that you connect in Assignment 5, and your own permitted work items.
+- For Bree in Assignment 5, use the Jira server you connected and your own permitted work items.
 - Do not connect work email. Use only sanitised, non-sensitive pasted text when the trainer explicitly asks for it.
 - Keep Bree private. Do not publish live output.
 - Do not store customer data, work data, credentials, connector responses, or live briefs in this repository.
@@ -64,13 +64,15 @@ Local execution does not mean that model processing stays on the laptop.
 
 ## Configure the live route
 
-A4 works without an account or network call. Before A5, close the first Claude Code session with `/exit`. Then connect Jira once, in this project folder:
+Assignment 4 uses sample data. Once dependencies are installed, the sample command generates local HTML. Opening the page may fetch its illustration. The build steps use Claude Code.
+
+Before Assignment 5, close the first Claude Code session with `/exit`. To use live Jira, connect it once in this project folder:
 
 ```bash
 claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp
 ```
 
-The server is added for this folder only. Start Claude Code again with the same command as at the start. It loads the Jira server of this folder:
+If you added Jira, the server is available in this folder. Without Jira access, continue with mocked tests and keep live proof `OPEN`. In either case, start Claude Code again:
 
 ```bash
 claude --permission-mode default

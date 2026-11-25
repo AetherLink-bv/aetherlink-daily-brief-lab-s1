@@ -172,13 +172,13 @@ Optional, when Impeccable is available:
 
 ## Assignment 5: connect the read-only Jira source
 
-Close the first Claude Code session with `/exit`. Connect Jira once, in this project folder:
+Close the first Claude Code session with `/exit`. If you have Jira access, connect it once in this project folder:
 
 ```bash
 claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp
 ```
 
-Start Claude Code again with the same command as at the start. It loads the Jira server of this folder:
+With or without Jira, start Claude Code again in the project folder:
 
 ```bash
 claude --permission-mode default
@@ -222,11 +222,11 @@ Run the preflight:
 npm run live:check
 ```
 
-If it reports `OPEN`, record the missing setting. `OPEN` usually ends with an exit code that is not 0. That is the honest status, not a broken build.
+If it reports `OPEN`, record the reason and exit code 3. The synthetic route can still pass.
 
 ### Part 3: create the private live brief
 
-**Action:** After a person approves Part 2, run this privately. Without Jira connected, do not run it: record `OPEN`. Do not paste a new prompt into Claude Code.
+**Action:** Run the command privately only after Part 2 is approved, the local check returns `READY`, and you confirm the read-only tool in `/mcp`. Otherwise record both the source and the dated artifact as `OPEN`. Continue with the synthetic exercise in Assignment 6.
 
 ```bash
 npm run brief:live
@@ -297,7 +297,7 @@ Choose one result you observed. Add `## Next iteration` to `intent.md` with the 
 
 There is no prescribed implementation prompt. Apply the same loop to one new personal use case.
 
-**Where:** Start in a fresh Claude Code session at the repository root.
+**Where:** Use the same project folder as Assignment 6.
 
 Choose one mission:
 
@@ -306,18 +306,14 @@ Choose one mission:
 - Confluence: retrieve one agreed decision with context.
 - Mock Outlook: summarise one synthetic work request from `sample/outlook-email.sample.json`.
 
-Start with one source that you connected and one read-only tool. Add another source only after the first mission is proven.
+Choose one source for this assignment. Type `/exit` to close the Assignment 6 session.
 
-For the Jira mission, use the Jira server from Assignment 5. For GitLab or Confluence, add that server the same way, then use `/mcp` to log in and see which tools only read:
+- **Jira:** Use the connection from Assignment 5.
+- **GitLab:** Run `claude mcp add --transport http gitlab https://mcpgitlab.kazan.ai.worldline-solutions.com/mcp` in the project folder.
+- **Confluence:** Run `claude mcp add --transport http confluence https://mcpconfluence.kazan.ai.worldline-solutions.com/mcp` in the project folder.
+- **Mock Outlook:** Use the sample email. Skip connector setup.
 
-```bash
-claude mcp add --transport http gitlab https://mcpgitlab.kazan.ai.worldline-solutions.com/mcp
-claude mcp add --transport http confluence https://mcpconfluence.kazan.ai.worldline-solutions.com/mcp
-```
-
-No access? Choose the mock Outlook mission (a made-up email in the project).
-
-The mock Outlook mission is different. It uses the synthetic fixture only. It does not connect Outlook or read work email.
+Start a fresh session in the project folder with `claude --permission-mode default`. For a live mission, open `/mcp`, log in and select one tool marked read-only. If you cannot confirm access, choose Mock Outlook.
 
 1. Choose one user, one decision, one mission, and one read-only source that you connected with `claude mcp add` (or Mock Outlook).
 2. Define a synthetic fixture with the same shape for repeatable tests.
