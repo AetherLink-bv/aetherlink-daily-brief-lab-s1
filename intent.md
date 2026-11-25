@@ -43,7 +43,7 @@ The proof is in `docs/evidence.md`: every synthetic command with its real exit c
 
 ## OPEN
 
-- Live source access: OPEN until the approved connection, the exact read-only tool and the model route are confirmed in Assignment 5.
+- Live source access: OPEN until Jira is connected and the exact read-only tool is named in Assignment 5.
 - Add every other unknown here, one per line. Unknowns are written down, not guessed.
 
 ## Optional extension after the core route

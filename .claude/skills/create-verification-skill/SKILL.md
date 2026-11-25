@@ -51,7 +51,7 @@ Run one complete synthetic journey:
 
 Change the generated skill's status to `VERIFIED` only when all six steps pass. A generated file without an executed journey remains `DRAFT`.
 
-Run `npm run live:check` separately. It proves only local approval and configuration fields. It does not prove authentication, source access, or a successful live connector call.
+Run `npm run live:check` separately. It proves only the local settings in `.bree.local.json`. It does not prove authentication, source access, or a successful live connector call.
 
 ## Safety boundary
 

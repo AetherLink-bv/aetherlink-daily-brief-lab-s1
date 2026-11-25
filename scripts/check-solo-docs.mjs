@@ -56,11 +56,9 @@ for (const [path, text] of Object.entries(files)) {
   assert.doesNotMatch(text, /git switch|git checkout step-/i, path);
 }
 
-assert.match(files["README.md"], /existing approved Jira MCP connection/);
 assert.match(files["README.md"], /Do not connect work email/);
-assert.match(files["README.md"], /organisation-approved Anthropic via Vertex model route/);
 assert.match(files["README.md"], /Node\.js 20\.12 or newer/);
-assert.match(files["README.md"], /--setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome/);
+assert.match(files["README.md"], /^claude --permission-mode default$/m);
 assert.match(files["README.md"], /claude mcp add --transport http jira https:\/\/mcpjira\.kazan\.ai\.worldline-solutions\.com\/mcp/);
 assert.match(files["SOLO.md"], /claude mcp add --transport http jira /);
 // Every tracked text file, not only the files above: the course modules and CLAUDE.md teach the route too.

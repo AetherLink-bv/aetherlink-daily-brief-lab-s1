@@ -36,9 +36,9 @@ These twelve prompt parts are identical to A1–A6 in `SOLO.md`. A7 is participa
 
 > Goal: one small house-style change. Context: out/latest.html and reference/solo-details.md, section A4 Part 2. Constraints: no change before I name it; no code before its test is red; no change to the facts or the schema; do not go on after the diff. Done when: npm run test:render and npm run brief:sample pass. Output: the changed detail and the diff. Check: real output only; mark doubts as OPEN.
 
-## Assignment 5: connect the existing read-only Jira source
+## Assignment 5: connect the read-only Jira source
 
-Before Part 1, close the synthetic-only session. Connect Jira once in this folder with `claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp`, start Claude Code again with `claude --permission-mode default --no-chrome`, then use `/mcp` to log in and see which tools only read. Missing access stays `OPEN`. `.bree.local.json` stores runtime approvals; it is not MCP server configuration.
+Before Part 1, close the synthetic-only session. Connect Jira once in this folder with `claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp`, start Claude Code again with `claude --permission-mode default`, then use `/mcp` to log in and see which tools only read. Missing access stays `OPEN`. `.bree.local.json` holds the tool name, user and decision for the live route; it is not MCP server configuration.
 
 ### Part 1
 

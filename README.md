@@ -4,7 +4,7 @@ It is 08:30. Your stand-up starts at 09:00. You need one reliable view of the wo
 
 Bree turns your permitted work items into a private Daily Brief. You build Bree through the AI-native SDLC with Claude Code and the Claude Agent SDK. At every step, you create something visible, review it, and prove what it does.
 
-The lesson starts with synthetic data because tests, recordings, and shared evidence must be repeatable and contain no work data. Assignment 5 uses the existing approved Jira MCP connection. Assignment 6 proves the user path and keeps live verification separate.
+The lesson starts with synthetic data because tests, recordings, and shared evidence must be repeatable and contain no work data. Assignment 5 connects Jira for this folder and reads your own work items. Assignment 6 proves the user path and keeps live verification separate.
 
 When a named command runs, preserve its synthetic red and green output with the actual exit codes. Never reconstruct historical raw logs or record live connector contents.
 
@@ -34,7 +34,7 @@ Keep the key in the ignored `.env.local` file. Never paste it into chat, share a
 
 ## Start
 
-Requirements are Node.js 20.12 or newer, Git, Claude Code, the existing Jira MCP connection, and the approved Anthropic via Vertex route.
+Requirements are Node.js 20.12 or newer, Git, Claude Code, and for Assignment 5 a Jira login.
 
 The clone makes a new folder, `aetherlink-daily-brief-lab-s1`. That is the project folder, also called the repository root. After the `cd` line you are in that folder. Run every later command from there.
 
@@ -42,26 +42,25 @@ The clone makes a new folder, `aetherlink-daily-brief-lab-s1`. That is the proje
 git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
 cd aetherlink-daily-brief-lab-s1
 npm ci
-claude --setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome
+claude --permission-mode default
 ```
 
 The `allowScripts` policy permits only the locked `esbuild` install script and denies the optional `fsevents` script. Review dependency changes before expanding it. See [npm install scripts](https://docs.npmjs.com/cli/commands/npm-install-scripts/).
 
-This starts Claude Code in Manual mode for A1–A4 and loads no MCP server. Local settings are excluded. The approved Vertex route must already be available through the organisation-managed environment or user settings. Confirm it with `/status` before the first prompt. If it is unavailable, keep model-assisted work `OPEN`; manual synthetic checks can continue.
+This starts Claude Code in manual mode: it asks before it changes a file or runs a command.
 
 Read [SOLO.md](SOLO.md). Complete one assignment at a time.
 
 ## Permission boundary
 
-- Use only the existing approved Jira MCP connection and your own permitted work items.
-- Use only the organisation-approved Anthropic via Vertex model route already configured for this session.
+- Use only the Jira server that you connect in Assignment 5, and your own permitted work items.
 - Do not connect work email. Use only sanitised, non-sensitive pasted text when the trainer explicitly asks for it.
 - Keep Bree private. Do not publish live output.
 - Do not store customer data, work data, credentials, connector responses, or live briefs in this repository.
 - Keep the live tool read-only. Bree cannot send messages, change tickets, write files, or start a shell.
 - Stop when approval or source access is unclear.
 
-Approval of a connector does not automatically approve every model account. Local execution also does not mean that model processing stays on the laptop.
+Local execution does not mean that model processing stays on the laptop.
 
 ## Configure the live route
 
@@ -71,19 +70,19 @@ A4 works without an account or network call. Before A5, close the first Claude C
 claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp
 ```
 
-The server is added for this folder only. Start Claude Code again, now without the flags that hide MCP servers (`--strict-mcp-config` and `--setting-sources`):
+The server is added for this folder only. Start Claude Code again with the same command as at the start. It loads the Jira server of this folder:
 
 ```bash
-claude --permission-mode default --no-chrome
+claude --permission-mode default
 ```
 
-Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. Manual mode asks before every Jira call: say yes only to a tool that reads. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository.
+Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. No mark? Treat the tool as one that can change something. Manual mode asks before every Jira call: say yes only to a tool that reads. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository.
 
 ```bash
 test -f .bree.local.json || cp .bree.example.json .bree.local.json
 ```
 
-Edit the ignored local file with the exact Jira read tool shown by `/mcp`, plus the user and decision. Set all three approval flags to `true` only after the connector, tool-owner read-only status, and model route are confirmed. `.bree.local.json` stores runtime approvals; it is not MCP server configuration. Never create or store a token for this session.
+Edit the ignored local file: put in the exact Jira read tool shown by `/mcp`, plus the user and decision. Never create or store a token for this session.
 
 The Agent SDK starts a separate process. `src/live.ts` loads MCP servers only from local settings (`settingSources: ['local']`): that is the Jira server you added in this folder, and no user settings or plugins. It sets built-in tools to none, allows only the exact approved Jira tool, and denies every other tool in `canUseTool` and in a `PreToolUse` hook. The hook also stops a tool that a local allow rule would let through.
 
