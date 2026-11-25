@@ -173,19 +173,19 @@ Optional, when Impeccable is available:
 
 ## Assignment 5: connect the existing read-only Jira source
 
-Close the first Claude Code session. Your organisation provides `AETHERLINK_JIRA_MCP_CONFIG`: the path to an existing approved Jira-only MCP configuration. It must be set before the session. The trainer has no access to it and cannot provide it. If it is missing, ask a colleague from your organisation. Until then, start Claude Code again with the command from "Start synthetic work", and keep live proof `OPEN`. In Assignment 5, tell Claude Code that the tool name is `OPEN`: the tests then use a mocked tool. Do not create a connector or copy the configuration into the repository. Verify it before the guarded restart:
+Close the first Claude Code session with `/exit`. Connect Jira once, in this project folder:
 
 ```bash
-test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" && test -f "$AETHERLINK_JIRA_MCP_CONFIG" && echo "Config found" || echo "Config missing"
+claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp
 ```
 
-You see `Config found`. If you see `Config missing`, keep live proof `OPEN` and do not start the live session. After `Config found`, start Claude Code with only that configuration:
+Start Claude Code again, now without the flag that blocks MCP servers:
 
 ```bash
-claude --setting-sources project,user --permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG" --no-chrome
+claude --setting-sources project,user --permission-mode default --no-chrome
 ```
 
-Run `/status` to confirm the approved Vertex route. Then use `/mcp` to inspect the existing approved connection. Local settings are not loaded. If either check fails, keep live proof `OPEN`. Do not install a connector or create a token. Keep the synthetic route for tests.
+Type `/mcp`, choose `jira` and log in. In the same menu, switch off every tool that can change something, and keep only read-only tools on. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository. In Assignment 5, tell Claude Code the tool name, or that it is `OPEN`: the tests then use a mocked tool. Keep the synthetic route for tests.
 
 **Where:** Claude Code for the bounded route. Use your terminal only for preflight and the approved private run.
 
@@ -309,7 +309,14 @@ Choose one mission:
 
 Start with one approved source and one owner-confirmed read-only tool. Add another source only after the first mission is proven.
 
-For the Jira mission, start Claude Code with the `--mcp-config "$AETHERLINK_JIRA_MCP_CONFIG"` command from Assignment 5. The GitLab and Confluence missions need a session that loads that approved source from your organisation. The trainer cannot provide it. Without one, choose the mock Outlook mission (a made-up email in the project) and start Claude Code with the `claude --setting-sources …` command from "Start synthetic work".
+For the Jira mission, use the Jira server from Assignment 5. For GitLab or Confluence, add that server the same way, then use `/mcp` to log in and keep only read-only tools on:
+
+```bash
+claude mcp add --transport http gitlab https://mcpgitlab.kazan.ai.worldline-solutions.com/mcp
+claude mcp add --transport http confluence https://mcpconfluence.kazan.ai.worldline-solutions.com/mcp
+```
+
+No access? Choose the mock Outlook mission (a made-up email in the project).
 
 The mock Outlook mission is different. It uses the synthetic fixture only. It does not connect Outlook or read work email.
 

@@ -81,8 +81,8 @@ The sentences below are the requirements of the long prompts that were used unti
 ## A5 Part 1
 
 - Read the accepted design, plan, DailyBrief contract, AGENTS.md, and the Bree config example.
-- The participant inspected the existing organisation-approved Jira connection with /mcp, and names one exact read-only tool for their own permitted work items. Ask for that name. If the participant says that it is OPEN, use a mocked tool in the tests and keep live proof OPEN.
-- Do not install a connector or create a token.
+- The participant connected Jira with claude mcp add, logged in with /mcp and kept only read-only tools on. They name one exact read-only tool for their own permitted work items. Ask for that name. If the participant says that it is OPEN, use a mocked tool in the tests and keep live proof OPEN.
+- Do not add another MCP server or create a token.
 - Write focused tests first for the live configuration boundary, exact allowed tool, schema validation, and private output path.
 - Include rejection cases for a failed or unstructured tool result, an unknown source ID, and any unexpected tool.
 - Show the expected red failure and stop for my approval.
@@ -90,9 +90,9 @@ The sentences below are the requirements of the long prompts that were used unti
 ## A5 Part 2
 
 - After I approve the tests and boundary, build the smallest Claude Agent SDK route through the approved model provider.
-- Read only the selected server definition from the existing Jira-only config at AETHERLINK_JIRA_MCP_CONFIG and pass it explicitly as the SDK mcpServers option; a new SDK process does not inherit the CLI session configuration.
-- Permit only the chosen Jira read tool.
-- Set built-in tools to none, enable strict MCP config, and deny every other request in canUseTool.
+- Load MCP servers only from local settings with settingSources ['local']: that gives the Jira server the participant added in this folder, and no user settings or plugins. Do not pass mcpServers and do not enable strict MCP config.
+- Permit only the chosen Jira read tool in allowedTools.
+- Set built-in tools to none, deny every other request in canUseTool, and deny every other tool in a PreToolUse hook, which also runs when a local allow rule would let a tool through.
 - Map available data into the complete DailyBrief schema.
 - Keep unavailable sections OPEN and reject unvalidated output.
 - Accept only exact Jira keys from the successful structured tool result as live source IDs.

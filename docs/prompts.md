@@ -38,7 +38,7 @@ These twelve prompt parts are identical to A1–A6 in `SOLO.md`. A7 is participa
 
 ## Assignment 5: connect the existing read-only Jira source
 
-Before Part 1, close the synthetic-only session. Your organisation provides the path to the existing approved Jira-only config as `AETHERLINK_JIRA_MCP_CONFIG`. The trainer has no access to it. Verify the file before restarting Claude Code with `--permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG"`. Confirm the approved Vertex route with `/status` and the Jira-only connection with `/mcp`. Missing access stays `OPEN`. `.bree.local.json` stores runtime approvals; it is not MCP server configuration.
+Before Part 1, close the synthetic-only session. Connect Jira once in this folder with `claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp`, start Claude Code again with `claude --setting-sources project,user --permission-mode default --no-chrome`, then use `/mcp` to log in and keep only read-only tools on. Missing access stays `OPEN`. `.bree.local.json` stores runtime approvals; it is not MCP server configuration.
 
 ### Part 1
 
