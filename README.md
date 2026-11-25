@@ -76,7 +76,7 @@ The server is added for this folder only. Start Claude Code again with the same 
 claude --permission-mode default
 ```
 
-Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. No mark? Treat the tool as one that can change something. Manual mode asks before every Jira call: say yes only to a tool that reads. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository.
+Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. No mark? Treat the tool as one that can change something. When Claude Code asks for permission, approve only that one read call. Decline any request to allow future calls automatically. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository.
 
 ```bash
 test -f .bree.local.json || cp .bree.example.json .bree.local.json
@@ -84,7 +84,7 @@ test -f .bree.local.json || cp .bree.example.json .bree.local.json
 
 Edit the ignored local file: put in the exact Jira read tool shown by `/mcp`, plus the user and decision. Never create or store a token for this session.
 
-The Agent SDK starts a separate process. `src/live.ts` loads MCP servers only from local settings (`settingSources: ['local']`): that is the Jira server you added in this folder, and no user settings or plugins. It sets built-in tools to none, allows only the exact approved Jira tool, and denies every other tool in `canUseTool` and in a `PreToolUse` hook. The hook also stops a tool that a local allow rule would let through.
+The Agent SDK starts a separate process. `src/live.ts` selects local SDK settings with `settingSources: ['local']`. Other MCP servers may still be visible. It sets built-in tools to none, allows only the exact approved Jira tool, and denies every other tool in `canUseTool` and in a `PreToolUse` hook. The hook also stops a tool that a local allow rule would let through. The local check validates the configured name. Before a live run, confirm in `/mcp` that this tool is read-only.
 
 ```bash
 npm run live:check

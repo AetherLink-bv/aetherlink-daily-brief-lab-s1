@@ -1,6 +1,6 @@
 # SOLO details
 
-The prompts in `SOLO.md` use the six lines of Day 1: Goal, Context, Constraints, Done when, Output, Check. They are short.
+The prompts in `SOLO.md` use the six parts of Day 1: Goal, Context, Constraints, Done when, Output, Check. They are short.
 This file holds the exact requirements of each part. Claude Code reads the section that the prompt names.
 
 The sentences below are the requirements of the long prompts that were used until November 2026.
@@ -90,7 +90,7 @@ The sentences below are the requirements of the long prompts that were used unti
 ## A5 Part 2
 
 - After I approve the tests and boundary, build the smallest Claude Agent SDK route.
-- Load MCP servers only from local settings with settingSources ['local']: that gives the Jira server the participant added in this folder, and no user settings or plugins. Do not pass mcpServers and do not enable strict MCP config.
+- Select local SDK settings with settingSources ['local']. Other MCP servers may still be visible. Do not pass mcpServers and do not enable strict MCP config.
 - Permit only the chosen Jira read tool in allowedTools.
 - Set built-in tools to none, deny every other request in canUseTool, and deny every other tool in a PreToolUse hook, which also runs when a local allow rule would let a tool through.
 - Map available data into the complete DailyBrief schema.
@@ -98,7 +98,7 @@ The sentences below are the requirements of the long prompts that were used unti
 - Accept only exact Jira keys from the successful structured tool result as live source IDs.
 - Let only the host write validated HTML to ~/.bree/briefs/YYYY-MM-DD.html with private permissions.
 - Add npm run live:check and npm run brief:live.
-- npm run live:check contacts nothing. It prints READY when .bree.local.json names the jira server, a real read tool (not the placeholder), a user and a decision. Otherwise it prints OPEN with the reasons. It exits with code 0 for READY and code 3 for OPEN.
+- npm run live:check contacts nothing. It prints READY when .bree.local.json names the jira server, a Jira tool name in the expected format (not the placeholder), a user and a decision. The participant must confirm in /mcp that the tool is read-only before a live run. The local check cannot inspect tool permissions. Otherwise missing or invalid configuration prints OPEN with the reasons. It exits with code 0 for READY and code 3 for OPEN.
 - Never store raw connector output or expose credentials, customer data, or work email.
 - Run the synthetic tests and live:check.
 - Show the boundaries and diff, then stop before the live run.

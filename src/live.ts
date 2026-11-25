@@ -178,7 +178,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   if (process.argv.includes("--check")) {
     // Local preflight only: reads .bree.local.json. Contacts nothing.
     if (check.status === "READY") {
-      console.log("READY — local Jira tool, user and decision are configured. Authentication and source access are not proven.");
+      console.log("READY — Jira tool name, user and decision are configured. Before a live run, confirm in /mcp that the tool is read-only. This check does not contact Jira.");
     } else {
       console.log("OPEN — live source proof is not ready:");
       for (const reason of check.reasons) console.log(`- ${reason}`);
