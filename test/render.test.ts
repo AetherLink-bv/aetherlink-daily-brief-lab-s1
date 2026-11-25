@@ -35,9 +35,9 @@ test("shows provenance: every source label and id, and the sources each item cit
 
 test("shows READY, CONFLICT and OPEN states visibly", async () => {
   const html = renderBrief(await sample());
-  assert.match(html, /data-status="READY"/);
-  assert.match(html, /data-status="CONFLICT"/);
-  assert.match(html, /data-status="OPEN"/);
+  assert.match(html, /<li class="item" data-status="READY"/);
+  assert.match(html, /<li class="item" data-status="CONFLICT"/);
+  assert.match(html, /<li class="item" data-status="OPEN"/);
   assert.match(html, /<span class="status">OPEN<\/span>/);
   assert.ok(html.includes("OPEN — email updates are not connected in this workshop."));
 });
