@@ -61,6 +61,11 @@ test("READY needs a local Jira tool, a user and a decision", () => {
   ]) assert.equal(checkLiveConfig(config).status, "OPEN");
 });
 
+test("local preflight checks the name; the participant verifies read-only permission in /mcp", () => {
+  const mcp = { server: "jira", tool: "mcp__jira__synthetic_update_issue" };
+  assert.deepEqual(checkLiveConfig({ ...READY_CONFIG, mcp }), { status: "READY" });
+});
+
 // ---- exact allowed tool -----------------------------------------------------------------------
 
 test("canUseTool allows exactly the approved tool", async () => {
