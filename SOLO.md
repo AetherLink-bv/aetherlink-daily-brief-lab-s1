@@ -1,6 +1,6 @@
 # Build your personal Daily Brief agent
 
-It is 08:30. Your stand-up starts at 09:00. Bree prepares one private brief from your own permitted work items in the existing, approved Jira MCP connection.
+It is 08:30. Your stand-up starts at 09:00. Bree prepares one private brief from your own permitted work items, through the Jira server that you connect for this folder.
 
 You are the builder and reviewer. Claude Code helps you through the local AI-native SDLC. Each assignment leaves an artifact and a visible check. Missing information stays `OPEN`. Conflicting evidence stays `CONFLICT`.
 
@@ -170,7 +170,7 @@ Optional, when Impeccable is available:
 
 **Visible result:** Open `out/latest.html` and trace its decision back to the synthetic input.
 
-## Assignment 5: connect the existing read-only Jira source
+## Assignment 5: connect the read-only Jira source
 
 Close the first Claude Code session with `/exit`. Connect Jira once, in this project folder:
 
@@ -214,7 +214,7 @@ Create the ignored local configuration. Add the chosen user, decision, and exact
 test -f .bree.local.json || cp .bree.example.json .bree.local.json
 ```
 
-This command prints nothing when it works. `.bree.local.json` stores runtime approvals; it is not MCP server configuration.
+This command prints nothing when it works. `.bree.local.json` holds the tool name, user and decision for the live route; it is not MCP server configuration.
 
 Run the preflight:
 
@@ -222,7 +222,7 @@ Run the preflight:
 npm run live:check
 ```
 
-If it reports `OPEN`, record the missing approval or configuration. `OPEN` usually ends with an exit code that is not 0. That is the honest status, not a broken build.
+If it reports `OPEN`, record the missing setting. `OPEN` usually ends with an exit code that is not 0. That is the honest status, not a broken build.
 
 ### Part 3: create the private live brief
 
