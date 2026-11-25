@@ -142,7 +142,7 @@ Press Shift+Tab until Claude Code shows plan mode. No implementation changes hap
 
 ## Assignment 4: build the synthetic product path
 
-Use manual mode. This assignment builds the visible result with synthetic input. It does not call a model or live connector.
+Use manual mode. Build the renderer with Claude Code. The sample command, `npm run brief:sample`, generates local HTML without calling a model or live connector. Opening the HTML may fetch its illustration.
 
 **Where:** Claude Code in manual mode, then your terminal and browser.
 
@@ -184,7 +184,7 @@ With or without Jira, start Claude Code again in the project folder:
 claude --permission-mode default
 ```
 
-Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. No mark? Treat the tool as one that can change something. When Claude Code asks for permission, approve only that one read call. Decline any request to allow future calls automatically. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository. In Assignment 5, tell Claude Code the tool name, or that it is `OPEN`: the tests then use a mocked tool. Keep the synthetic route for tests.
+Without Jira access, skip login and use a mocked tool for the tests. If you connected Jira, type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. No mark? Treat the tool as one that can change something. When Claude Code asks for permission, approve only that one read call. Decline any request to allow future calls automatically. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. Do not create a token or copy any configuration into the repository. In Assignment 5, tell Claude Code the tool name, or that it is `OPEN`: the tests then use a mocked tool. Keep the synthetic route for tests.
 
 **Where:** Claude Code for the bounded route. Use your terminal only for preflight and the approved private run.
 

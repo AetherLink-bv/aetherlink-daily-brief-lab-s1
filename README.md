@@ -78,13 +78,13 @@ If you added Jira, the server is available in this folder. Without Jira access, 
 claude --permission-mode default
 ```
 
-Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. No mark? Treat the tool as one that can change something. When Claude Code asks for permission, approve only that one read call. Decline any request to allow future calls automatically. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository.
+Without Jira access, skip login and use a mocked tool for the tests. If you connected Jira, type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. No mark? Treat the tool as one that can change something. When Claude Code asks for permission, approve only that one read call. Decline any request to allow future calls automatically. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. Do not create a token or copy any configuration into the repository.
 
 ```bash
 test -f .bree.local.json || cp .bree.example.json .bree.local.json
 ```
 
-Edit the ignored local file: put in the exact Jira read tool shown by `/mcp`, plus the user and decision. Never create or store a token for this session.
+Keep the placeholder if you have no verified read-only tool. Otherwise, enter its exact name from `/mcp`, the user and the decision in the ignored local file. Never create or store a token for this session.
 
 The Agent SDK starts a separate process. In `src/live.ts`, `settingSources: ['local']` selects local SDK settings. Other servers may still be visible to the SDK. Bree disables built-in tools, allows only the exact approved Jira tool, and denies every other tool in `canUseTool` and in a `PreToolUse` hook. The hook also stops a tool that a local allow rule would let through.
 
@@ -94,7 +94,9 @@ npm run live:check
 
 This check runs offline. `READY` means the file names the jira server, a user, a decision and a tool in the expected format. It cannot confirm that the tool exists, only reads, or is accessible to your account. If you cannot confirm the read-only mark in `/mcp`, keep the placeholder and record `OPEN`.
 
-Run the real route privately:
+Without approval, a verified read-only tool, or a local `READY` result, skip the live run. Record `OPEN` for both the source and the dated HTML file, then continue with Assignment 6.
+
+If all three checks pass, run the real route privately:
 
 ```bash
 npm run brief:live
