@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 
@@ -60,11 +61,14 @@ assert.match(files["README.md"], /Do not connect work email/);
 assert.match(files["README.md"], /organisation-approved Anthropic via Vertex model route/);
 assert.match(files["README.md"], /Node\.js 20\.12 or newer/);
 assert.match(files["README.md"], /--setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome/);
-assert.match(files["README.md"], /AETHERLINK_JIRA_MCP_CONFIG/);
-assert.match(files["README.md"], /--strict-mcp-config --mcp-config "\$AETHERLINK_JIRA_MCP_CONFIG"/);
-assert.match(files["SOLO.md"], /AETHERLINK_JIRA_MCP_CONFIG/);
+assert.match(files["README.md"], /claude mcp add --transport http jira https:\/\/mcpjira\.kazan\.ai\.worldline-solutions\.com\/mcp/);
+assert.match(files["SOLO.md"], /claude mcp add --transport http jira /);
+// Every tracked text file, not only the files above: the course modules and CLAUDE.md teach the route too.
+const tracked = execFileSync("git", ["ls-files", "*.md", "*.html"], {encoding: "utf8"}).split("\n").filter(Boolean);
+for (const path of tracked) assert.doesNotMatch(await readFile(path, "utf8"), /AETHERLINK_JIRA_MCP_CONFIG|--mcp-config/, `${path}: the Jira route is claude mcp add plus /mcp, not a private config path`);
 assert.match(files["SOLO.md"], /\.bree\.local\.json.*not.*MCP server configuration/is);
-assert.match(solo, /mcpServers option/);
+assert.match(solo, /settingSources \['local'\]/);
+assert.match(solo, /PreToolUse hook/);
 assert.match(solo, /built-in tools to none/);
 assert.match(solo, /canUseTool/);
 assert.match(files["SOLO.md"], /\/mcp/);
@@ -149,6 +153,6 @@ for (const prompt of prompts(files["SOLO.md"])) assert.match(prompt, /reference\
 for (const [section, needs] of Object.entries({
   "A2 Part 1": [/Summary and moveWorkForward are single items/, /TopTodos, newUpdates, and yourDay are non-empty item arrays/, /READY and CONFLICT items have at least one source ID; OPEN may have none/],
   "A4 Part 1": [/https:\/\/picsum\.photos\/seed\/bree-morning\/1200\/400/, /referrerpolicy="no-referrer"/, /stable visible fallback text/],
-  "A5 Part 2": [/mcpServers option/, /built-in tools to none/, /canUseTool/, /strict MCP config/, /Accept only exact Jira keys .* as live source IDs/, /~\/\.bree\/briefs\/YYYY-MM-DD\.html/, /exits with code 0 for READY and code 3 for OPEN/],
+  "A5 Part 2": [/settingSources \['local'\]/, /built-in tools to none/, /canUseTool/, /PreToolUse hook/, /Accept only exact Jira keys .* as live source IDs/, /~\/\.bree\/briefs\/YYYY-MM-DD\.html/, /exits with code 0 for READY and code 3 for OPEN/],
 })) for (const need of needs) assert.match(sectionOf(section), need, `${section} must hold ${need}`);
 console.log("PASS — seven assignments, twelve canonical prompt parts, core DailyBrief route, and optional synthetic voice extension align");

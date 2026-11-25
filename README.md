@@ -65,19 +65,19 @@ Approval of a connector does not automatically approve every model account. Loca
 
 ## Configure the live route
 
-A4 works without an account or network call. Before A5, close the first Claude Code session. Your organisation provides `AETHERLINK_JIRA_MCP_CONFIG`: the path to an existing approved Jira-only MCP configuration. It must be set before the session. The trainer has no access to it and cannot provide it. If it is missing, ask a colleague from your organisation. Until then, start Claude Code again with the `claude --setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome` command, and keep live proof `OPEN`. Leave `.bree.local.json` as copied: its status stays `OPEN`. Do not create a connector or copy the configuration into the repository. Verify the file before the guarded restart:
+A4 works without an account or network call. Before A5, close the first Claude Code session with `/exit`. Then connect Jira once, in this project folder:
 
 ```bash
-test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" && test -f "$AETHERLINK_JIRA_MCP_CONFIG" && echo "Config found" || echo "Config missing"
+claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp
 ```
 
-You see `Config found`. If you see `Config missing`, keep live proof `OPEN` and do not start the live session. After `Config found`, start Claude Code with only that configuration:
+The server is added for this folder only. Start Claude Code again, now without the flags that hide MCP servers (`--strict-mcp-config` and `--setting-sources`):
 
 ```bash
-claude --setting-sources project,user --permission-mode default --strict-mcp-config --mcp-config "$AETHERLINK_JIRA_MCP_CONFIG" --no-chrome
+claude --permission-mode default --no-chrome
 ```
 
-Run `/status` to confirm the approved Vertex route. Then run `/mcp` and inspect the existing approved Jira connection. If either check fails, keep live proof `OPEN`. Do not install a connector or create a token.
+Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. Manual mode asks before every Jira call: say yes only to a tool that reads. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository.
 
 ```bash
 test -f .bree.local.json || cp .bree.example.json .bree.local.json
@@ -85,7 +85,7 @@ test -f .bree.local.json || cp .bree.example.json .bree.local.json
 
 Edit the ignored local file with the exact Jira read tool shown by `/mcp`, plus the user and decision. Set all three approval flags to `true` only after the connector, tool-owner read-only status, and model route are confirmed. `.bree.local.json` stores runtime approvals; it is not MCP server configuration. Never create or store a token for this session.
 
-The Agent SDK starts a separate process. `src/live.ts` must read only the selected server definition from `AETHERLINK_JIRA_MCP_CONFIG` and pass it through the SDK `mcpServers` option. It must set built-in tools to none, enable strict MCP config, and deny every tool except the exact approved Jira tool in `canUseTool`.
+The Agent SDK starts a separate process. `src/live.ts` loads MCP servers only from local settings (`settingSources: ['local']`): that is the Jira server you added in this folder, and no user settings or plugins. It sets built-in tools to none, allows only the exact approved Jira tool, and denies every other tool in `canUseTool` and in a `PreToolUse` hook. The hook also stops a tool that a local allow rule would let through.
 
 ```bash
 npm run live:check
