@@ -26,7 +26,7 @@ npm ci
 claude --permission-mode default
 ```
 
-This starts Claude Code in manual mode: it asks before it changes a file or uses a tool.
+This starts Claude Code in manual mode: it asks before it changes a file or runs a command.
 
 Complete one assignment at a time. Inspect each diff and run the named check yourself before you continue.
 
@@ -226,7 +226,7 @@ If it reports `OPEN`, record the missing setting. `OPEN` usually ends with an ex
 
 ### Part 3: create the private live brief
 
-**Action:** After a person approves Part 2, run this privately. Without the Jira config, do not run it: record `OPEN`. Do not paste a new prompt into Claude Code.
+**Action:** After a person approves Part 2, run this privately. Without Jira connected, do not run it: record `OPEN`. Do not paste a new prompt into Claude Code.
 
 ```bash
 npm run brief:live
@@ -306,7 +306,7 @@ Choose one mission:
 - Confluence: retrieve one agreed decision with context.
 - Mock Outlook: summarise one synthetic work request from `sample/outlook-email.sample.json`.
 
-Start with one approved source and one owner-confirmed read-only tool. Add another source only after the first mission is proven.
+Start with one source that you connected and one read-only tool. Add another source only after the first mission is proven.
 
 For the Jira mission, use the Jira server from Assignment 5. For GitLab or Confluence, add that server the same way, then use `/mcp` to log in and see which tools only read:
 
@@ -319,7 +319,7 @@ No access? Choose the mock Outlook mission (a made-up email in the project).
 
 The mock Outlook mission is different. It uses the synthetic fixture only. It does not connect Outlook or read work email.
 
-1. Choose one user, one decision, one mission, and one organisation-approved read-only source.
+1. Choose one user, one decision, one mission, and one read-only source that you connected with `claude mcp add` (or Mock Outlook).
 2. Define a synthetic fixture with the same shape for repeatable tests.
 3. Write the intent, contract, design, and visual plan.
 4. Write a red test before implementation.

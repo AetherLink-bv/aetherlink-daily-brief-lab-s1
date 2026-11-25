@@ -47,7 +47,7 @@ claude --permission-mode default
 
 The `allowScripts` policy permits only the locked `esbuild` install script and denies the optional `fsevents` script. Review dependency changes before expanding it. See [npm install scripts](https://docs.npmjs.com/cli/commands/npm-install-scripts/).
 
-This starts Claude Code in manual mode: it asks before it changes a file or uses a tool.
+This starts Claude Code in manual mode: it asks before it changes a file or runs a command.
 
 Read [SOLO.md](SOLO.md). Complete one assignment at a time.
 
