@@ -81,7 +81,7 @@ The sentences below are the requirements of the long prompts that were used unti
 ## A5 Part 1
 
 - Read the accepted design, plan, DailyBrief contract, AGENTS.md, and the Bree config example.
-- The participant connected Jira with claude mcp add, logged in with /mcp and kept only read-only tools on. They name one exact read-only tool for their own permitted work items. Ask for that name. If the participant says that it is OPEN, use a mocked tool in the tests and keep live proof OPEN.
+- The participant connected Jira with claude mcp add, logged in with /mcp and checked which tools only read. They name one exact read-only tool for their own permitted work items. Ask for that name. If the participant says that it is OPEN, use a mocked tool in the tests and keep live proof OPEN.
 - Do not add another MCP server or create a token.
 - Write focused tests first for the live configuration boundary, exact allowed tool, schema validation, and private output path.
 - Include rejection cases for a failed or unstructured tool result, an unknown source ID, and any unexpected tool.

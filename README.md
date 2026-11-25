@@ -71,13 +71,13 @@ A4 works without an account or network call. Before A5, close the first Claude C
 claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp
 ```
 
-The server is added for this folder only. Start Claude Code again, now without the flag that blocks MCP servers:
+The server is added for this folder only. Start Claude Code again, now without the flags that hide MCP servers (`--strict-mcp-config` and `--setting-sources`):
 
 ```bash
-claude --setting-sources project,user --permission-mode default --no-chrome
+claude --permission-mode default --no-chrome
 ```
 
-Type `/mcp`, choose `jira` and log in. In the same menu, switch off every tool that can change something, and keep only read-only tools on. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository.
+Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. Manual mode asks before every Jira call: say yes only to a tool that reads. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository.
 
 ```bash
 test -f .bree.local.json || cp .bree.example.json .bree.local.json

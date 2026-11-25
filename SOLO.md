@@ -179,13 +179,13 @@ Close the first Claude Code session with `/exit`. Connect Jira once, in this pro
 claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp
 ```
 
-Start Claude Code again, now without the flag that blocks MCP servers:
+Start Claude Code again, now without the flags that hide MCP servers (`--strict-mcp-config` and `--setting-sources`):
 
 ```bash
-claude --setting-sources project,user --permission-mode default --no-chrome
+claude --permission-mode default --no-chrome
 ```
 
-Type `/mcp`, choose `jira` and log in. In the same menu, switch off every tool that can change something, and keep only read-only tools on. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository. In Assignment 5, tell Claude Code the tool name, or that it is `OPEN`: the tests then use a mocked tool. Keep the synthetic route for tests.
+Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. Manual mode asks before every Jira call: say yes only to a tool that reads. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository. In Assignment 5, tell Claude Code the tool name, or that it is `OPEN`: the tests then use a mocked tool. Keep the synthetic route for tests.
 
 **Where:** Claude Code for the bounded route. Use your terminal only for preflight and the approved private run.
 
@@ -309,7 +309,7 @@ Choose one mission:
 
 Start with one approved source and one owner-confirmed read-only tool. Add another source only after the first mission is proven.
 
-For the Jira mission, use the Jira server from Assignment 5. For GitLab or Confluence, add that server the same way, then use `/mcp` to log in and keep only read-only tools on:
+For the Jira mission, use the Jira server from Assignment 5. For GitLab or Confluence, add that server the same way, then use `/mcp` to log in and see which tools only read:
 
 ```bash
 claude mcp add --transport http gitlab https://mcpgitlab.kazan.ai.worldline-solutions.com/mcp

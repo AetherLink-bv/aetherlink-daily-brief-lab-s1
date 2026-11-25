@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 
@@ -62,7 +63,9 @@ assert.match(files["README.md"], /Node\.js 20\.12 or newer/);
 assert.match(files["README.md"], /--setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome/);
 assert.match(files["README.md"], /claude mcp add --transport http jira https:\/\/mcpjira\.kazan\.ai\.worldline-solutions\.com\/mcp/);
 assert.match(files["SOLO.md"], /claude mcp add --transport http jira /);
-for (const [path, text] of Object.entries(files)) assert.doesNotMatch(text, /AETHERLINK_JIRA_MCP_CONFIG|--mcp-config/, `${path}: the Jira route is claude mcp add plus /mcp, not a private config path`);
+// Every tracked text file, not only the files above: the course modules and CLAUDE.md teach the route too.
+const tracked = execFileSync("git", ["ls-files", "*.md", "*.html"], {encoding: "utf8"}).split("\n").filter(Boolean);
+for (const path of tracked) assert.doesNotMatch(await readFile(path, "utf8"), /AETHERLINK_JIRA_MCP_CONFIG|--mcp-config/, `${path}: the Jira route is claude mcp add plus /mcp, not a private config path`);
 assert.match(files["SOLO.md"], /\.bree\.local\.json.*not.*MCP server configuration/is);
 assert.match(solo, /settingSources \['local'\]/);
 assert.match(solo, /PreToolUse hook/);
