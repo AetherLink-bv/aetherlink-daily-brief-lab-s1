@@ -1,6 +1,6 @@
 # Intent — Daily brief agent
 
-Status: `TEMPLATE — complete before the spec`
+Status: you choose the user and the decision in Assignment 1. The other sections are written for this lab. The Maintain step adds `## Next iteration`.
 
 ## Outcome
 
@@ -13,44 +13,48 @@ Observable result: the brief names one blocker with its source ID, so Maya walks
 
 ## Success checks
 
-- [ ] `TEMPLATE — a check a fresh reader can verify with one command or one look, without the author in the room.`
-- [ ] `TEMPLATE`
-- [ ] `TEMPLATE`
-- [ ] `npm run mini prints one synthetic decision line.`
-- [ ] `npm run live:check reports READY or an exact OPEN reason without contacting the source.`
-- [ ] `TEMPLATE — the private dated HTML brief names its sources, or live access remains OPEN.`
+Each check is one command or one look. A fresh reader can verify it without the author in the room.
+
+- `npm run mini` prints one synthetic decision line.
+- `npm run test:schema` passes for the valid sample and rejects one invalid sample.
+- `npm run brief:sample` writes `out/latest.html` with every section of the brief.
+- `npm run live:check` reports READY or an exact OPEN reason without contacting the source.
+- `npm run eval` passes for a complete brief, a brief with missing evidence, and a brief with conflicting evidence.
+- The private dated HTML brief names its sources, or live access remains OPEN.
 
 ## Boundary
 
-- In scope: `TEMPLATE — one approved read-only corporate source, the synthetic equivalent, and validated private HTML at ~/.bree/briefs/YYYY-MM-DD.html.`
+- In scope: one approved read-only corporate source, the synthetic equivalent, and validated private HTML at `~/.bree/briefs/YYYY-MM-DD.html`.
 - Out of scope: writing to a source, sending messages, changing tickets, public deployment, customer data, raw connector storage, and live output inside this repository.
-- The model never invents a fact: `TEMPLATE — what happens when a source is silent.`
-- Stop or escalate when: `TEMPLATE — a write scope is offered, personal data appears, the agent starts deciding instead of describing.`
+- The model never invents a fact: a silent source gives `OPEN`, and sources that disagree give `CONFLICT`.
+- Stop or escalate when: a write scope is offered, customer data appears, or the agent starts deciding instead of describing.
 
 ## Owners
 
 | Role | Name | Responsibility |
 | --- | --- | --- |
-| Reader | `TEMPLATE` | Reads the brief and makes the named decision |
-| Builder | `TEMPLATE` | Owns the contract, the code and the local proof |
-| Gate | `TEMPLATE` | Accepts or rejects each local result against this file |
+| Reader | The user named above | Reads the brief and makes the named decision |
+| Builder | The participant (a person, not Claude) | Owns the contract, the code and the local proof |
+| Gate | The participant (a person, not Claude) | Accepts or rejects each local result against this file |
 
 ## Evidence contract
 
-`TEMPLATE — which synthetic commands, output file, preflight, private live check, fresh-checkout result, and rollback proof are required. Anything unrun is OPEN.`
+The proof is in `docs/evidence.md`: every synthetic command with its real exit code, the page `out/latest.html`, and the `npm run live:check` preflight. In Assignment 6 you also run the previous and the current commit in separate worktrees. A private live run is recorded only as PASS or OPEN. Anything unrun is OPEN.
 
 ## OPEN
 
-- `TEMPLATE — every unknown, one per line. Unknowns are written down, not guessed.`
+- Live source access: OPEN until Jira is connected and the exact read-only tool is named in Assignment 5.
+- Add every other unknown here, one per line. Unknowns are written down, not guessed.
+
 
 ## Next iteration
 
-Observed result: `npm run live:check` exited 3 and printed `OPEN — live source proof is not ready:` with five reasons (approvals false, Jira tool placeholder, `AETHERLINK_JIRA_MCP_CONFIG` not set).
+Observed result: `npm run live:check` exited 3 and printed `OPEN — live source proof is not ready:` because the example tool name is a placeholder.
 
 - Command: `npm run live:check`
 - One safe output signal: the first line, `OPEN — live source proof is not ready:`, followed by reason lines that name configuration fields only, never source content.
 - Remaining risk: live access is unproven. No Jira tool was inspected with `/mcp`, so the exact read-only tool and its issue-key field are unknown. `READY` would still not prove authentication or source access.
-- One improvement: with the trainer-provided `AETHERLINK_JIRA_MCP_CONFIG`, inspect `/mcp`, record the exact read-only tool name in the ignored `.bree.local.json`, and set the three approvals only after each is confirmed.
+- One improvement: connect Jira in the project folder and inspect `/mcp`. Record the exact read-only tool name in the ignored `.bree.local.json`.
 - One check: `npm run live:check` prints `READY` and exits 0 on the participant's own machine, followed by one private `npm run brief:live` whose status is recorded as `PASS` or `OPEN` only.
 
 ## Optional extension after the core route

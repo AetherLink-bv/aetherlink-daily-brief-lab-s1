@@ -40,7 +40,7 @@ Only the host process writes files. The model returns data, never a file.
 ## Hooks (deterministic, hold without asking)
 
 - Deny by default: `canUseTool` in `src/live.ts` allows exactly the one approved tool name and denies every other request. Checked by `test/live.test.ts`.
-- No built-in tools: the SDK is started with built-in tools set to none and `strictMcpConfig` on. Checked by `test/live.test.ts`.
+- No built-in tools: the SDK is started with built-in tools set to none. A PreToolUse hook denies every tool except the exact Jira read tool. Checked by `test/live.test.ts`.
 - Unvalidated output is rejected: the host parses the model output with the `DailyBrief` schema before it renders anything. Checked by `test/schema.test.ts` and `test/live.test.ts`.
 - Live source IDs are exact Jira keys from the successful structured tool result; an unknown ID is rejected. Checked by `test/live.test.ts`.
 - The host owns the file: the artifact path is built from the validated date, written with private permissions, outside the repository. Checked by `test/live.test.ts`.
@@ -62,7 +62,6 @@ Only the host process writes files. The model returns data, never a file.
 ## OPEN
 
 - OPEN — exact Jira read tool and the issue-key field of its structured result (step 3).
-- OPEN — whether the approved Vertex route is configured for this session (step 4, `/status`).
 - OPEN — the local trigger (step 8). It is a proposal only.
 
 ## Optional voice route

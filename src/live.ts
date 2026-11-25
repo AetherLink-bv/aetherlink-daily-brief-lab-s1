@@ -1,5 +1,5 @@
-import { query, type CanUseTool, type McpServerConfig, type Options } from "@anthropic-ai/claude-agent-sdk";
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { query, type CanUseTool, type Options } from "@anthropic-ai/claude-agent-sdk";
+import { readFileSync } from "node:fs";
 import { chmod, mkdir, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join, resolve, sep } from "node:path";
@@ -17,33 +17,22 @@ export const EXIT_OPEN = 3;
 
 export type CheckResult = { status: "READY" } | { status: "OPEN"; reasons: string[] };
 
-const TOOL_NAME = /^mcp__([A-Za-z0-9_-]+)__([A-Za-z0-9_-]+)$/;
+const localConfig = z.object({
+  user: z.string().trim().min(1, "user is missing"),
+  decision: z.string().trim().min(1, "decision is missing"),
+  mcp: z.object({
+    server: z.literal("jira"),
+    tool: z.string().regex(/^mcp__jira__[A-Za-z0-9_-]+$/, "use the exact Jira read tool from /mcp")
+      .refine(name => !name.includes("REPLACE_WITH"), "replace the placeholder with the exact Jira read tool from /mcp"),
+  }),
+});
 
-export function checkLiveConfig(config: unknown, env: Record<string, string | undefined>): CheckResult {
-  const reasons: string[] = [];
-  const c = (config && typeof config === "object" ? config : undefined) as Record<string, unknown> | undefined;
-  if (!c) reasons.push(".bree.local.json is missing or unreadable (copy .bree.example.json and fill it in)");
-  for (const flag of ["approvedCorporateConnector", "approvedReadOnlyTool", "authorizedModelAccount"]) {
-    if (c?.[flag] !== true) reasons.push(`${flag} is not true`);
-  }
-  if (c && c.modelProvider !== "vertex") reasons.push("modelProvider is not vertex");
-  const mcp = (c?.mcp && typeof c.mcp === "object" ? c.mcp : {}) as Record<string, unknown>;
-  const tool = typeof mcp.tool === "string" ? mcp.tool : "";
-  if (c) {
-    if (tool.includes("REPLACE_WITH")) reasons.push("mcp.tool is still the REPLACE_WITH placeholder; use the exact read-only name shown by /mcp");
-    else if (!TOOL_NAME.test(tool)) reasons.push("mcp.tool is not a mcp__<server>__<tool> name");
-    else if (TOOL_NAME.exec(tool)?.[1] !== mcp.server) reasons.push("mcp.tool does not belong to mcp.server");
-  }
-  const path = env.AETHERLINK_JIRA_MCP_CONFIG;
-  if (!path) reasons.push("AETHERLINK_JIRA_MCP_CONFIG is not set");
-  else if (!existsSync(path) || !statSync(path).isFile()) reasons.push("AETHERLINK_JIRA_MCP_CONFIG does not point to a file");
-  return reasons.length ? { status: "OPEN", reasons } : { status: "READY" };
-}
-
-export interface LiveConfig {
-  user: string;
-  decision: string;
-  mcp: { server: string; tool: string };
+export function checkLiveConfig(config: unknown): CheckResult {
+  if (config == null) return { status: "OPEN", reasons: [".bree.local.json is missing or unreadable"] };
+  const result = localConfig.safeParse(config);
+  return result.success ? { status: "READY" } : {
+    status: "OPEN", reasons: result.error.issues.map(issue => issue.path.join(".") + ": " + issue.message),
+  };
 }
 
 function loadLocalConfig(): unknown {
@@ -63,25 +52,21 @@ export function makeCanUseTool(allowed: string): CanUseTool {
       : { behavior: "deny", message: `Only ${allowed} is permitted in Bree.` };
 }
 
-export function readServerDefinition(path: string, server: string): McpServerConfig {
-  const parsed = JSON.parse(readFileSync(path, "utf8")) as { mcpServers?: Record<string, McpServerConfig> };
-  const definition = parsed.mcpServers?.[server];
-  if (!definition) throw new Error(`MCP server "${server}" is not defined in the configured MCP file`);
-  return definition; // only the selected definition leaves this function
-}
-
-export function buildQueryOptions(input: { server: string; tool: string; serverDefinition: McpServerConfig }): Options {
+export function buildQueryOptions(tool: string): Options {
   return {
-    tools: [], // no built-in tools: no shell, no file write
-    strictMcpConfig: true, // ignore every MCP configuration except the one passed below
-    mcpServers: { [input.server]: input.serverDefinition },
-    allowedTools: [input.tool],
-    canUseTool: makeCanUseTool(input.tool), // deny by default
-    settingSources: [], // no project, user or local settings
+    cwd: root,
+    tools: [],
+    settingSources: ["local"],
+    allowedTools: [tool],
+    canUseTool: makeCanUseTool(tool),
+    hooks: { PreToolUse: [{ hooks: [async input =>
+      input.hook_event_name === "PreToolUse" && input.tool_name === tool ? {} : {
+        hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "deny" },
+      },
+    ] }] },
     persistSession: false,
     permissionMode: "default",
     maxTurns: 6,
-    outputFormat: { type: "json_schema", schema: z.toJSONSchema(DailyBriefSchema) as Record<string, unknown> },
   };
 }
 
@@ -146,19 +131,15 @@ function textOf(content: unknown): string {
   return "";
 }
 
-export async function runLive(config: LiveConfig, mcpConfigPath: string): Promise<string> {
+export async function runLive(config: z.infer<typeof localConfig>): Promise<string> {
   const today = new Date().toLocaleDateString("sv-SE"); // YYYY-MM-DD in local time
-  const options = buildQueryOptions({
-    server: config.mcp.server,
-    tool: config.mcp.tool,
-    serverDefinition: readServerDefinition(mcpConfigPath, config.mcp.server),
-  });
-  options.env = { ...process.env, CLAUDE_CODE_USE_VERTEX: "1" };
+  const options = buildQueryOptions(config.mcp.tool);
   options.systemPrompt =
     "You write one private Daily Brief. Use only the one permitted read-only tool, only for the user's own work items. " +
     "Never state a fact the tool result does not contain. Use an exact issue key as every source id. " +
     "A section with no evidence gets an OPEN item whose text starts with OPEN. Disagreeing evidence is a CONFLICT item whose text starts with CONFLICT. " +
-    "Describe the work; do not decide for the reader.";
+    "Describe the work; do not decide for the reader. Return only a JSON object matching this schema: " +
+    JSON.stringify(z.toJSONSchema(DailyBriefSchema));
   const prompt =
     `Make the Daily Brief for ${config.user}, date ${today}. The decision this brief supports: ${config.decision}. ` +
     `Read the user's own open work items with ${config.mcp.tool} and fill every DailyBrief section.`;
@@ -182,7 +163,7 @@ export async function runLive(config: LiveConfig, mcpConfigPath: string): Promis
     }
     if (message.type === "result") {
       if (message.subtype !== "success") throw new Error(`the model run ended with: ${message.subtype}`);
-      structured = message.structured_output;
+      structured = JSON.parse(message.result);
     }
   }
   if (!issueKeys) throw new Error("the approved tool returned no successful structured result");
@@ -193,11 +174,11 @@ export async function runLive(config: LiveConfig, mcpConfigPath: string): Promis
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const config = loadLocalConfig();
-  const check = checkLiveConfig(config, process.env);
+  const check = checkLiveConfig(config);
   if (process.argv.includes("--check")) {
-    // Local preflight only: reads .bree.local.json and tests that a file exists. Contacts nothing.
+    // Local preflight only: reads .bree.local.json. Contacts nothing.
     if (check.status === "READY") {
-      console.log("READY — local approvals and configuration are present. Authentication and source access are not proven.");
+      console.log("READY — Jira tool name, user and decision are configured. Before a live run, confirm in /mcp that the tool is read-only. This check does not contact Jira.");
     } else {
       console.log("OPEN — live source proof is not ready:");
       for (const reason of check.reasons) console.log(`- ${reason}`);
@@ -209,7 +190,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     process.exitCode = EXIT_OPEN;
   } else {
     try {
-      const path = await runLive(config as LiveConfig, process.env.AETHERLINK_JIRA_MCP_CONFIG as string);
+      const path = await runLive(localConfig.parse(config));
       console.log(`PASS — private brief written to ${path}`);
     } catch (error) {
       // Print the error class only: messages could echo connector or model content.

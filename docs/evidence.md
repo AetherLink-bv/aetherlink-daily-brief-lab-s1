@@ -1,6 +1,22 @@
 # Evidence — Daily brief agent
 
-Cutoff: `2026-11-24 11:10 CET, revision 1f860cb plus the uncommitted A6 P2 changes (the commit that holds this file)`
+## A6 part 2 replay, 25 November 2026
+
+The check used revision `e8682b5` and the example configuration. Its Jira tool name is still a placeholder.
+
+| Command | Exit code | Observed result |
+| --- | --- | --- |
+| `npm test` | 0 | 47 tests passed on the render host. |
+| `npm run test:live` | 0 | 16 synthetic tests passed. |
+| `npm run eval` | 0 | Four synthetic cases passed. |
+| `npm run brief:sample` | 0 | `source: sample/brief.sample.json (synthetic)` |
+| `npm run live:check` | 3 | `mcp.tool: replace the placeholder with the exact Jira read tool from /mcp` |
+
+Live access stays OPEN. The replay made no Jira or model call.
+
+## Original run, 24 November 2026
+
+Cutoff: `2026-11-24 11:10 CET, revision 1f860cb plus the uncommitted A6 P2 changes`
 
 Every row is a claim with the command that proves it, the exit code you saw and
 one quoted output line. A command nobody ran is `OPEN`, never a failure or pass.
