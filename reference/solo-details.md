@@ -1,6 +1,6 @@
 # SOLO details
 
-The prompts in `SOLO.md` use the six lines of Day 1: Goal, Context, Constraints, Done when, Output, Check. They are short.
+The prompts in `SOLO.md` use the six parts of Day 1: Goal, Context, Constraints, Done when, Output, Check. They are short.
 This file holds the exact requirements of each part. Claude Code reads the section that the prompt names.
 
 The sentences below are the requirements of the long prompts that were used until November 2026.

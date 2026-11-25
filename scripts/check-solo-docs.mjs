@@ -143,8 +143,8 @@ for (const [, section] of files["SOLO.md"].matchAll(/reference\/solo-details\.md
   assert.match(files["reference/solo-details.md"], new RegExp(`^## ${section}$`, "m"), `no section ${section} in reference/solo-details.md`);
 }
 for (const prompt of prompts(files["SOLO.md"])) assert.ok(prompt.split(/\s+/).length <= 75, `a SOLO prompt is longer than 75 words: ${prompt.slice(0, 40)}`);
-// Every SOLO prompt has the six lines of the Day 1 template, in that order.
-for (const prompt of prompts(files["SOLO.md"])) assert.match(prompt, /^Goal: .+ Context: .+ Constraints: .+ Done when: .+ Output: .+ Check: .+$/, `not the six-line template: ${prompt.slice(0, 40)}`);
+// Every SOLO prompt has the six parts of the Day 1 template, in that order.
+for (const prompt of prompts(files["SOLO.md"])) assert.match(prompt, /^Goal: .+ Context: .+ Constraints: .+ Done when: .+ Output: .+ Check: .+$/, `not the six-part template: ${prompt.slice(0, 40)}`);
 // Every prompt names its section. A requirement that a prompt moved to the details file is in that prompt's section.
 const sectionOf = name => (files["reference/solo-details.md"].split(/^## /m).find(part => part.startsWith(`${name}\n`)) ?? "");
 for (const prompt of prompts(files["SOLO.md"])) assert.match(prompt, /reference\/solo-details\.md, section A\d(?: Part \d)?/, `a SOLO prompt names no section: ${prompt.slice(0, 40)}`);
