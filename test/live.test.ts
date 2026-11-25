@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, stat, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
@@ -10,7 +10,6 @@ import {
   checkLiveConfig,
   extractIssueKeys,
   makeCanUseTool,
-  readServerDefinition,
   validateLiveBrief,
   writePrivateBrief,
 } from "../src/live.js";
@@ -18,10 +17,6 @@ import {
 // Synthetic names for tests only. The real tool name comes from /mcp and lives in the ignored .bree.local.json.
 const TOOL = "mcp__jira__synthetic_search_own_issues";
 const READY_CONFIG = {
-  approvedCorporateConnector: true,
-  approvedReadOnlyTool: true,
-  authorizedModelAccount: true,
-  modelProvider: "vertex",
   user: "Maya",
   decision: "Bring the top blocker to the 09:00 stand-up",
   mcp: { server: "jira", tool: TOOL },
@@ -47,41 +42,23 @@ async function liveBrief(): Promise<DailyBrief> {
 
 // ---- live configuration boundary -------------------------------------------------------------
 
-test("the shipped example config is OPEN with one reason per missing approval and the placeholder tool", async () => {
+test("the example stays OPEN until the participant enters the exact Jira tool", async () => {
   const example = JSON.parse(await readFile(new URL("../.bree.example.json", import.meta.url), "utf8"));
-  const result = checkLiveConfig(example, {});
+  const result = checkLiveConfig(example);
   assert.equal(result.status, "OPEN");
-  const text = (result as { reasons: string[] }).reasons.join("\n");
-  for (const needle of ["approvedCorporateConnector", "approvedReadOnlyTool", "authorizedModelAccount", "REPLACE_WITH", "AETHERLINK_JIRA_MCP_CONFIG"]) {
-    assert.ok(text.includes(needle), `reason missing: ${needle}`);
-  }
+  if (result.status === "OPEN") assert.match(result.reasons.join("\n"), /placeholder/);
 });
 
-test("a missing config is OPEN, not an error", () => {
-  const result = checkLiveConfig(undefined, {});
-  assert.equal(result.status, "OPEN");
-  assert.match((result as { reasons: string[] }).reasons.join("\n"), /\.bree\.local\.json/);
-});
-
-test("READY needs all three approvals, a well-formed tool for the named server, vertex, and an existing MCP config file", async () => {
-  const dir = await tmp();
-  const file = join(dir, "mcp.json");
-  await writeFile(file, JSON.stringify({ mcpServers: { jira: { command: "synthetic" } } }));
-  assert.deepEqual(checkLiveConfig(READY_CONFIG, { AETHERLINK_JIRA_MCP_CONFIG: file }), { status: "READY" });
-  for (const key of ["approvedCorporateConnector", "approvedReadOnlyTool", "authorizedModelAccount"]) {
-    assert.equal(checkLiveConfig({ ...READY_CONFIG, [key]: false }, { AETHERLINK_JIRA_MCP_CONFIG: file }).status, "OPEN");
-  }
-  assert.equal(checkLiveConfig({ ...READY_CONFIG, modelProvider: "anthropic" }, { AETHERLINK_JIRA_MCP_CONFIG: file }).status, "OPEN");
-  assert.equal(checkLiveConfig({ ...READY_CONFIG, mcp: { server: "jira", tool: "mcp__other__read" } }, { AETHERLINK_JIRA_MCP_CONFIG: file }).status, "OPEN");
-  assert.equal(checkLiveConfig(READY_CONFIG, { AETHERLINK_JIRA_MCP_CONFIG: join(dir, "missing.json") }).status, "OPEN");
-  assert.equal(checkLiveConfig(READY_CONFIG, {}).status, "OPEN");
-});
-
-test("a truthy string is not an approval: flags must be the boolean true", async () => {
-  const dir = await tmp();
-  const file = join(dir, "mcp.json");
-  await writeFile(file, "{}");
-  assert.equal(checkLiveConfig({ ...READY_CONFIG, approvedReadOnlyTool: "true" }, { AETHERLINK_JIRA_MCP_CONFIG: file }).status, "OPEN");
+test("READY needs a local Jira tool, a user and a decision", () => {
+  assert.deepEqual(checkLiveConfig(READY_CONFIG), { status: "READY" });
+  for (const config of [
+    undefined, null, [],
+    { ...READY_CONFIG, user: "   " }, { ...READY_CONFIG, decision: 1 },
+    { ...READY_CONFIG, mcp: null },
+    { ...READY_CONFIG, mcp: { server: "other", tool: "mcp__other__read" } },
+    { ...READY_CONFIG, mcp: { server: "jira", tool: "mcp__other__read" } },
+    { ...READY_CONFIG, mcp: { server: "jira", tool: "mcp__jira__*" } },
+  ]) assert.equal(checkLiveConfig(config).status, "OPEN");
 });
 
 // ---- exact allowed tool -----------------------------------------------------------------------
@@ -89,8 +66,8 @@ test("a truthy string is not an approval: flags must be the boolean true", async
 test("canUseTool allows exactly the approved tool", async () => {
   const canUse = makeCanUseTool(TOOL);
   const signal = new AbortController().signal;
-  const allowed = await canUse(TOOL, { jql: "synthetic" }, { signal, toolUseID: "t1" });
-  assert.equal(allowed.behavior, "allow");
+  const allowed = await canUse(TOOL, { jql: "synthetic" }, { signal, toolUseID: "t1", requestId: "r1" });
+  assert.equal(allowed?.behavior, "allow");
 });
 
 test("canUseTool denies every unexpected tool, including near misses", async () => {
@@ -101,29 +78,30 @@ test("canUseTool denies every unexpected tool, including near misses", async () 
     "mcp__jira__synthetic_update_issue",
     `${TOOL}_x`, `x${TOOL}`, TOOL.toUpperCase(), ` ${TOOL}`, "mcp__other__synthetic_search_own_issues", "",
   ]) {
-    const result = await canUse(name, {}, { signal, toolUseID: "t" });
-    assert.equal(result.behavior, "deny", `must deny ${JSON.stringify(name)}`);
+    const result = await canUse(name, {}, { signal, toolUseID: "t", requestId: "r" });
+    assert.equal(result?.behavior, "deny", `must deny ${JSON.stringify(name)}`);
   }
 });
 
-test("SDK options: no built-in tools, strict MCP config, only the selected server, one allowed tool, no inherited settings, no session on disk", async () => {
-  const options = buildQueryOptions({ server: "jira", tool: TOOL, serverDefinition: { command: "synthetic" } as never });
+test("SDK uses this folder's settings and denies unexpected tools before use", async () => {
+  const options = buildQueryOptions(TOOL);
   assert.deepEqual(options.tools, []);
-  assert.equal(options.strictMcpConfig, true);
-  assert.deepEqual(Object.keys(options.mcpServers ?? {}), ["jira"]);
+  assert.deepEqual(options.settingSources, ["local"]);
+  assert.equal(options.strictMcpConfig, undefined);
+  assert.equal(options.mcpServers, undefined);
   assert.deepEqual(options.allowedTools, [TOOL]);
-  assert.equal(typeof options.canUseTool, "function");
-  assert.deepEqual(options.settingSources, []);
   assert.equal(options.persistSession, false);
-  assert.equal(options.outputFormat?.type, "json_schema");
-});
-
-test("readServerDefinition reads only the selected server from the config file", async () => {
-  const dir = await tmp();
-  const file = join(dir, "mcp.json");
-  await writeFile(file, JSON.stringify({ mcpServers: { jira: { command: "synthetic-jira" }, mail: { command: "synthetic-mail" } } }));
-  assert.deepEqual(readServerDefinition(file, "jira"), { command: "synthetic-jira" });
-  assert.throws(() => readServerDefinition(file, "confluence"), /not defined/);
+  const hook = options.hooks?.PreToolUse?.[0]?.hooks[0];
+  assert.ok(hook);
+  for (const name of [TOOL, "Bash", "mcp__jira__write", "mcp__other__read"]) {
+    const result = await hook({
+      hook_event_name: "PreToolUse", session_id: "test", cwd: "/tmp",
+      transcript_path: "", tool_name: name, tool_input: {}, tool_use_id: "test",
+    }, "test", { signal: new AbortController().signal });
+    assert.deepEqual(result, name === TOOL ? {} : {
+      hookSpecificOutput: { hookEventName: "PreToolUse", permissionDecision: "deny" },
+    });
+  }
 });
 
 // ---- tool result and source ID rejection ------------------------------------------------------

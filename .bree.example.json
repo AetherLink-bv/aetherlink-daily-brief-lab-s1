@@ -1,8 +1,4 @@
 {
-  "approvedCorporateConnector": false,
-  "approvedReadOnlyTool": false,
-  "authorizedModelAccount": false,
-  "modelProvider": "vertex",
   "user": "Maya",
   "decision": "Bring the top blocker to the 09:00 stand-up",
   "mcp": {
