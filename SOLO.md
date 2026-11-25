@@ -4,14 +4,13 @@ It is 08:30. Your stand-up starts at 09:00. Bree prepares one private brief from
 
 You are the builder and reviewer. Claude Code helps you through the local AI-native SDLC. Each assignment leaves an artifact and a visible check. Missing information stays `OPEN`. Conflicting evidence stays `CONFLICT`.
 
-Local fixtures are synthetic. Use them for tests, recordings, and reproducible evidence. The finished Bree route reads only your permitted work items through the existing approved Jira MCP connection.
+Local fixtures are synthetic. Use them for tests, recordings, and reproducible evidence. The finished Bree route reads only your permitted work items through the Jira server that you connect in Assignment 5.
 
 ## Data and permission rules
 
 - Use Bree privately for your own work. Do not publish the brief or its live output.
 - Never add customer data, credentials, connector responses, or live briefs to prompts, fixtures, screenshots, recordings, evidence files, or commits.
-- Use only the existing, organisation-approved Jira MCP connection and your own permitted work items.
-- Use only the organisation-approved Anthropic via Vertex model route configured for this session.
+- Use only the Jira server that you connect in Assignment 5, and your own permitted work items.
 - Do not connect work email. Paste only sanitised, non-sensitive text when an exercise explicitly needs mail-like input.
 - Give Bree one exact read-only source tool. Do not give it shell, file-write, messaging, or ticket-update tools.
 - Stop when the connector offers write scope, the source contains customer data, or permission is unclear.
@@ -24,10 +23,10 @@ The slides name each prompt `SOLO N`, or `SOLO N · Part M`. That is Assignment 
 
 ```bash
 npm ci
-claude --setting-sources project,user --permission-mode default --strict-mcp-config --no-chrome
+claude --permission-mode default
 ```
 
-This starts Manual mode and loads no MCP server for A1–A4. Local settings are excluded. Confirm the organisation-approved Vertex route with `/status` before the first prompt. If it is unavailable, keep model-assisted work `OPEN`; manual synthetic checks can continue.
+This starts Claude Code in manual mode: it asks before it changes a file or uses a tool.
 
 Complete one assignment at a time. Inspect each diff and run the named check yourself before you continue.
 
@@ -179,13 +178,13 @@ Close the first Claude Code session with `/exit`. Connect Jira once, in this pro
 claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp
 ```
 
-Start Claude Code again, now without the flags that hide MCP servers (`--strict-mcp-config` and `--setting-sources`):
+Start Claude Code again with the same command as at the start. It loads the Jira server of this folder:
 
 ```bash
-claude --permission-mode default --no-chrome
+claude --permission-mode default
 ```
 
-Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. Manual mode asks before every Jira call: say yes only to a tool that reads. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository. In Assignment 5, tell Claude Code the tool name, or that it is `OPEN`: the tests then use a mocked tool. Keep the synthetic route for tests.
+Type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. No mark? Treat the tool as one that can change something. Manual mode asks before every Jira call: say yes only to a tool that reads. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. No Jira access? Keep live proof `OPEN`: the synthetic route keeps working. Do not create a token or copy any configuration into the repository. In Assignment 5, tell Claude Code the tool name, or that it is `OPEN`: the tests then use a mocked tool. Keep the synthetic route for tests.
 
 **Where:** Claude Code for the bounded route. Use your terminal only for preflight and the approved private run.
 
@@ -209,7 +208,7 @@ Inspect one successful structured result during the private human review. Choose
 
 > Goal: the smallest live route with the Claude Agent SDK. Context: reference/solo-details.md, section A5 Part 2. Constraints: no tool other than the approved Jira read tool; no MCP config other than the approved one; do not run npm run brief:live. Done when: the tests are green and npm run live:check prints READY or OPEN. Output: the boundaries and the diff. Check: real output only; mark doubts as OPEN.
 
-Create the ignored local configuration. Set its three approval flags to `true` only after the connector, read-only tool status, and model route are confirmed. Add the chosen user, decision, and exact Jira read-tool name shown by `/mcp`:
+Create the ignored local configuration. Add the chosen user, decision, and exact Jira read-tool name shown by `/mcp`:
 
 ```bash
 test -f .bree.local.json || cp .bree.example.json .bree.local.json

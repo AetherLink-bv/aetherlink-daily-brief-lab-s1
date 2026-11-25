@@ -38,7 +38,7 @@ These twelve prompt parts are identical to A1–A6 in `SOLO.md`. A7 is participa
 
 ## Assignment 5: connect the existing read-only Jira source
 
-Before Part 1, close the synthetic-only session. Connect Jira once in this folder with `claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp`, start Claude Code again with `claude --permission-mode default --no-chrome`, then use `/mcp` to log in and see which tools only read. Missing access stays `OPEN`. `.bree.local.json` stores runtime approvals; it is not MCP server configuration.
+Before Part 1, close the synthetic-only session. Connect Jira once in this folder with `claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp`, start Claude Code again with `claude --permission-mode default`, then use `/mcp` to log in and see which tools only read. Missing access stays `OPEN`. `.bree.local.json` stores runtime approvals; it is not MCP server configuration.
 
 ### Part 1
 

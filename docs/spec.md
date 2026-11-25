@@ -4,7 +4,7 @@ Status: `TEMPLATE — complete before design`
 
 References: `reference/dia-to-bree.md` and `reference/brief-example.md`. Both contain synthetic structural guidance only.
 
-Live source: `TEMPLATE — one exact owner-confirmed read-only tool from the existing approved Jira MCP connection. Live source IDs are exact issue keys from its successful structured result. Never paste its response here.`
+Live source: `TEMPLATE — one exact read-only tool from the Jira server connected for this folder. Live source IDs are exact issue keys from its successful structured result. Never paste its response here.`
 
 ## The artifact
 
