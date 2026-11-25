@@ -190,7 +190,7 @@ Without Jira access, skip login and use a mocked tool for the tests. If you conn
 
 ### Part 1: choose and test the source boundary
 
-**Action:** Write this prompt in a note first, in six lines. Take two minutes. Compare it with Part 1 below. Then send only Part 1, so that nothing runs twice. Review the proposed tests and exact tool before you approve the build.
+**Action:** Write this prompt in a note first, in six lines. Take two minutes. Compare it with Part 1 below. Then send only Part 1, so that nothing runs twice. Review the proposed tests. With Jira, check the exact tool name. Without Jira, approve the mocked tests and leave the live tool OPEN.
 
 > Goal: tests for the boundary of the live route. Context: docs/plan.md, docs/spec.md and reference/solo-details.md, section A5 Part 1. Constraints: no route yet; no installs; no tool name of your own: ask me for it, and accept OPEN. Done when: the new tests fail for the right reason. Output: the red run. Check: I approve the tool and the tests.
 
@@ -200,21 +200,21 @@ Ask Claude to explain the boundary before you approve it:
 /eli5 Explain Bree's source boundary from Jira through one read-only tool and the Agent SDK to validated private HTML. Name what each boundary prevents. Do not edit files or expose live data.
 ```
 
-Inspect one successful structured result during the private human review. Choose its exact Jira key field only after that review. The mocked `issues[].key` shape is test evidence, not live proof.
+If you have approved Jira access and a successful result, inspect it privately to identify its Jira key field. Otherwise, use the synthetic `issues[].key` fixture for the tests and record the live key field as `OPEN`.
 
 ### Part 2: build and check the bounded route
 
-**Action:** Only after you approve the tests, tool, and boundary: write this prompt in a note first, compare it with Part 2 below, then send only Part 2.
+**Action:** After approving the tests and the boundary for your route, write this prompt in a note. Compare it with Part 2 below, then send only Part 2.
 
 > Goal: the smallest live route with the Claude Agent SDK. Context: reference/solo-details.md, section A5 Part 2. Constraints: no tool other than the approved Jira read tool; no MCP config other than the approved one; do not run npm run brief:live. Done when: the tests are green and npm run live:check prints READY or OPEN. Output: the boundaries and the diff. Check: real output only; mark doubts as OPEN.
 
-Create the ignored local configuration. Add the chosen user, decision, and exact Jira read-tool name shown by `/mcp`:
+Create the ignored local configuration if it is missing:
 
 ```bash
 test -f .bree.local.json || cp .bree.example.json .bree.local.json
 ```
 
-This command prints nothing when it works. `.bree.local.json` holds the tool name, user and decision for the live route; it is not MCP server configuration.
+`.bree.local.json` is not MCP server configuration. With a verified read-only tool, enter its exact name from `/mcp`, your user and your decision in `.bree.local.json`. Without one, keep the placeholder and expect `OPEN` from the offline check.
 
 Run the preflight:
 
@@ -232,7 +232,7 @@ If it reports `OPEN`, record the reason and exit code 3. The synthetic route can
 npm run brief:live
 ```
 
-Open the dated HTML privately. Record only `PASS` or `OPEN` for the source and artifact.
+After a successful private run, open the dated HTML privately. Record only `PASS` or `OPEN` for each result. If you skipped the run, carry both `OPEN` results into Assignment 6.
 
 This part changes no file in the project folder, so there is no version to save.
 
