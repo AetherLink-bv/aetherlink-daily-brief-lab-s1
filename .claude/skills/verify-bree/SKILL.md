@@ -27,8 +27,6 @@ git check-ignore -v .bree.local.json out/latest.html  # both must be ignored (a 
 test -f .bree.local.json && echo "local config present" || echo "local config absent"
 ```
 
-Never print the value of `AETHERLINK_JIRA_MCP_CONFIG`; only whether it is set.
-
 ## Drive
 
 | Journey | Command | Pass signal |

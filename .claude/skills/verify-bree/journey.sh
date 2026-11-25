@@ -25,7 +25,6 @@ run 1 git rev-parse --short HEAD
 run 0 git status --short
 run 1 git check-ignore -v out/latest.html
 run 0 bash -c 'test -f .bree.local.json && echo "local config present" || echo "local config absent"'
-run 0 bash -c 'test -n "${AETHERLINK_JIRA_MCP_CONFIG:-}" && echo "AETHERLINK_JIRA_MCP_CONFIG is set" || echo "AETHERLINK_JIRA_MCP_CONFIG is not set"'
 
 step "3 drive"
 run 1 npm run brief:sample
