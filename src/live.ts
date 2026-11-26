@@ -56,7 +56,7 @@ export function buildQueryOptions(tool: string): Options {
   return {
     cwd: root,
     tools: [],
-    settingSources: ["local"],
+    settingSources: ["user", "local"],
     allowedTools: [tool],
     canUseTool: makeCanUseTool(tool),
     hooks: { PreToolUse: [{ hooks: [async input =>

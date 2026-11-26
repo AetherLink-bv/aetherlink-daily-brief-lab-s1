@@ -40,7 +40,7 @@ export function buildOutlookOptions(): Options {
     mcpServers: {},
     strictMcpConfig: true,
     canUseTool: async (toolName) => ({ behavior: "deny", message: `No tool is permitted (${toolName || "unnamed"}).` }),
-    settingSources: [],
+    settingSources: ["user", "local"],
     persistSession: false,
     permissionMode: "default",
     maxTurns: 2,

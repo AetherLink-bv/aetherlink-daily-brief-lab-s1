@@ -88,10 +88,10 @@ test("canUseTool denies every unexpected tool, including near misses", async () 
   }
 });
 
-test("SDK uses this folder's settings and denies unexpected tools before use", async () => {
+test("Worldline SDK loads user and local settings and denies unexpected tools before use", async () => {
   const options = buildQueryOptions(TOOL);
   assert.deepEqual(options.tools, []);
-  assert.deepEqual(options.settingSources, ["local"]);
+  assert.deepEqual(options.settingSources, ["user", "local"]);
   assert.equal(options.strictMcpConfig, undefined);
   assert.equal(options.mcpServers, undefined);
   assert.deepEqual(options.allowedTools, [TOOL]);

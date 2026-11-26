@@ -1,16 +1,16 @@
 # Build your personal Daily Brief agent
 
-It is 08:30. Your stand-up starts at 09:00. Bree prepares one private brief from your own permitted work items, through the Jira server that you connect for this folder.
+It is 08:30. Your stand-up starts at 09:00. Bree helps you choose what to raise at stand-up. Start with sample items. You can also try your own items with approved Jira access.
 
 You are the builder and reviewer. Claude Code helps you through the local AI-native SDLC. Each assignment leaves an artifact and a visible check. Missing information stays `OPEN`. Conflicting evidence stays `CONFLICT`.
 
-Local fixtures are synthetic. Use them for tests, recordings, and reproducible evidence. The finished Bree route reads only your permitted work items through the Jira server that you connect in Assignment 5.
+Local fixtures are synthetic. Use them for tests, recordings, and reproducible evidence. The optional private run in Assignment 5 reads only your own permitted work items.
 
 ## Data and permission rules
 
 - Use Bree privately for your own work. Do not publish the brief or its live output.
 - Never add customer data, credentials, connector responses, or live briefs to prompts, fixtures, screenshots, recordings, evidence files, or commits.
-- Use only the Jira server that you connect in Assignment 5, and your own permitted work items.
+- For the optional private run in Assignment 5, use only the approved Jira server and your own permitted items.
 - Do not connect work email. Paste only sanitised, non-sensitive text when an exercise explicitly needs mail-like input.
 - Give Bree one exact read-only source tool. Do not give it shell, file-write, messaging, or ticket-update tools.
 - Stop when the connector offers write scope, the source contains customer data, or permission is unclear.
@@ -26,7 +26,9 @@ npm ci
 claude --permission-mode default
 ```
 
-This starts Claude Code in manual mode: it asks before it changes a file or runs a command.
+Claude Code starts in manual mode and asks before edits or commands.
+
+Use your existing organisation sign-in for Claude Code. If it asks for a personal API key, cancel the prompt. If your approved sign-in is unavailable, run the local checks for code you already have or work with a partner. Keep anything you could not verify yourself `OPEN`.
 
 Complete one assignment at a time. Inspect each diff and run the named check yourself before you continue.
 
@@ -170,23 +172,17 @@ Optional, when Impeccable is available:
 
 **Visible result:** Open `out/latest.html` and trace its decision back to the synthetic input.
 
-## Assignment 5: connect the read-only Jira source
+## Assignment 5: test what Bree may read
 
-Close the first Claude Code session with `/exit`. If you have Jira access, connect it once in this project folder:
+Use Claude Code in manual mode. Keep your current session for the sample route. Reply `OPEN` when Claude asks for a Jira tool.
+
+Only with approval, check `/mcp` in your existing session. If Jira is missing and you want the private route, add it from the project folder in Terminal:
 
 ```bash
 claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp
 ```
 
-With or without Jira, start Claude Code again in the project folder:
-
-```bash
-claude --permission-mode default
-```
-
-Without Jira access, skip login and use a mocked tool for the tests. If you connected Jira, type `/mcp`, choose `jira`, log in and open its tools. Claude Code marks which tools only read. No mark? Treat the tool as one that can change something. When Claude Code asks for permission, approve only that one read call. Decline any request to allow future calls automatically. Note the exact name of the one read tool for your own work items, in the form `mcp__jira__<tool>`. Do not create a token or copy any configuration into the repository. In Assignment 5, tell Claude Code the tool name, or that it is `OPEN`: the tests then use a mocked tool. Keep the synthetic route for tests.
-
-**Where:** Claude Code for the bounded route. Use your terminal only for preflight and the approved private run.
+Restart Claude Code only after adding the server. Type `/exit`, then run `claude --permission-mode default` in Terminal. Otherwise keep the session open. In `/mcp`, sign in to Jira privately and verify the exact name of one read-only tool. Approve only that read call. Without a verified name, reply `OPEN`.
 
 ### Part 1: choose and test the source boundary
 
@@ -208,6 +204,8 @@ If you have approved Jira access and a successful result, inspect it privately t
 
 > Goal: the smallest live route with the Claude Agent SDK. Context: reference/solo-details.md, section A5 Part 2. Constraints: no tool other than the approved Jira read tool; no MCP config other than the approved one; do not run npm run brief:live. Done when: the tests are green and npm run live:check prints READY or OPEN. Output: the boundaries and the diff. Check: real output only; mark doubts as OPEN.
 
+In the `src/live.ts` diff, check `settingSources: ['user', 'local']` for Worldline. Use an organisation-approved profile. User settings can load hooks, environment variables and permission rules. Check that Bree still has no built-in tools and allows only the verified Jira tool.
+
 Create the ignored local configuration if it is missing:
 
 ```bash
@@ -216,23 +214,31 @@ test -f .bree.local.json || cp .bree.example.json .bree.local.json
 
 `.bree.local.json` is not MCP server configuration. With a verified read-only tool, enter its exact name from `/mcp`, your user and your decision in `.bree.local.json`. Without one, keep the placeholder and expect `OPEN` from the offline check.
 
-Run the preflight:
+In Terminal, run the sample tests. Then check the local settings:
 
 ```bash
+npm run test:live
 npm run live:check
 ```
 
-If it reports `OPEN`, record the reason and exit code 3. The synthetic route can still pass.
+The tests should pass. With the example tool the settings give `OPEN` (exit 3). `READY` (exit 0) only confirms the fields in the file. If either command asks for a key, cancel. Follow the [offline check in the README](README.md#check-the-code-and-the-settings).
 
-### Part 3: create the private live brief
+### Part 3: record two statuses
 
-**Action:** Run the command privately only after Part 2 is approved, the local check returns `READY`, and you confirm the read-only tool in `/mcp`. Otherwise record both the source and the dated artifact as `OPEN`. Continue with the synthetic exercise in Assignment 6.
+Missing approval, a verified read-only Jira tool or local `READY`? Record `source OPEN` and `page OPEN`. Continue with `out/latest.html` in Assignment 6.
+
+<details>
+<summary>Optional private run</summary>
+
+Only with all three checks and existing, approved model and Jira access, run this yourself in Terminal:
 
 ```bash
 npm run brief:live
 ```
 
-After a successful private run, open the dated HTML privately. Record only `PASS` or `OPEN` for each result. If you skipped the run, carry both `OPEN` results into Assignment 6.
+After a successful run, open the dated HTML privately. Record only `PASS` or `OPEN` for the source and the page separately. If you skip the run, keep both `OPEN`.
+
+</details>
 
 This part changes no file in the project folder, so there is no version to save.
 
@@ -306,20 +312,20 @@ Choose one mission:
 - Confluence: retrieve one agreed decision with context.
 - Mock Outlook: summarise one synthetic work request from `sample/outlook-email.sample.json`.
 
-Choose one source for this assignment. Type `/exit` to close the Assignment 6 session.
+Choose one source. Keep your current Claude Code session for Mock Outlook or an existing approved connection.
 
 - **Jira:** Use the connection from Assignment 5.
-- **GitLab:** Run `claude mcp add --transport http gitlab https://mcpgitlab.kazan.ai.worldline-solutions.com/mcp` in the project folder.
-- **Confluence:** Run `claude mcp add --transport http confluence https://mcpconfluence.kazan.ai.worldline-solutions.com/mcp` in the project folder.
+- **GitLab:** Only if you need to add this approved server, run `claude mcp add --transport http gitlab https://mcpgitlab.kazan.ai.worldline-solutions.com/mcp` in the project folder.
+- **Confluence:** Only if you need to add this approved server, run `claude mcp add --transport http confluence https://mcpconfluence.kazan.ai.worldline-solutions.com/mcp` in the project folder.
 - **Mock Outlook:** Use the sample email. Skip connector setup.
 
-Start a fresh session in the project folder with `claude --permission-mode default`. For a live mission, open `/mcp`, log in and select one tool marked read-only. If you cannot confirm access, choose Mock Outlook.
+Only after adding a new server, type `/exit` and restart in the project folder with `claude --permission-mode default`. For a live mission, open `/mcp`, sign in privately and verify one read-only tool. If you cannot confirm access, choose Mock Outlook.
 
 1. Choose one user, one decision, one mission, and one read-only source that you connected with `claude mcp add` (or Mock Outlook).
 2. Define a synthetic fixture with the same shape for repeatable tests.
 3. Write the intent, contract, design, and visual plan.
 4. Write a red test before implementation.
-5. Build the smallest bounded SDK route.
+5. Build the smallest route. An optional Worldline model run uses `settingSources: ['user', 'local']`. Keep `tools: []`. For a connected mission, restrict `allowedTools`, `canUseTool` and `PreToolUse` to its one approved read-only tool. Mock Outlook permits no tools. Its test stays offline. Only an explicitly chosen model run sends the sample to the approved provider.
 6. Prove one synthetic journey and record live access separately.
 7. Inspect the diff and keep all live data outside the repository.
 
