@@ -4,11 +4,13 @@ Add this only after the synthetic HTML brief and its tests pass. This extension 
 
 This extension is optional. Skip it if you do not want to create an external account.
 
+Use Windows PowerShell or macOS Terminal. Enter one command at a time and continue after it succeeds. If PowerShell blocks `npm.ps1`, use `npm.cmd`.
+
 Use Node.js 20.12 or newer. Check with `node --version` before you start.
 
 ## Boundary
 
-- Use only `sample/brief.sample.json`. Never read `~/.bree/briefs/` or live connector output.
+- Use only `sample/brief.sample.json`. Never read `~/.bree/briefs/` or live connector output. On Windows, this private folder is inside your user profile.
 - Send only the short summary and top todos. Keep source labels and raw work data out of the request.
 - Speak `OPEN` and `CONFLICT` exactly. Do not turn uncertainty into a confident statement.
 - Keep the HTML route unchanged. Audio is an extra artifact, not a replacement.
@@ -28,7 +30,7 @@ Use Node.js 20.12 or newer. Check with `node --version` before you start.
 
 ElevenLabs API calls consume account credits, including calls on the free plan. Key restrictions and credit limits reduce the effect of accidental use. See the official [API authentication guide](https://elevenlabs.io/docs/api-reference/authentication) and [ElevenAPI quickstart](https://elevenlabs.io/docs/eleven-api/guides/cookbooks/text-to-speech/).
 
-Create `.env.local` in the repository root:
+Create a plain-text file named exactly `.env.local` in the project folder using your editor. On Windows, check that the name does not end in `.txt`. Enter this setting in the file:
 
 ```text
 ELEVENLABS_API_KEY=your_personal_key
@@ -36,11 +38,12 @@ ELEVENLABS_API_KEY=your_personal_key
 
 The repository ignores `.env.local`. Check before continuing:
 
-```bash
+```text
+git check-ignore .env.local
 git status --short
 ```
 
-Expected result: `.env.local` is absent from the output. Stop if it appears.
+The first command prints `.env.local`. The second must omit it. Stop if either result differs.
 
 ## 2. Agree the boundary and test plan
 
@@ -60,7 +63,7 @@ Review the diff. Confirm that `src/voice.ts` has no Jira, MCP, Agent SDK, live b
 
 ## 4. Run the free checks first
 
-```bash
+```text
 npm run test:voice
 npm test
 npm run brief:sample
@@ -77,7 +80,7 @@ Expected result:
 
 This is the only step that sends text to ElevenLabs and uses credits.
 
-```bash
+```text
 npm run brief:voice
 ```
 
