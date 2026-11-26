@@ -49,13 +49,13 @@ test("a message that is not marked synthetic is refused", async () => {
   assert.throws(() => summariseEmail({} as Email), /synthetic/);
 });
 
-test("SDK route: no built-in tools, no MCP server, strict config, deny everything, nothing stored", () => {
+test("Worldline SDK route: user and local settings, no built-in tools or MCP servers", () => {
   const options = buildOutlookOptions();
   assert.deepEqual(options.tools, []);
   assert.deepEqual(options.mcpServers, {});
   assert.equal(options.strictMcpConfig, true);
   assert.equal(options.allowedTools, undefined);
-  assert.deepEqual(options.settingSources, []);
+  assert.deepEqual(options.settingSources, ["user", "local"]);
   assert.equal(options.persistSession, false);
   assert.equal(options.outputFormat?.type, "json_schema");
 });

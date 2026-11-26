@@ -29,8 +29,10 @@ If the claim is vague ("cleaner code"), ask for a measurable claim first.
 
 ## Artifacts (when safe)
 
+Use the operating system’s temporary folder (Node: `os.tmpdir()`). Create the following structure inside it:
+
 ```text
-/tmp/verify-this/<claim-slug>/
+verify-this/<claim-slug>/
 ├── claim.md
 ├── baseline/
 ├── treatment/

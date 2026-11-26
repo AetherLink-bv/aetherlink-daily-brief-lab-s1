@@ -46,7 +46,7 @@ Live connector: `OPEN`. Dated artifact: `OPEN`. Nothing is published.
 
 - Receiver: the next person who opens the local folder
 - Start from: the A6 P3 commit on branch `run/day5-real-run`
-- Run: `bash .claude/skills/verify-bree/journey.sh` (read-only apart from `out/`)
+- Run: `npm run verify:journey` from PowerShell or Terminal. The journey prints the path to its local evidence.
 - Compare: `journey result: PASS`, and `live:check` exit 3 while the Jira tool name is missing
 - Open work: confirm the Jira read tool with `/mcp` (owner: Maya with the tool owner); approve the trigger type (owner: the organisation); stop condition: any write scope offered
 

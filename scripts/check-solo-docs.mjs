@@ -21,7 +21,7 @@ const paths = [
   "AGENTS.md",
   "course/index.html",
 ];
-const files = Object.fromEntries(await Promise.all(paths.map(async (path) => [path, await readFile(path, "utf8")])));
+const files = Object.fromEntries(await Promise.all(paths.map(async (path) => [path, (await readFile(path, "utf8")).replace(/\r\n/g, "\n")])));
 // The prompts are short. The exact requirements of each part are in reference/solo-details.md.
 const solo = `${files["SOLO.md"]}\n${files["reference/solo-details.md"]}`;
 const packageJson = JSON.parse(files["package.json"]);
@@ -62,10 +62,13 @@ assert.match(files["README.md"], /^claude --permission-mode default$/m);
 assert.match(files["README.md"], /claude mcp add --transport http jira https:\/\/mcpjira\.kazan\.ai\.worldline-solutions\.com\/mcp/);
 assert.match(files["SOLO.md"], /claude mcp add --transport http jira /);
 // Every tracked text file, not only the files above: the course modules and CLAUDE.md teach the route too.
-const tracked = execFileSync("git", ["ls-files", "*.md", "*.html"], {encoding: "utf8"}).split("\n").filter(Boolean);
+const tracked = execFileSync("git", ["ls-files", "-z", "*.md", "*.html"], {encoding: "utf8"}).split("\0").filter(Boolean);
 for (const path of tracked) assert.doesNotMatch(await readFile(path, "utf8"), /AETHERLINK_JIRA_MCP_CONFIG|--mcp-config/, `${path}: the Jira route is claude mcp add plus /mcp, not a private config path`);
 assert.match(files["SOLO.md"], /\.bree\.local\.json.*not.*MCP server configuration/is);
-assert.match(solo, /settingSources \['local'\]/);
+const worldlineSettings = /settingSources: \['user', 'local'\]/;
+for (const path of ["README.md", "SOLO.md", "reference/solo-details.md"]) {
+  assert.match(files[path], worldlineSettings, `${path} must tell Worldline SDK users which settings to load`);
+}
 assert.match(solo, /PreToolUse hook/);
 assert.match(solo, /built-in tools to none/);
 assert.match(solo, /canUseTool/);
@@ -119,6 +122,20 @@ for (const name of ["mini", "test:mini", "test:schema", "test:render", "eval", "
   assert.ok(scripts[name], `package.json is missing ${name}`);
 }
 
+// Terminal examples must also run one line at a time in Windows PowerShell 5.1.
+for (const path of ["README.md", "SOLO.md", "docs/voice-extension.md", "course/index.html"]) {
+  const examples = path.endsWith(".html") ? /<pre><code>([\s\S]*?)<\/code><\/pre>/g : /```(?:bash|sh|text)\n([\s\S]*?)```/g;
+  for (const [, example] of files[path].matchAll(examples)) {
+    assert.doesNotMatch(example, /&&|&amp;&amp;|\|\||\(cd \.\.\/|test -f |open out\/latest\.html/, path);
+  }
+}
+assert.equal(scripts["config:init"], "node scripts/init-config.mjs");
+for (const path of ["README.md", "SOLO.md"]) assert.match(files[path], /^npm run config:init$/m);
+
+// These two A5 commands must keep working without model or Jira access.
+assert.equal(scripts["test:live"], "tsx --test test/live.test.ts");
+assert.equal(scripts["live:check"], "tsx src/live.ts --check");
+
 // The optional voice extension tells a participant to make both files, so they may exist. They exist together.
 assert.equal(await exists("src/voice.ts"), await exists("test/voice.test.ts"), "src/voice.ts and test/voice.test.ts exist together");
 
@@ -151,6 +168,6 @@ for (const prompt of prompts(files["SOLO.md"])) assert.match(prompt, /reference\
 for (const [section, needs] of Object.entries({
   "A2 Part 1": [/Summary and moveWorkForward are single items/, /TopTodos, newUpdates, and yourDay are non-empty item arrays/, /READY and CONFLICT items have at least one source ID; OPEN may have none/],
   "A4 Part 1": [/https:\/\/picsum\.photos\/seed\/bree-morning\/1200\/400/, /referrerpolicy="no-referrer"/, /stable visible fallback text/],
-  "A5 Part 2": [/settingSources \['local'\]/, /built-in tools to none/, /canUseTool/, /PreToolUse hook/, /Accept only exact Jira keys .* as live source IDs/, /~\/\.bree\/briefs\/YYYY-MM-DD\.html/, /exits with code 0 for READY and code 3 for OPEN/],
+  "A5 Part 2": [worldlineSettings, /built-in tools to none/, /canUseTool/, /PreToolUse hook/, /Accept only exact Jira keys .* as live source IDs/, /~\/\.bree\/briefs\/YYYY-MM-DD\.html/, /exits with code 0 for READY and code 3 for OPEN/],
 })) for (const need of needs) assert.match(sectionOf(section), need, `${section} must hold ${need}`);
 console.log("PASS — seven assignments, twelve canonical prompt parts, core DailyBrief route, and optional synthetic voice extension align");
