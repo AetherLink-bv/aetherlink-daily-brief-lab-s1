@@ -21,7 +21,7 @@ const paths = [
   "AGENTS.md",
   "course/index.html",
 ];
-const files = Object.fromEntries(await Promise.all(paths.map(async (path) => [path, await readFile(path, "utf8")])));
+const files = Object.fromEntries(await Promise.all(paths.map(async (path) => [path, (await readFile(path, "utf8")).replace(/\r\n/g, "\n")])));
 // The prompts are short. The exact requirements of each part are in reference/solo-details.md.
 const solo = `${files["SOLO.md"]}\n${files["reference/solo-details.md"]}`;
 const packageJson = JSON.parse(files["package.json"]);
@@ -62,7 +62,7 @@ assert.match(files["README.md"], /^claude --permission-mode default$/m);
 assert.match(files["README.md"], /claude mcp add --transport http jira https:\/\/mcpjira\.kazan\.ai\.worldline-solutions\.com\/mcp/);
 assert.match(files["SOLO.md"], /claude mcp add --transport http jira /);
 // Every tracked text file, not only the files above: the course modules and CLAUDE.md teach the route too.
-const tracked = execFileSync("git", ["ls-files", "*.md", "*.html"], {encoding: "utf8"}).split("\n").filter(Boolean);
+const tracked = execFileSync("git", ["ls-files", "-z", "*.md", "*.html"], {encoding: "utf8"}).split("\0").filter(Boolean);
 for (const path of tracked) assert.doesNotMatch(await readFile(path, "utf8"), /AETHERLINK_JIRA_MCP_CONFIG|--mcp-config/, `${path}: the Jira route is claude mcp add plus /mcp, not a private config path`);
 assert.match(files["SOLO.md"], /\.bree\.local\.json.*not.*MCP server configuration/is);
 const worldlineSettings = /settingSources: \['user', 'local'\]/;
@@ -121,6 +121,16 @@ const scripts = JSON.parse(files["package.json"]).scripts;
 for (const name of ["mini", "test:mini", "test:schema", "test:render", "eval", "test:live", "live:check", "brief:live", "test:voice", "brief:voice"]) {
   assert.ok(scripts[name], `package.json is missing ${name}`);
 }
+
+// Terminal examples must also run one line at a time in Windows PowerShell 5.1.
+for (const path of ["README.md", "SOLO.md", "docs/voice-extension.md", "course/index.html"]) {
+  const examples = path.endsWith(".html") ? /<pre><code>([\s\S]*?)<\/code><\/pre>/g : /```(?:bash|sh|text)\n([\s\S]*?)```/g;
+  for (const [, example] of files[path].matchAll(examples)) {
+    assert.doesNotMatch(example, /&&|&amp;&amp;|\|\||\(cd \.\.\/|test -f |open out\/latest\.html/, path);
+  }
+}
+assert.equal(scripts["config:init"], "node scripts/init-config.mjs");
+for (const path of ["README.md", "SOLO.md"]) assert.match(files[path], /^npm run config:init$/m);
 
 // These two A5 commands must keep working without model or Jira access.
 assert.equal(scripts["test:live"], "tsx --test test/live.test.ts");

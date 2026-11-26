@@ -90,6 +90,8 @@ Output:
 
 ## Clipboard
 
+For A7, always return the complete handoff in chat. The participant can copy it directly. If the participant requests a clipboard action, Windows PowerShell supports `Get-Content -Raw -LiteralPath <path> | Set-Clipboard`. Use the actual path to the saved, non-sensitive prompt.
+
 On macOS:
 
 ```sh

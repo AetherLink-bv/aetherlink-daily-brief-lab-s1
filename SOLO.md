@@ -19,9 +19,11 @@ Local fixtures are synthetic. Use them for tests, recordings, and reproducible e
 
 Run every command from the project folder, `aetherlink-daily-brief-lab-s1`. It is also called the repository root. The slides show it as "Work in this folder".
 
+Use Windows PowerShell 5.1 or macOS Terminal. Enter one command at a time. Wait for it to finish before entering the next. Stop on an unexpected error. If PowerShell blocks `npm.ps1`, type `npm.cmd` wherever this guide says `npm`. Keep the organisation’s execution policy. For the exit code, enter `$LASTEXITCODE` in PowerShell or `echo $?` on macOS immediately after the command.
+
 The slides name each prompt `SOLO N`, or `SOLO N · Part M`. That is Assignment N, Part M in this file.
 
-```bash
+```text
 npm ci
 claude --permission-mode default
 ```
@@ -44,12 +46,18 @@ The prompt in this file is always the backup. It gives every participant the sam
 
 Save your work after every part that you accept. A commit is a saved version of the project. Claude Code keeps its own terminal, so open a second terminal window in the project folder and type:
 
-```bash
+```text
 git status --short
-git add -A && git commit -m "A1 P1"
 ```
 
-The first command lists what changed. Stop if it shows a file that you did not make. Change the message for each part: `A1 P2`, `A2 P1`, and so on. Assignment 6 compares your last two commits, so it needs these saved versions. If Git asks who you are, run `git config user.name "Your name"` and `git config user.email "you@example.com"` once, then run the commit again.
+Stop if the status lists an unexpected or private file. Otherwise save the accepted part:
+
+```text
+git add -A
+git commit -m "A1 P1"
+```
+
+Change the message for each part: `A1 P2`, `A2 P1`, and so on. Assignment 6 compares your last two commits, so it needs these saved versions. If Git asks who you are, run `git config user.name "Your name"` and `git config user.email "you@example.com"` once, then run the commit again.
 
 When a named command runs, preserve its synthetic red and green output with the actual exit codes. Never reconstruct historical raw logs or record live connector contents.
 
@@ -178,7 +186,7 @@ Use Claude Code in manual mode. Keep your current session for the sample route. 
 
 Only with approval, check `/mcp` in your existing session. If Jira is missing and you want the private route, add it from the project folder in Terminal:
 
-```bash
+```text
 claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp
 ```
 
@@ -208,15 +216,15 @@ In the `src/live.ts` diff, check `settingSources: ['user', 'local']` for Worldli
 
 Create the ignored local configuration if it is missing:
 
-```bash
-test -f .bree.local.json || cp .bree.example.json .bree.local.json
+```text
+npm run config:init
 ```
 
 `.bree.local.json` is not MCP server configuration. With a verified read-only tool, enter its exact name from `/mcp`, your user and your decision in `.bree.local.json`. Without one, keep the placeholder and expect `OPEN` from the offline check.
 
 In Terminal, run the sample tests. Then check the local settings:
 
-```bash
+```text
 npm run test:live
 npm run live:check
 ```
@@ -232,11 +240,11 @@ Missing approval, a verified read-only Jira tool or local `READY`? Record `sourc
 
 Only with all three checks and existing, approved model and Jira access, run this yourself in Terminal:
 
-```bash
+```text
 npm run brief:live
 ```
 
-After a successful run, open the dated HTML privately. Record only `PASS` or `OPEN` for the source and the page separately. If you skip the run, keep both `OPEN`.
+On Windows the private run checks the output folder and any existing page before calling the model. If it cannot verify private access, it returns `OPEN` (exit 3). Continue with `npm run brief:sample`. After a successful run, open the printed path privately in File Explorer or Finder. Record only `PASS` or `OPEN` for the source and the page separately. If you skip the run, keep both `OPEN`.
 
 </details>
 
@@ -278,16 +286,33 @@ Then find the six parts in Part 2 below, and paste it. It checks the generated s
 
 Commit only the accepted result. Test the previous and current commits in temporary worktrees. A worktree is a second folder with another version of the same project. `HEAD` is your last commit. `HEAD^` is the commit before it. The two folders appear next to the project folder, and you stay in the project folder:
 
-```bash
+```text
 git worktree add --detach ../daily-brief-previous HEAD^
 git worktree add --detach ../daily-brief-current HEAD
-(cd ../daily-brief-previous && npm ci && npm run typecheck && npm test && npm run brief:sample)
-(cd ../daily-brief-current && npm ci && npm run typecheck && npm test && npm run eval && npm run brief:sample)
 ```
 
-When both lines end without an error, open `out/latest.html` in the folder `daily-brief-previous` and in the folder `daily-brief-current`. Then remove the two folders:
+Check the previous version. Enter each command from the original project folder. Continue after it succeeds.
 
-```bash
+```text
+npm --prefix ../daily-brief-previous ci
+npm --prefix ../daily-brief-previous run typecheck
+npm --prefix ../daily-brief-previous test
+npm --prefix ../daily-brief-previous run brief:sample
+```
+
+Check the current version from that same project folder:
+
+```text
+npm --prefix ../daily-brief-current ci
+npm --prefix ../daily-brief-current run typecheck
+npm --prefix ../daily-brief-current test
+npm --prefix ../daily-brief-current run eval
+npm --prefix ../daily-brief-current run brief:sample
+```
+
+In File Explorer or Finder, open `out/latest.html` in each worktree. Inspect both pages. Once you have saved the evidence, close them and remove the two temporary folders:
+
+```text
 git worktree remove ../daily-brief-previous
 git worktree remove ../daily-brief-current
 git worktree list

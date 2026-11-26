@@ -96,7 +96,8 @@ The sentences below are the requirements of the long prompts that were used unti
 - Map available data into the complete DailyBrief schema.
 - Keep unavailable sections OPEN and reject unvalidated output.
 - Accept only exact Jira keys from the successful structured tool result as live source IDs.
-- Let only the host write validated HTML to ~/.bree/briefs/YYYY-MM-DD.html with private permissions.
+- Let only the host write validated HTML to ~/.bree/briefs/YYYY-MM-DD.html with private permissions. Resolve the home folder with Node’s os.homedir() and use path.join(). The terminal prints the path for File Explorer or Finder.
+- On Windows the optional private run must verify the output directory and any existing page before an SDK query. Check the security descriptor owner and the access control list (DACL). Only the current user, SYSTEM and built-in Administrators may own or have access to these objects. If privacy cannot be verified, return OPEN (exit 3) without a model call. Leave account and device policy unchanged. This check is separate from `--check`.
 - Keep the starter scripts: `npm run test:live` runs `tsx --test test/live.test.ts`; `npm run live:check` runs `tsx src/live.ts --check`. Run both in Terminal. Importing the module must not run the CLI. The tests use made-up tool results.
 - In the CLI, finish the `--check` branch before SDK `query()` or model authentication, for both OPEN and READY. Only the optional `npm run brief:live` may use approved model and Jira access.
 - npm run live:check runs offline. It prints READY when .bree.local.json names the jira server, a tool in the format `mcp__jira__<tool>` (no placeholder), a user and a decision. Otherwise it prints OPEN with the reasons. It exits with code 0 for READY and code 3 for OPEN. READY does not verify authentication, access, or whether the tool only reads. If the read-only mark in /mcp is unclear, keep the placeholder and record OPEN.
@@ -115,7 +116,7 @@ The sentences below are the requirements of the long prompts that were used unti
 ## A6 Part 2
 
 - Read .claude/skills/verify-bree/.
-- Confirm that it covers every synthetic HTML section, long-text escaping, resolved sourceIds, OPEN and CONFLICT behavior, the dated private artifact path, and the private live preflight without storing live contents.
+- Confirm that it covers every synthetic HTML section, long-text escaping, resolved sourceIds, OPEN and CONFLICT behavior, the dated private artifact path, and the private live preflight without storing live contents. Run the journey from PowerShell or macOS Terminal using Node and platform-native paths.
 - Add what is missing.
 - Run npm run typecheck, npm test, npm run eval, npm run brief:sample, and npm run live:check.
 - Record real commands and exit codes in docs/evidence.md.

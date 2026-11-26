@@ -52,11 +52,11 @@ Gradient text; thick left-border callouts; three or four identical icon cards; h
 
 ## 6. Verify, then deliver
 
-- No external requests: `grep -nEi "(src|srcset|href|poster|action|data)[[:space:]]*=[[:space:]]*[\"']?(https?:)?//|@import|url\([[:space:]]*[\"']?(https?:)?//" <file>` may only match plain `<a href>` links the reader clicks. Any `src`, stylesheet, `@import` or `url(...)` hit is a network dependency: inline it or drop it.
+- No external requests: check the HTML in the editor on Windows. For a POSIX shell, `grep -nEi "(src|srcset|href|poster|action|data)[[:space:]]*=[[:space:]]*[\"']?(https?:)?//|@import|url\([[:space:]]*[\"']?(https?:)?//" <file>` may only match plain `<a href>` links the reader clicks. Any `src`, stylesheet, `@import` or `url(...)` hit is a network dependency: inline it or drop it.
 - Check desktop and ~390px width, light and dark (`prefers-color-scheme`). If a browser tool is available, screenshot both; otherwise state that it was not rendered.
 - Headings in order, text contrast AA, `<title>` set, tables have captions, SVG has `<title>`/`<desc>`.
 - Counts match: tallies equal the items listed; an `on track` status never sits beside an unmitigated high risk.
-- Deliver: the file path, how to open it (`open <file>` on macOS, `xdg-open` on Linux), and one line on what the page shows. Offer to commit it only if the user asked for that.
+- Deliver: the file path, how to open it (double-click it in Windows File Explorer or macOS Finder, or open it in a browser), and one line on what the page shows. Offer to commit it only if the user asked for that.
 
 ## Refine an existing page
 
