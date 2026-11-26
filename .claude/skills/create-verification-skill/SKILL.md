@@ -10,7 +10,7 @@ Adapted for Claude Code from pstack's `create-verification-skill`. Write the res
 
 ## Inspect the repository
 
-Read `package.json`, `SOLO.md`, `docs/spec.md`, and the actual application routes. Derive every command and path from the repository. Do not invent a server, selector, account, or connector.
+Read `package.json`, `SOLO.md`, `docs/spec.md`, and the actual application routes. Derive every command and path from the repository. Do not invent a server, selector, account, or connector. Make any generated journey runnable with Node.js on Windows PowerShell 5.1 and macOS. Use platform-native paths and preserve the exit code of each failed command.
 
 Identify:
 

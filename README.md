@@ -12,10 +12,10 @@ When a named command runs, preserve its synthetic red and green output with the 
 
 | Assignment | Result | Proof |
 | --- | --- | --- |
-| A1 | One user, one decision, one synthetic line | `npm run test:mini && npm run mini` |
+| A1 | One user, one decision, one synthetic line | `npm run test:mini`, then `npm run mini` |
 | A2 | Reverse-engineered full Daily Brief contract with provenance, `OPEN`, and `CONFLICT` | `npm run test:schema` |
 | A3 | Accepted design, decision, plan, and offline visual plan | Human review plus `/visual-plan` |
-| A4 | Complete synthetic Daily Brief HTML with a fixed public illustration and text fallback | `npm run test:render && npm run brief:sample` |
+| A4 | Complete synthetic Daily Brief HTML with a fixed public illustration and text fallback | `npm run test:render`, then `npm run brief:sample` |
 | A5 | One tool allowed by the Agent SDK, tested with sample data | `npm run test:live`, then `npm run live:check` |
 | A6 | Full-page evaluations, verification skill, recovery, and trigger proposal | Full local suite plus one synthetic journey |
 | A7 | One personal mission using Jira, GitLab, Confluence, or a mock Outlook email | Participant-defined proof |
@@ -34,11 +34,13 @@ Keep the key in the ignored `.env.local` file. Never paste it into chat, share a
 
 ## Start
 
+Use Windows PowerShell 5.1 or macOS Terminal. Enter one command at a time. Wait for it to finish before entering the next. Stop on an unexpected error. If PowerShell blocks `npm.ps1`, type `npm.cmd` wherever this guide says `npm`. Keep the organisation’s execution policy. For the exit code, enter `$LASTEXITCODE` in PowerShell or `echo $?` on macOS immediately after the command.
+
 Install Node.js 20.12 or newer, Git and Claude Code. In Assignment 5, a Jira login is needed for the private run in Part 3. The earlier parts use mocked tools for testing.
 
 The clone makes a new folder, `aetherlink-daily-brief-lab-s1`. That is the project folder, also called the repository root. After the `cd` line you are in that folder. Run every later command from there.
 
-```bash
+```text
 git clone https://github.com/AetherLink-bv/aetherlink-daily-brief-lab-s1.git
 cd aetherlink-daily-brief-lab-s1
 npm ci
@@ -72,20 +74,20 @@ Assignment 4 uses sample data. Once dependencies are installed, the sample comma
 
 **Optional Jira setup.** With approved access, check `/mcp` in your existing session. If Jira is already listed, keep that session. Only if you need to add Jira, run this once in Terminal from the project folder:
 
-```bash
+```text
 claude mcp add --transport http jira https://mcpjira.kazan.ai.worldline-solutions.com/mcp
 ```
 
 After adding the server, type `/exit` in Claude Code. Start it again from the same folder to load the new server:
 
-```bash
+```text
 claude --permission-mode default
 ```
 
 In `/mcp`, select `jira` and sign in privately. Use the exact name of one tool marked read-only for your own permitted items. Approve only that read call. Decline requests to allow future calls automatically. If the mark or access is unclear, use the sample route.
 
-```bash
-test -f .bree.local.json || cp .bree.example.json .bree.local.json
+```text
+npm run config:init
 ```
 
 Keep the placeholder if you have no verified read-only tool. Otherwise, enter its exact name from `/mcp`, the user and the decision in the ignored local file. Never create or store a token for this session.
@@ -98,7 +100,7 @@ Keep `tools: []` and put only the exact read-only Jira tool in `allowedTools`. B
 
 After A5 Part 2, run these commands separately in Terminal from the project folder. Keep Claude Code open.
 
-```bash
+```text
 npm run test:live
 npm run live:check
 ```
@@ -107,7 +109,7 @@ The first command runs the synthetic tests in `test/live.test.ts`. The second re
 
 If either check asks for an API key, cancel it. In Terminal, inspect what the scripts run:
 
-```bash
+```text
 npm pkg get scripts.test:live scripts.live:check
 ```
 
@@ -122,13 +124,17 @@ Without explicit approval, a verified read-only tool or a local `READY` result, 
 
 Run this yourself only with all three checks and existing, approved model and Jira access. If either service asks for a personal key, cancel and use the sample route.
 
-```bash
+```text
 npm run brief:live
 ```
 
 </details>
 
-The host application writes only validated HTML to `~/.bree/briefs/YYYY-MM-DD.html` with private permissions. It does not write raw connector output. The configured client and provider follow company retention policy. Do not record or commit live contents.
+Open the exact dated path printed by the private run in File Explorer or Finder. The folder `.bree/briefs` is inside your user profile (`%USERPROFILE%` in File Explorer) or your home directory on macOS.
+
+On Windows the private run first checks who owns the output folder and any existing page, and who can access them. It accepts only your user account, SYSTEM and local Administrators. If it cannot verify that boundary, it returns `OPEN` (exit 3) before calling the model. Continue with `npm run brief:sample`. Leave device policy unchanged.
+
+The host writes only validated HTML. The configured client and provider follow company retention policy. Do not record or commit live contents.
 
 A6 may propose an organisation-approved local daily trigger. This session does not install or activate a scheduler. Automatic daily execution begins only after the participant approves and installs their own trigger.
 
@@ -154,7 +160,7 @@ The optional A7 Outlook mission uses only `sample/outlook-email.sample.json`. It
 - `src/live.ts` owns the private Agent SDK route after A5.
 - `reference/dia-to-bree.md` maps the safe Dia-style structure to the `DailyBrief` schema and checks.
 
-Open `course/index.html` for the interactive explanation. Edit modules under `course/modules/`, then rebuild with `cd course && bash build.sh`.
+Open `course/index.html` from File Explorer or Finder for the interactive explanation. After editing the course modules, rebuild from the project folder with `node course/build.mjs`.
 
 ## Official references
 

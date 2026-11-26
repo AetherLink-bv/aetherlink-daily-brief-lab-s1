@@ -11,6 +11,7 @@
     "outlook": "tsx src/outlook.ts sample/outlook-email.sample.json",
     "brief:voice": "node --import tsx src/voice.ts",
     "brief:live": "tsx src/live.ts",
+    "config:init": "node scripts/init-config.mjs",
     "live:check": "tsx src/live.ts --check",
     "verify:journey": "node .claude/skills/verify-bree/journey.mjs",
     "docs:check": "node scripts/check-solo-docs.mjs",
@@ -22,7 +23,7 @@
     "test:live": "tsx --test test/live.test.ts",
     "test:voice": "tsx --test test/voice.test.ts",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test --test-concurrency=2 test/*.test.ts"
+    "test": "node scripts/run-tests.mjs"
   },
   "engines": { "node": ">=20.12" },
   "dependencies": {
