@@ -12,6 +12,7 @@
     "brief:voice": "node --import tsx src/voice.ts",
     "brief:live": "tsx src/live.ts",
     "live:check": "tsx src/live.ts --check",
+    "verify:journey": "node .claude/skills/verify-bree/journey.mjs",
     "docs:check": "node scripts/check-solo-docs.mjs",
     "eval": "tsx --test test/eval.test.ts",
     "test:mini": "tsx --test test/mini.test.ts",

@@ -15,12 +15,13 @@ Run `npm run brief:sample`, then open `out/latest.html` in a browser. The comman
 
 ## Driving it with the repository commands
 
-```bash
+```text
 npm run brief:sample
-for h in "Summary" "Push your work forward" "Top to-dos" "New updates" "Your day" "Sources"; do grep -c ">$h</h2>" out/latest.html; done   # each prints 1
-grep -c '<li class="item" data-status=' out/latest.html                                                                                 # item count plus source list
-npm run test:render && npm run test:schema                                                                                              # escaping and source IDs
+npm run test:render
+npm run test:schema
 ```
+
+Open `out/latest.html` and compare its six headings with the list above. The render tests also verify escaping and source labels.
 
 Expected: exit 0 everywhere; `out/latest.html` exists; the printed source line reads `source: sample/brief.sample.json (synthetic)`.
 

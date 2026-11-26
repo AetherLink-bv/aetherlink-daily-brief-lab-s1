@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, stat } from "node:fs/promises";
-import { tmpdir } from "node:os";
+import childProcess from "node:child_process";
+import { mkdir, mkdtemp, readFile, readdir, stat } from "node:fs/promises";
+import os, { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { isPrivateWindowsAcl, PrivateOutputError } from "../src/private-windows.js";
 import { parseBrief, type DailyBrief } from "../src/brief.js";
 import {
   briefPath,
@@ -10,6 +12,7 @@ import {
   checkLiveConfig,
   extractIssueKeys,
   makeCanUseTool,
+  runLive,
   validateLiveBrief,
   writePrivateBrief,
 } from "../src/live.js";
@@ -156,7 +159,7 @@ test("the artifact path rejects anything that is not a plain date", () => {
   }
 });
 
-test("the host writes the validated HTML with private permissions", async () => {
+test("the host writes the validated HTML with POSIX permissions", { skip: process.platform === "win32" }, async () => {
   const home = await tmp();
   const path = await writePrivateBrief(await liveBrief(), { home, repoRoot: process.cwd() });
   assert.equal(path, join(home, ".bree", "briefs", "2026-11-24.html"));
@@ -170,4 +173,60 @@ test("the host writes the validated HTML with private permissions", async () => 
 test("the host refuses to write inside the repository", async () => {
   const home = await tmp();
   await assert.rejects(writePrivateBrief(await liveBrief(), { home, repoRoot: home }), /repository/i);
+});
+
+test("Windows privacy needs a DACL with only the reader, SYSTEM or local administrators", () => {
+  const user = "S-1-5-21-11-22-33-1001";
+  const system = "S-1-5-18";
+  const acl = { owner: user, aces: [
+    { kind: "AccessAllowed", sid: user }, { kind: "AccessAllowed", sid: system },
+    { kind: "AccessAllowed", sid: "S-1-5-32-544" },
+    { kind: "AccessDenied", sid: "S-1-1-0" },
+  ] };
+  assert.equal(isPrivateWindowsAcl(user, acl), true);
+  for (const invalid of [
+    null, {}, { ...acl, owner: "S-1-1-0" }, { ...acl, aces: null },
+    { ...acl, aces: [{ kind: "AccessAllowed", sid: "S-1-5-32-545" }] },
+    { ...acl, aces: [{ kind: "AccessAllowedCallback", sid: user }] },
+    { ...acl, aces: [{ kind: "AccessAllowed", sid: user }, {}] },
+  ]) assert.equal(isPrivateWindowsAcl(user, invalid), false);
+});
+
+test("unverified Windows output stops before the first model call", async t => {
+  t.mock.method(os, "platform", () => "win32");
+  t.mock.method(os, "homedir", () => join(tmpdir(), "outside-real-profile"));
+  let calls = 0;
+  const fakeQuery = () => { calls++; throw new Error("Unexpected SDK call"); };
+  await assert.rejects(runLive({ ...READY_CONFIG, mcp: { server: "jira", tool: TOOL } }, fakeQuery), PrivateOutputError);
+  assert.equal(calls, 0);
+});
+
+test("a broad ACL on an existing dated page stops Windows before any model call", async t => {
+  const user = "S-1-5-21-11-22-33-1001";
+  const safe = { owner: user, aces: [{ kind: "AccessAllowed", sid: user }] };
+  const shared = { owner: user, aces: [{ kind: "AccessAllowed", sid: "S-1-1-0" }] };
+  t.mock.method(os, "platform", () => "win32");
+  t.mock.method(childProcess, "execFileSync", () => JSON.stringify({ user, records: [safe, safe, shared] }));
+  const fakeQuery = t.mock.fn(() => { throw new Error("Unexpected SDK call"); });
+  await assert.rejects(runLive({ ...READY_CONFIG, mcp: { server: "jira", tool: TOOL } }, fakeQuery), PrivateOutputError);
+  assert.equal(fakeQuery.mock.callCount(), 0);
+});
+
+test("verified Windows permissions publish a synthetic page only after staging is checked", async t => {
+  const home = await tmp();
+  const dir = join(home, ".bree", "briefs");
+  await mkdir(dir, { recursive: true });
+  const user = "S-1-5-21-11-22-33-1001";
+  const record = { owner: user, aces: [{ kind: "AccessAllowed", sid: user }] };
+  const checks: number[] = [];
+  t.mock.method(os, "platform", () => "win32");
+  t.mock.method(childProcess, "execFileSync", (_exe: string, args: string[]) => {
+    const size = args.includes("-StagedPath") ? 3 : 2;
+    checks.push(size);
+    return JSON.stringify({ user, records: Array(size).fill(record) });
+  });
+  const path = await writePrivateBrief(await liveBrief(), { home });
+  assert.deepEqual(checks, [2, 3, 3]);
+  assert.deepEqual(await readdir(dir), ["2026-11-24.html"]);
+  assert.match(await readFile(path, "utf8"), /One synthetic blocker/);
 });

@@ -1,11 +1,12 @@
 import { query, type CanUseTool, type Options } from "@anthropic-ai/claude-agent-sdk";
 import { readFileSync } from "node:fs";
 import { chmod, mkdir, writeFile } from "node:fs/promises";
-import { homedir } from "node:os";
-import { join, resolve, sep } from "node:path";
+import os from "node:os";
+import { isAbsolute, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { z } from "zod";
 import { DailyBriefSchema, parseBrief, type DailyBrief } from "./brief.js";
+import { PrivateOutputError, writeWindowsPage } from "./private-windows.js";
 import { renderBrief } from "./render.js";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
@@ -109,11 +110,21 @@ export function briefPath(date: string, home: string): string {
   return join(home, ".bree", "briefs", `${date}.html`);
 }
 
-export async function writePrivateBrief(brief: DailyBrief, where: { home?: string; repoRoot?: string } = {}): Promise<string> {
-  const home = where.home ?? homedir();
+type OutputLocation = { home?: string; repoRoot?: string };
+
+async function writeBriefFrom(date: string, where: OutputLocation, makeBrief: () => Promise<DailyBrief>): Promise<string> {
+  const home = where.home ?? os.homedir();
   const repoRoot = resolve(where.repoRoot ?? root);
-  const path = resolve(briefPath(brief.date, home));
-  if (path === repoRoot || path.startsWith(repoRoot + sep)) throw new Error("refusing to write inside the repository");
+  const path = resolve(briefPath(date, home));
+  const within = relative(repoRoot, path);
+  if (within !== ".." && !within.startsWith(".." + sep) && !isAbsolute(within)) {
+    throw new Error("refusing to write inside the repository");
+  }
+  if (os.platform() === "win32") {
+    await writeWindowsPage(path, async () => renderBrief(await makeBrief()));
+    return path;
+  }
+  const brief = await makeBrief();
   const dir = resolve(path, "..");
   await mkdir(dir, { recursive: true, mode: 0o700 });
   await chmod(resolve(dir, ".."), 0o700);
@@ -121,6 +132,10 @@ export async function writePrivateBrief(brief: DailyBrief, where: { home?: strin
   await writeFile(path, renderBrief(brief), { mode: 0o600 });
   await chmod(path, 0o600);
   return path;
+}
+
+export function writePrivateBrief(brief: DailyBrief, where: OutputLocation = {}): Promise<string> {
+  return writeBriefFrom(brief.date, where, async () => brief);
 }
 
 // ---- 5. the live run (a person starts it; never part of the tests) -----------------------------
@@ -131,8 +146,7 @@ function textOf(content: unknown): string {
   return "";
 }
 
-export async function runLive(config: z.infer<typeof localConfig>): Promise<string> {
-  const today = new Date().toLocaleDateString("sv-SE"); // YYYY-MM-DD in local time
+async function readLiveBrief(config: z.infer<typeof localConfig>, today: string, queryModel: typeof query): Promise<DailyBrief> {
   const options = buildQueryOptions(config.mcp.tool);
   options.systemPrompt =
     "You write one private Daily Brief. Use only the one permitted read-only tool, only for the user's own work items. " +
@@ -147,7 +161,7 @@ export async function runLive(config: z.infer<typeof localConfig>): Promise<stri
   const toolUseIds = new Set<string>();
   let issueKeys: string[] | undefined;
   let structured: unknown;
-  for await (const message of query({ prompt, options })) {
+  for await (const message of queryModel({ prompt, options })) {
     const content = (message as { message?: { content?: unknown } }).message?.content;
     if (message.type === "assistant" && Array.isArray(content)) {
       for (const block of content as { type: string; id?: string; name?: string }[]) {
@@ -169,7 +183,12 @@ export async function runLive(config: z.infer<typeof localConfig>): Promise<stri
   if (!issueKeys) throw new Error("the approved tool returned no successful structured result");
   const brief = validateLiveBrief(structured, issueKeys);
   if (brief.date !== today) throw new Error("model output date is not today's date");
-  return writePrivateBrief(brief);
+  return brief;
+}
+
+export function runLive(config: z.infer<typeof localConfig>, queryModel = query): Promise<string> {
+  const today = new Date().toLocaleDateString("sv-SE");
+  return writeBriefFrom(today, {}, () => readLiveBrief(config, today, queryModel));
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
@@ -194,7 +213,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       console.log(`PASS — private brief written to ${path}`);
     } catch (error) {
       // Print the error class only: messages could echo connector or model content.
-      console.log(`OPEN — live run did not produce a validated brief (${error instanceof Error ? error.name : "unknown error"}).`);
+      if (error instanceof PrivateOutputError) console.log(`OPEN — ${error.message}`);
+      else console.log(`OPEN — live run did not produce a validated brief (${error instanceof Error ? error.name : "unknown error"}).`);
       process.exitCode = EXIT_OPEN;
     }
   }

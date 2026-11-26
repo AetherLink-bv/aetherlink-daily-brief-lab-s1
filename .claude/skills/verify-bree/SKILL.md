@@ -11,33 +11,23 @@ All commands exist in `package.json`. Run them from the repository root. Evidenc
 
 ## Launch
 
-No server exists. Bree is a CLI.
-
-```bash
-test -d node_modules || npm ci
-```
+Open PowerShell on Windows or Terminal on macOS in the repository folder. Run `npm run verify:journey`. It prints the path to its evidence file and a PASS or FAIL result. The journey installs dependencies if needed.
 
 ## Doctor (read-only)
 
-```bash
-node --version                                   # needs 20.12 or newer
-git rev-parse --short HEAD                       # the revision under test
-git status --short                               # note unexpected changes
-git check-ignore -v .bree.local.json out/latest.html  # both must be ignored (a missing .bree.local.json is fine)
-test -f .bree.local.json && echo "local config present" || echo "local config absent"
-```
+The journey records the Node version, Git revision and worktree state. It checks that Git ignores the generated page. It records only whether local configuration exists.
 
 ## Drive
 
 | Journey | Command | Pass signal |
 | --- | --- | --- |
 | Synthetic brief | `npm run brief:sample` | exit 0; prints `wrote <root>/out/latest.html` and `source: sample/brief.sample.json (synthetic)` |
-| Every section, escaping, source IDs | `npm run test:render && npm run test:schema` | exit 0 |
+| Every section, escaping, source IDs | `npm run test:render`, then `npm run test:schema` | exit 0 |
 | OPEN and CONFLICT | `npm run eval` | exit 0, four passing tests |
 | Live boundary in code | `npm run test:live` | exit 0 |
 | Live preflight (local only) | `npm run live:check` | exit 0 = `READY`; exit 3 = `OPEN` with reasons. Both are honest results. Neither proves authentication or source access. |
 
-`scripts`: `.claude/skills/verify-bree/journey.sh` runs launch, doctor, drive, evidence and cleanup in one go and writes an evidence file.
+For a chosen evidence file, run `npm run verify:journey -- evidence.txt` from the repository folder. The filename is optional.
 
 Details per journey are in `features/`.
 
@@ -47,7 +37,7 @@ Capture the command, its exit code and one output line. Record them in `docs/evi
 
 ## Cleanup
 
-Remove only what the run created: `out/` if it did not exist before the run. Keep the evidence file and `docs/evidence.md`. `journey.sh` does this and then checks that the evidence file still exists.
+The journey removes its generated page if the page was absent at the start. It restores an existing page and keeps the evidence file.
 
 ## Last journey
 

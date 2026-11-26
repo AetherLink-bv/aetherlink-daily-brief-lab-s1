@@ -34,6 +34,7 @@ Only the host process writes files. The model returns data, never a file.
 
 - One live source tool: `OPEN — the exact Jira read-tool name is inspected with /mcp and confirmed read-only by its owner in A5. Until then live proof stays OPEN.`
 - No extra capability: no built-in, shell, file-write, messaging, or ticket-update tool.
+- Run the synthetic verification journey with `npm run verify:journey` in PowerShell or Terminal. It records the exit code of each command and preserves the evidence after cleanup.
 - Separate evidence: synthetic tests may be stored; live contents may not. Record only the dated path and status.
 - Human gate: Maya accepts this design and `docs/plan.md` before step 1, accepts the live tests and tool before step 4, and approves the live run (step 5) herself.
 
@@ -43,6 +44,7 @@ Only the host process writes files. The model returns data, never a file.
 - No built-in tools: the SDK is started with built-in tools set to none. A PreToolUse hook denies every tool except the exact Jira read tool. Checked by `test/live.test.ts`.
 - Unvalidated output is rejected: the host parses the model output with the `DailyBrief` schema before it renders anything. Checked by `test/schema.test.ts` and `test/live.test.ts`.
 - Live source IDs are exact Jira keys from the successful structured tool result; an unknown ID is rejected. Checked by `test/live.test.ts`.
+- On native Windows the host checks the private folders and the dated page under the user profile before contacting Jira. Only the current user, SYSTEM and local administrators may have access. If Bree cannot verify access, keep both live results OPEN and run `npm run brief:sample`.
 - The host owns the file: the artifact path is built from the validated date, written with private permissions, outside the repository. Checked by `test/live.test.ts`.
 
 ## Decisions
