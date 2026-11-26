@@ -204,6 +204,8 @@ If you have approved Jira access and a successful result, inspect it privately t
 
 > Goal: the smallest live route with the Claude Agent SDK. Context: reference/solo-details.md, section A5 Part 2. Constraints: no tool other than the approved Jira read tool; no MCP config other than the approved one; do not run npm run brief:live. Done when: the tests are green and npm run live:check prints READY or OPEN. Output: the boundaries and the diff. Check: real output only; mark doubts as OPEN.
 
+In the `src/live.ts` diff, check `settingSources: ['user', 'local']` for Worldline. Use an organisation-approved profile. User settings can load hooks, environment variables and permission rules. Check that Bree still has no built-in tools and allows only the verified Jira tool.
+
 Create the ignored local configuration if it is missing:
 
 ```bash
@@ -310,20 +312,20 @@ Choose one mission:
 - Confluence: retrieve one agreed decision with context.
 - Mock Outlook: summarise one synthetic work request from `sample/outlook-email.sample.json`.
 
-Choose one source for this assignment. Type `/exit` to close the Assignment 6 session.
+Choose one source. Keep your current Claude Code session for Mock Outlook or an existing approved connection.
 
 - **Jira:** Use the connection from Assignment 5.
-- **GitLab:** Run `claude mcp add --transport http gitlab https://mcpgitlab.kazan.ai.worldline-solutions.com/mcp` in the project folder.
-- **Confluence:** Run `claude mcp add --transport http confluence https://mcpconfluence.kazan.ai.worldline-solutions.com/mcp` in the project folder.
+- **GitLab:** Only if you need to add this approved server, run `claude mcp add --transport http gitlab https://mcpgitlab.kazan.ai.worldline-solutions.com/mcp` in the project folder.
+- **Confluence:** Only if you need to add this approved server, run `claude mcp add --transport http confluence https://mcpconfluence.kazan.ai.worldline-solutions.com/mcp` in the project folder.
 - **Mock Outlook:** Use the sample email. Skip connector setup.
 
-Start a fresh session in the project folder with `claude --permission-mode default`. For a live mission, open `/mcp`, log in and select one tool marked read-only. If you cannot confirm access, choose Mock Outlook.
+Only after adding a new server, type `/exit` and restart in the project folder with `claude --permission-mode default`. For a live mission, open `/mcp`, sign in privately and verify one read-only tool. If you cannot confirm access, choose Mock Outlook.
 
 1. Choose one user, one decision, one mission, and one read-only source that you connected with `claude mcp add` (or Mock Outlook).
 2. Define a synthetic fixture with the same shape for repeatable tests.
 3. Write the intent, contract, design, and visual plan.
 4. Write a red test before implementation.
-5. Build the smallest bounded SDK route.
+5. Build the smallest route. An optional Worldline model run uses `settingSources: ['user', 'local']`. Keep `tools: []`. For a connected mission, restrict `allowedTools`, `canUseTool` and `PreToolUse` to its one approved read-only tool. Mock Outlook permits no tools. Its test stays offline. Only an explicitly chosen model run sends the sample to the approved provider.
 6. Prove one synthetic journey and record live access separately.
 7. Inspect the diff and keep all live data outside the repository.
 

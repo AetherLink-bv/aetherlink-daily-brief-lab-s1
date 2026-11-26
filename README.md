@@ -90,7 +90,9 @@ test -f .bree.local.json || cp .bree.example.json .bree.local.json
 
 Keep the placeholder if you have no verified read-only tool. Otherwise, enter its exact name from `/mcp`, the user and the decision in the ignored local file. Never create or store a token for this session.
 
-The Agent SDK starts a separate process. In `src/live.ts`, `settingSources: ['local']` selects local SDK settings. Other servers may still be visible to the SDK. Bree disables built-in tools, allows only the exact approved Jira tool, and denies every other tool in `canUseTool` and in a `PreToolUse` hook. The hook also stops a tool that a local allow rule would let through.
+For the Worldline SDK run, set `settingSources: ['user', 'local']` in `src/live.ts`. The organisation login uses the user settings. Load only an organisation-approved profile. Its user settings can also supply hooks, environment variables and permission rules. Other servers may be visible.
+
+Keep `tools: []` and put only the exact read-only Jira tool in `allowedTools`. Both `canUseTool` and `PreToolUse` must deny every other tool. The hook must still deny an unexpected tool allowed by a settings rule. Use the same settings for an optional A7 model run. A connected mission may use its one approved read-only tool. Mock Outlook permits no tools and connects no server.
 
 ### Check the code and the settings
 
@@ -140,7 +142,7 @@ The repository includes the core skills for this session:
 
 Impeccable, Break UI, and other design skills are optional. They do not replace the accepted contract, tests, or real connector evidence.
 
-The optional A7 Outlook mission uses only `sample/outlook-email.sample.json`. It simulates an email and never connects to Outlook or work email. Put its focused test in `test/tool.test.ts`, put the implementation in `src/outlook.ts` or your chosen entry file, and run `npm run test:tool`.
+The optional A7 Outlook mission uses only `sample/outlook-email.sample.json`. Its test runs offline. An optional model run sends only the sample to the approved model provider. Neither route connects to Outlook or work email. Put its focused test in `test/tool.test.ts`, put the implementation in `src/outlook.ts` or your chosen entry file, and run `npm run test:tool`.
 
 ## Files
 

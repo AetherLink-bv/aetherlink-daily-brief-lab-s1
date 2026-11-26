@@ -40,7 +40,7 @@ These twelve prompt parts are identical to A1–A6 in `SOLO.md`. A7 is participa
 
 Keep your current Claude Code session for the sample route. Reply `OPEN` when asked for a tool. Only restart to load a newly added Jira server. Use your existing organisation sign-in. If asked for a personal API key, cancel. Run available local checks or work with a partner. Keep your own unverified results `OPEN`.
 
-In Terminal, `npm run test:live` runs sample tests and `npm run live:check` checks local settings. If either asks for a key, follow the [offline check in the README](../README.md#check-the-code-and-the-settings). Only the optional private run uses approved model and Jira access.
+In Terminal, `npm run test:live` runs sample tests and `npm run live:check` checks local settings. If either asks for a key, follow the [offline check in the README](../README.md#check-the-code-and-the-settings). Only the optional private run uses approved model and Jira access. For Worldline the SDK needs both user and local settings in an organisation-approved profile. See [A5 Part 2](../reference/solo-details.md#a5-part-2).
 
 ### Part 1
 

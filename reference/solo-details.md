@@ -83,16 +83,16 @@ The sentences below are the requirements of the long prompts that were used unti
 - Read the accepted design, plan, DailyBrief contract, AGENTS.md, and the Bree config example.
 - Keep the current Claude Code session for sample work. Only restart to load a newly added Jira server. Ask for one verified read-only tool name or accept OPEN. Use a mocked tool in the tests. Do not ask for a key or require a login to write tests.
 - Do not add another MCP server or create a token.
-- Write focused tests first for the live configuration boundary, exact allowed tool, schema validation, and private output path.
+- Write focused tests first for the live configuration boundary, exact allowed tool, schema validation, and private output path. Inspect the SDK options offline. Assert both approved settings sources, no built-in tools and exactly one allowed tool. Call the permission callback and hook with the chosen tool and an unexpected tool.
 - Include rejection cases for a failed or unstructured tool result, an unknown source ID, and any unexpected tool.
 - Show the expected red failure and stop for my approval.
 
 ## A5 Part 2
 
 - After I approve the tests and boundary, build the smallest Claude Agent SDK route.
-- Select local SDK settings with settingSources ['local']. Other servers may still be visible to the SDK. Do not pass mcpServers and do not enable strict MCP config.
+- For Worldline set `settingSources: ['user', 'local']`. Use an organisation-approved profile. User settings supply the organisation login and may also load hooks, environment variables and permission rules. Keep local settings enabled. Other servers can be visible. Do not pass mcpServers and do not enable strict MCP config.
 - Permit only the chosen Jira read tool in allowedTools.
-- Set built-in tools to none, deny every other request in canUseTool, and deny every other tool in a PreToolUse hook, which also runs when a local allow rule would let a tool through.
+- Set built-in tools to none (`tools: []`). Deny every other request in canUseTool and in the PreToolUse hook. The hook must deny unexpected tools even when a settings rule would allow them.
 - Map available data into the complete DailyBrief schema.
 - Keep unavailable sections OPEN and reject unvalidated output.
 - Accept only exact Jira keys from the successful structured tool result as live source IDs.
