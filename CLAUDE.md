@@ -11,4 +11,6 @@ loaded together before anything is changed.
 
 See `SOLO.md` for the exact A1-A6 prompts and their proof. A7 is deliberately self-directed and has no implementation prompt.
 
-Use the synthetic fixture route for tests and stored evidence. The live route uses the Jira server that the participant added with `claude mcp add` in this folder, and one read-only tool. Check it with `/mcp`; add no other server and create no token. Never copy live output into project files or transcripts.
+Use the synthetic fixture route for tests and stored evidence. Keep the current Claude Code session for A5 sample work. Only restart it to load a newly added Jira server. Accept OPEN when the participant has no verified tool. Never ask for a personal API key. Both A5 Terminal checks run offline. Follow the flag and test requirements in `reference/solo-details.md`.
+
+The live route uses the Jira server that the participant added with `claude mcp add` in this folder, and one read-only tool. Check it with `/mcp`; add no other server and create no token. Never copy live output into project files or transcripts.

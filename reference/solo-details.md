@@ -81,7 +81,7 @@ The sentences below are the requirements of the long prompts that were used unti
 ## A5 Part 1
 
 - Read the accepted design, plan, DailyBrief contract, AGENTS.md, and the Bree config example.
-- The participant connected Jira with claude mcp add, logged in with /mcp and checked which tools only read. They name one exact read-only tool for their own permitted work items. Ask for that name. If the participant says that it is OPEN, use a mocked tool in the tests and keep live proof OPEN.
+- Keep the current Claude Code session for sample work. Only restart to load a newly added Jira server. Ask for one verified read-only tool name or accept OPEN. Use a mocked tool in the tests. Do not ask for a key or require a login to write tests.
 - Do not add another MCP server or create a token.
 - Write focused tests first for the live configuration boundary, exact allowed tool, schema validation, and private output path.
 - Include rejection cases for a failed or unstructured tool result, an unknown source ID, and any unexpected tool.
@@ -97,10 +97,11 @@ The sentences below are the requirements of the long prompts that were used unti
 - Keep unavailable sections OPEN and reject unvalidated output.
 - Accept only exact Jira keys from the successful structured tool result as live source IDs.
 - Let only the host write validated HTML to ~/.bree/briefs/YYYY-MM-DD.html with private permissions.
-- Add npm run live:check and npm run brief:live.
+- Keep the starter scripts: `npm run test:live` runs `tsx --test test/live.test.ts`; `npm run live:check` runs `tsx src/live.ts --check`. Run both in Terminal. Importing the module must not run the CLI. The tests use made-up tool results.
+- In the CLI, finish the `--check` branch before SDK `query()` or model authentication, for both OPEN and READY. Only the optional `npm run brief:live` may use approved model and Jira access.
 - npm run live:check runs offline. It prints READY when .bree.local.json names the jira server, a tool in the format `mcp__jira__<tool>` (no placeholder), a user and a decision. Otherwise it prints OPEN with the reasons. It exits with code 0 for READY and code 3 for OPEN. READY does not verify authentication, access, or whether the tool only reads. If the read-only mark in /mcp is unclear, keep the placeholder and record OPEN.
 - Never store raw connector output or expose credentials, customer data, or work email.
-- Run the synthetic tests and live:check.
+- If an offline check asks for an API key, cancel it. Verify the package scripts and inspect the `--check` branch and tests before retrying. Use the existing organisation sign-in for Claude Code. Without that access, work locally or with a partner and keep your unverified results OPEN.
 - Show the boundaries and diff, then stop before the live run.
 
 ## A6 Part 1

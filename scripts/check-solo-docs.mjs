@@ -119,6 +119,10 @@ for (const name of ["mini", "test:mini", "test:schema", "test:render", "eval", "
   assert.ok(scripts[name], `package.json is missing ${name}`);
 }
 
+// These two A5 commands must keep working without model or Jira access.
+assert.equal(scripts["test:live"], "tsx --test test/live.test.ts");
+assert.equal(scripts["live:check"], "tsx src/live.ts --check");
+
 // The optional voice extension tells a participant to make both files, so they may exist. They exist together.
 assert.equal(await exists("src/voice.ts"), await exists("test/voice.test.ts"), "src/voice.ts and test/voice.test.ts exist together");
 
